@@ -1,11 +1,12 @@
 package embedded.keycloak
 
-import embedded.keycloak.internal.KeycloakInstaller
+import embedded.keycloak.internal.EmbeddedKeycloak
 import embedded.keycloak.models.Settings
 import org.backuity.clist._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
+import scala.io.StdIn
 
 class KeycloakCommand extends Command(description = "starts keycloak server") {
 
@@ -54,10 +55,11 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
          |version: $version
        """.stripMargin)
 
-    val installer = new KeycloakInstaller(settings)
+    val keycloak = new EmbeddedKeycloak(settings)
 
     import scala.concurrent.ExecutionContext.Implicits._
 
-    Await.result(installer.install(x => print(s"\r$x")), 10.minutes)
+    Await.result(keycloak.startServer(), 10.minutes)
+    StdIn.readLine("press return to exit...")
   }
 }
