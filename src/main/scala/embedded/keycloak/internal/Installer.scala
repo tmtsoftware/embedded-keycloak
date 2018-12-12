@@ -2,7 +2,7 @@ package embedded.keycloak.internal
 
 import embedded.keycloak.models.Settings
 import os.Path
-
+import Bash._
 import scala.concurrent.{ExecutionContext, Future}
 
 class Installer(settings: Settings) {
@@ -32,30 +32,13 @@ class Installer(settings: Settings) {
   }
 
   private def decompress(): Unit = {
-
     os.makeDir.all(getKeycloakRoot)
-
-    val commandResult = os
-      .proc("tar", "-xzf", getTarFilePath, "-C", getKeycloakRoot)
-      .call(cwd = getInstallationDirectory)
-    if (commandResult.exitCode != 0)
-      throw new RuntimeException(
-        s"could not decompress keycloak tar file. exit code ${commandResult.exitCode}")
+    exec(s"tar -xzf $getTarFilePath -C $getKeycloakRoot")
   }
 
   private def addAdmin(): Unit = {
-    val result = os
-      .proc("sh",
-            getBinDirectory / "add-user-keycloak.sh",
-            "--user",
-            username,
-            "-p",
-            password)
-      .call()
-    if (result.exitCode != 0)
-      throw new RuntimeException(
-        "could not add admin user. " +
-          s"exit code ${result.exitCode}")
+    exec(
+      s"sh ${getBinDirectory / "add-user-keycloak.sh"} --user $username -p $password")
   }
 
   def install()(implicit ec: ExecutionContext): Future[Unit] = {
