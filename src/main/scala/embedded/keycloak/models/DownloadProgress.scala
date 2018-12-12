@@ -2,6 +2,7 @@ package embedded.keycloak.models
 
 import java.text.DecimalFormat
 
+import akka.util.ByteString
 import embedded.keycloak.models.DownloadProgress.{
   DownloadProgressWithTotalLength,
   DownloadProgressWithoutTotalLength
@@ -12,11 +13,13 @@ import scala.concurrent.{ExecutionContext, Future}
 sealed trait DownloadProgress {
   val downloadedBytes: Long
 
-  def +(value: Long): DownloadProgress = this match {
-    case DownloadProgressWithTotalLength(`downloadedBytes`, totalBytes) =>
-      DownloadProgress(`downloadedBytes` + value, totalBytes)
-    case DownloadProgressWithoutTotalLength(`downloadedBytes`) =>
-      DownloadProgress(`downloadedBytes` + value)
+  private[keycloak] val lastChunk: ByteString
+
+  def +(value: ByteString): DownloadProgress = this match {
+    case DownloadProgressWithTotalLength(`downloadedBytes`, totalBytes, _) =>
+      DownloadProgress(`downloadedBytes` + value.length, totalBytes, value)
+    case DownloadProgressWithoutTotalLength(`downloadedBytes`, _) =>
+      DownloadProgress(`downloadedBytes` + value.length, value)
   }
 
   protected def readableFileSize(size: Long): String = {
@@ -31,14 +34,16 @@ sealed trait DownloadProgress {
 object DownloadProgress {
 
   case class DownloadProgressWithTotalLength(downloadedBytes: Long,
-                                             totalBytes: Long)
+                                             totalBytes: Long,
+                                             lastChunk: ByteString)
       extends DownloadProgress {
 
     override def toString =
       s"${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)}"
   }
 
-  case class DownloadProgressWithoutTotalLength(downloadedBytes: Long)
+  case class DownloadProgressWithoutTotalLength(downloadedBytes: Long,
+                                                lastChunk: ByteString)
       extends DownloadProgress {
     val progress: String = s"$downloadedBytes bytes"
 
@@ -46,25 +51,33 @@ object DownloadProgress {
       s"${readableFileSize(downloadedBytes)}"
   }
 
-  def apply(downloadedBytes: Long): DownloadProgress =
-    DownloadProgressWithoutTotalLength(downloadedBytes)
-  def apply(downloadedBytes: Long, totalBytes: Long): DownloadProgress =
-    DownloadProgressWithTotalLength(downloadedBytes, totalBytes)
+  def apply(downloadedBytes: Long, lastChunk: ByteString): DownloadProgress =
+    DownloadProgressWithoutTotalLength(downloadedBytes, lastChunk)
 
-  def apply(downloadedBytes: Long, totalBytes: Future[Option[Long]])(
+  def apply(downloadedBytes: Long,
+            totalBytes: Long,
+            lastChunk: ByteString): DownloadProgress =
+    DownloadProgressWithTotalLength(downloadedBytes, totalBytes, lastChunk)
+
+  def apply(downloadedBytes: Long,
+            totalBytes: Future[Option[Long]],
+            lastChunk: ByteString)(
       implicit ec: ExecutionContext): Future[DownloadProgress] =
     totalBytes.map {
       case Some(bytes) =>
-        DownloadProgressWithTotalLength(downloadedBytes, bytes)
-      case None => DownloadProgressWithoutTotalLength(downloadedBytes)
+        DownloadProgressWithTotalLength(downloadedBytes,
+                                        bytes,
+                                        lastChunk: ByteString)
+      case None =>
+        DownloadProgressWithoutTotalLength(downloadedBytes, lastChunk)
     }
 
   def empty(totalBytes: Future[Option[Long]])(
       implicit ec: ExecutionContext): Future[DownloadProgress] =
     totalBytes.map {
       case Some(bytes) =>
-        DownloadProgressWithTotalLength(0, bytes)
-      case None => DownloadProgressWithoutTotalLength(0)
+        DownloadProgressWithTotalLength(0, bytes, ByteString.empty)
+      case None => DownloadProgressWithoutTotalLength(0, ByteString.empty)
     }
 
 }

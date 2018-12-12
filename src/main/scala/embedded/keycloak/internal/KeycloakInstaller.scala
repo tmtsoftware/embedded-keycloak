@@ -6,28 +6,29 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import embedded.keycloak.models.{DownloadProgress, Settings}
 import os.Path
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class KeycloakInstaller(settings: Settings) {
 
   import settings._
 
   private def getUrl =
+//    "http://localhost:9090/mytar.tar.gz"
     s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
   private def getInstallationDirectory = Path(installationDirectory) / version
   private def getTarFilePath =
     Path(installationDirectory) / version / s"keycloak-$version.Final.tar.gz"
   private def getKeycloakRoot =
-    Path(installationDirectory) / version / s"binaries/"
+    Path(installationDirectory) / version / s"binaries"
 
   private def download(progress: DownloadProgress => Unit) = {
+
     implicit val system = ActorSystem()
-    implicit val materializer = ActorMaterializer()
     implicit val executionContext = system.dispatcher
+    implicit val materializer = ActorMaterializer()
 
     val responseFuture: Future[HttpResponse] =
       Http().singleRequest(HttpRequest(uri = getUrl))
@@ -37,27 +38,31 @@ class KeycloakInstaller(settings: Settings) {
         entity.contentLengthOption
     }
 
-    val f: Future[Source[ByteString, Any]] = responseFuture.map {
-      case HttpResponse(StatusCodes.OK, _, entity, _) =>
-        entity.withoutSizeLimit.dataBytes
-      case HttpResponse(statusCode, _, _, _) =>
-        throw new RuntimeException(
-          s"failed to download keycloak. Status code: $statusCode")
-    }
+    import Extensions._
 
-    val a: Source[DownloadProgress, Future[Done]] = Source
-      .fromFutureSource(f)
-      .scan(DownloadProgress.empty(contentLength)) { (acc, bs) =>
-        acc.map(ac => ac + bs.length)
-      }
-      .mapAsync(1)(identity)
-      .mapMaterializedValue(matF => matF.map(_ => Done))
+    val source: Source[DownloadProgress, Future[Done]] =
+      responseFuture.toByteStringSource
+        .toProgressSource(contentLength)
+        .writeToFile(getTarFilePath)
+        .untilDownloadCompletes
 
-    val result = a.runForeach(progress)
+    val materializedValue = source.runForeach(progress)
 
-//    result.onComplete(_ => system.terminate())
+    materializedValue.onComplete(_ => system.terminate())
 
-    result
+    materializedValue
+  }
+
+  private def decompress(): Unit = {
+
+    os.makeDir.all(getKeycloakRoot)
+
+    val commandResult = os
+      .proc("tar", "-xzf", getTarFilePath, "-C", getKeycloakRoot)
+      .call(cwd = getInstallationDirectory)
+    if (commandResult.exitCode != 0)
+      throw new RuntimeException(
+        s"could not decompress keycloak tar file. exit code ${commandResult.exitCode}")
   }
 
   private def clean(): Unit = {
@@ -69,10 +74,18 @@ class KeycloakInstaller(settings: Settings) {
     os.exists(wd)
   }
 
-  def install(f: DownloadProgress => Unit) = {
+  def install(progress: DownloadProgress => Unit)(
+      implicit ec: ExecutionContext): Future[Done] = {
     if (cleanInstall) clean()
 
-    if (!isKeycloakInstalled) download(f)
-    else Future.successful(Done)
+    if (!isKeycloakInstalled) {
+      download(progress).map(d => {
+        decompress()
+        d
+      })
+
+    } else {
+      Future.successful(Done)
+    }
   }
 }
