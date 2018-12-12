@@ -32,6 +32,15 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
 
   var version = opt[String](default = "4.6.0")
 
+  private def settings =
+    Settings(port,
+             host,
+             username,
+             password,
+             installationDirectory,
+             cleanInstall,
+             version)
+
   def run(): Unit = {
     println(s"""
          |OPTIONS:
@@ -45,14 +54,7 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
          |version: $version
        """.stripMargin)
 
-    val installer = new KeycloakInstaller(
-      Settings(port,
-               host,
-               username,
-               password,
-               installationDirectory,
-               cleanInstall,
-               version))
+    val installer = new KeycloakInstaller(settings)
 
     Await.result(installer.install(x => print(s"\r$x")), 10.minutes)
 

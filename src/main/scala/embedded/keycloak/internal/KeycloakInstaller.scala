@@ -42,16 +42,13 @@ class KeycloakInstaller(settings: Settings) {
         entity.withoutSizeLimit.dataBytes
       case HttpResponse(statusCode, _, _, _) =>
         throw new RuntimeException(
-          s"failed to download file. Status code: $statusCode")
+          s"failed to download keycloak. Status code: $statusCode")
     }
 
     val a: Source[DownloadProgress, Future[Done]] = Source
       .fromFutureSource(f)
-      .scan(0L) { (acc, bs) =>
-        acc + bs.length
-      }
-      .scanAsync(DownloadProgress.empty(contentLength)) { (acc, current) =>
-        acc.map(_ => DownloadProgress(current, contentLength))
+      .scan(DownloadProgress.empty(contentLength)) { (acc, bs) =>
+        acc.map(ac => ac + bs.length)
       }
       .mapAsync(1)(identity)
       .mapMaterializedValue(matF => matF.map(_ => Done))

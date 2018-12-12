@@ -1,11 +1,31 @@
 package embedded.keycloak.models
 
+import java.text.DecimalFormat
+
+import embedded.keycloak.models.DownloadProgress.{
+  DownloadProgressWithTotalLength,
+  DownloadProgressWithoutTotalLength
+}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 sealed trait DownloadProgress {
   val downloadedBytes: Long
 
-  def +(value: Long) = DownloadProgress(downloadedBytes + value)
+  def +(value: Long): DownloadProgress = this match {
+    case DownloadProgressWithTotalLength(`downloadedBytes`, totalBytes) =>
+      DownloadProgress(`downloadedBytes` + value, totalBytes)
+    case DownloadProgressWithoutTotalLength(`downloadedBytes`) =>
+      DownloadProgress(`downloadedBytes` + value)
+  }
+
+  protected def readableFileSize(size: Long): String = {
+    if (size <= 0) return "0"
+    val units = Array[String]("B", "kB", "MB", "GB", "TB")
+    val digitGroups = (Math.log10(size) / Math.log10(1024)).toInt
+    new DecimalFormat("#,##0.#")
+      .format(size / Math.pow(1024, digitGroups)) + " " + units(digitGroups)
+  }
 }
 
 object DownloadProgress {
@@ -14,16 +34,6 @@ object DownloadProgress {
                                              totalBytes: Long)
       extends DownloadProgress {
 
-    import java.text.DecimalFormat
-
-    private def readableFileSize(size: Long): String = {
-      if (size <= 0) return "0"
-      val units = Array[String]("B", "kB", "MB", "GB", "TB")
-      val digitGroups = (Math.log10(size) / Math.log10(1024)).toInt
-      new DecimalFormat("#,##0.#")
-        .format(size / Math.pow(1024, digitGroups)) + " " + units(digitGroups)
-    }
-
     override def toString =
       s"${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)}"
   }
@@ -31,6 +41,9 @@ object DownloadProgress {
   case class DownloadProgressWithoutTotalLength(downloadedBytes: Long)
       extends DownloadProgress {
     val progress: String = s"$downloadedBytes bytes"
+
+    override def toString =
+      s"${readableFileSize(downloadedBytes)}"
   }
 
   def apply(downloadedBytes: Long): DownloadProgress =
