@@ -59,7 +59,7 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
 
     import scala.concurrent.ExecutionContext.Implicits._
 
-    Await.result(keycloak.startServer(), 10.minutes)
+    Await.result(keycloak.startServer(), 5.minutes)
     StdIn.readLine("press return to exit...")
   }
 }

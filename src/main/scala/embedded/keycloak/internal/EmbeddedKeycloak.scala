@@ -11,14 +11,11 @@ class EmbeddedKeycloak(settings: Settings) {
 
   import settings._
 
-  private def getKeycloakRoot =
-    Path(installationDirectory) / version / s"binaries"
-
   private def getBinDirectory =
-    getKeycloakRoot / s"keycloak-$version.Final" / "bin"
+    Path(installationDirectory) / version / s"binaries" / s"keycloak-$version.Final" / "bin"
 
   def startServer()(implicit ec: ExecutionContext): Future[Unit] = {
-    installer.install(x => print(s"\r$x")).map { _ =>
+    installer.install().map { _ =>
       //bin/standalone.sh -Djboss.bind.address=${host}
       // //-Djboss.http.port=${port}
       // //-Dkeycloak.migration.action=import
