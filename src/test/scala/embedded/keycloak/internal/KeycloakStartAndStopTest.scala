@@ -2,7 +2,7 @@ package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
 import embedded.keycloak.models.Settings
-import org.scalatest.{AsyncFunSuite, FunSuite, Matchers}
+import org.scalatest.{AsyncFunSuite, Matchers}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
