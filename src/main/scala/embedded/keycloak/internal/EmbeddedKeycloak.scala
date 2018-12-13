@@ -1,33 +1,48 @@
 package embedded.keycloak.internal
 
-import embedded.keycloak.internal.Extensions.RichProc
-import embedded.keycloak.models.Settings
+import akka.actor.ActorSystem
+import embedded.keycloak.internal.Bash._
+import embedded.keycloak.models.{Settings, StopHandle}
 import os.Path
-import Bash._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmbeddedKeycloak(settings: Settings) {
+class EmbeddedKeycloak(settings: Settings = Settings.default)(
+    implicit actorSystem: ActorSystem) {
 
-  val installer = new Installer(settings)
+  private val installer = new Installer(settings)
+  private val healthCheck = new HealthCheck(settings)
+  private val ports = new Ports()
 
   import settings._
 
   private def getBinDirectory =
     Path(installationDirectory) / version / s"binaries" / s"keycloak-$version.Final" / "bin"
 
-  def startServer()(implicit ec: ExecutionContext): Future[Unit] = {
-    installer.install().map { _ =>
-      //bin/standalone.sh -Djboss.bind.address=${host}
-      // //-Djboss.http.port=${port}
-      // //-Dkeycloak.migration.action=import
-      // //-Dkeycloak.migration.provider=singleFile
-      // -Dkeycloak.migration.file=$path" -p "$port"
+  def preRun(): Unit = {
+    installer.install()
+    ports.checkAvailability(port = port, `throw` = true)
+  }
 
-      exec(
-        s"sh ${getBinDirectory / "standalone.sh"} " +
-          s"-Djboss.bind.address=$host " +
-          s"-Djboss.http.port=$port")
-    }
+  def startServer()(implicit ec: ExecutionContext): Unit = {
+    preRun()
+    exec(
+      s"sh ${getBinDirectory / "standalone.sh"} " +
+        s"-Djboss.bind.address=$host " +
+        s"-Djboss.http.port=$port")
+  }
+
+  def startServerInBackground()(
+      implicit ec: ExecutionContext): Future[StopHandle] = {
+    preRun()
+
+    val process = background(
+      s"sh ${getBinDirectory / "standalone.sh"} " +
+        s"-Djboss.bind.address=$host " +
+        s"-Djboss.http.port=$port")
+
+    val stopHandle = new StopHandle(process)
+
+    healthCheck.checkHealth().map(_ => stopHandle)
   }
 }

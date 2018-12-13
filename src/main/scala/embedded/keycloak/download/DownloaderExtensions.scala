@@ -1,4 +1,4 @@
-package embedded.keycloak.internal
+package embedded.keycloak.download
 
 import akka.Done
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
@@ -6,11 +6,11 @@ import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import embedded.keycloak.models.DownloadProgress
 import embedded.keycloak.models.DownloadProgress.DownloadProgressWithTotalLength
-import os.proc
+import os.{Path, SubProcess, proc}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object Extensions {
+object DownloaderExtensions {
 
   implicit class ProgressSource(
       source: Source[DownloadProgress, Future[Done]]) {
@@ -73,33 +73,6 @@ object Extensions {
             }
         )
         .addMaterializer
-    }
-  }
-
-  implicit class RichProc(proc: proc) {
-    def executeAndShow(`throw`: Boolean = false): Int = {
-      val exitCode = proc.stream(
-        onOut = (buffer, length) =>
-          buffer
-            .slice(0, length)
-            .map(x => x.toChar)
-            .mkString
-            .split("\n")
-            .foreach(println),
-        onErr = (buffer, length) =>
-          buffer
-            .slice(0, length)
-            .map(x => x.toChar)
-            .mkString
-            .split("\n")
-            .foreach(System.err.println)
-      )
-
-      if (`throw` && exitCode != 1)
-        throw new RuntimeException(
-          s"the command $proc resulted in exit code $exitCode")
-
-      exitCode
     }
   }
 }

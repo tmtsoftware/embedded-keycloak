@@ -1,15 +1,19 @@
 package embedded.keycloak.internal
 
+import akka.actor.ActorSystem
+import embedded.keycloak.download.AkkaDownloader
+import embedded.keycloak.internal.Bash._
 import embedded.keycloak.models.Settings
 import os.Path
-import Bash._
-import scala.concurrent.{ExecutionContext, Future}
 
-class Installer(settings: Settings) {
+import scala.concurrent.Future
 
+class Installer(settings: Settings)(implicit actorSystem: ActorSystem) {
+
+  implicit val ec = actorSystem.dispatcher
   import settings._
 
-  val downloader = new Downloader(settings)
+  val downloader = new AkkaDownloader(settings)
 
   private def getInstallationDirectory = Path(installationDirectory) / version
 
@@ -27,7 +31,7 @@ class Installer(settings: Settings) {
   }
 
   private def isKeycloakInstalled: Boolean = {
-    val wd = getInstallationDirectory
+    val wd = getBinDirectory / "standalone.sh"
     os.exists(wd)
   }
 
@@ -41,18 +45,13 @@ class Installer(settings: Settings) {
       s"sh ${getBinDirectory / "add-user-keycloak.sh"} --user $username -p $password")
   }
 
-  def install()(implicit ec: ExecutionContext): Future[Unit] = {
+  def install(): Unit = {
     if (cleanInstall) clean()
 
     if (!isKeycloakInstalled) {
-
-      downloader
-        .download()
-        .map(_ => {
-          decompress()
-          addAdmin()
-        })
-
+      downloader.download()
+      decompress()
+      addAdmin()
     } else {
       Future.successful(())
     }

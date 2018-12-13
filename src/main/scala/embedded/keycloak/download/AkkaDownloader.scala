@@ -1,4 +1,4 @@
-package embedded.keycloak.internal
+package embedded.keycloak.download
 
 import akka.Done
 import akka.actor.ActorSystem
@@ -8,11 +8,14 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import embedded.keycloak.models.{DownloadProgress, Settings}
 import os.Path
+import DownloaderExtensions._
 
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
 
-class Downloader(settings: Settings) {
+class AkkaDownloader(settings: Settings)(implicit actorSystem: ActorSystem) {
 
+  implicit val ec = actorSystem.dispatcher
   import settings._
 
   private def getTarFilePath =
@@ -21,11 +24,9 @@ class Downloader(settings: Settings) {
   private def getUrl =
     s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
 
-  def download(): Future[_] = {
+  def download(): Unit = {
 
-    implicit val system = ActorSystem()
-    implicit val executionContext = system.dispatcher
-    implicit val materializer = ActorMaterializer()
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     val responseFuture: Future[HttpResponse] =
       Http().singleRequest(HttpRequest(uri = getUrl))
@@ -35,8 +36,6 @@ class Downloader(settings: Settings) {
         entity.contentLengthOption
     }
 
-    import Extensions._
-
     val source: Source[DownloadProgress, Future[Done]] =
       responseFuture.toByteStringSource
         .toProgressSource(contentLength)
@@ -45,8 +44,8 @@ class Downloader(settings: Settings) {
 
     val materializedValue = source.runForeach(x => print(s"\r$x"))
 
-    materializedValue.onComplete(_ => system.terminate())
+//    materializedValue.onComplete(_ => system.terminate())
 
-    materializedValue
+    Await.result(materializedValue, 5.minutes)
   }
 }
