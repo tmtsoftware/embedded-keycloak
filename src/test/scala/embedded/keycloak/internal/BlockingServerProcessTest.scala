@@ -7,8 +7,10 @@ import org.scalatest.{FunSuite, Matchers}
 import scala.concurrent.duration.DurationLong
 import scala.concurrent.{Await, Future}
 
-class StartTest extends FunSuite with Matchers {
-  test("startTest") {
+class BlockingServerProcessTest extends FunSuite with Matchers {
+  test(
+    "startServer should start the keycloak server on " +
+      "calling thread and should keep running until aborted") {
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     implicit val actorSystem = ActorSystem()
     implicit val ec = actorSystem.dispatcher
@@ -24,6 +26,8 @@ class StartTest extends FunSuite with Matchers {
 
     actorSystem.terminate()
 
-    new Ports().checkAvailability(settings.port) shouldBe true
+    val ports = new Ports()
+    ports.stop(settings.port)
+    ports.checkAvailability(settings.port) shouldBe true
   }
 }

@@ -1,8 +1,7 @@
-package embedded.keycloak.models
+package embedded.keycloak.internal
 
-import os.SubProcess
 import embedded.keycloak.OsLibExtensions._
-import os.proc
+import os.{SubProcess, proc}
 
 class StopHandle(subProcess: SubProcess) {
   def stop(): Unit = {

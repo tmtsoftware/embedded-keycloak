@@ -1,5 +1,6 @@
 package embedded.keycloak.data
 
+import embedded.keycloak.models._
 import org.scalatest.{FunSuite, Matchers}
 
 class DataParserTest extends FunSuite with Matchers {

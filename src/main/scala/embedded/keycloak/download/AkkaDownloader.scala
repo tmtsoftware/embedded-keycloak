@@ -6,9 +6,10 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import embedded.keycloak.models.{DownloadProgress, Settings}
+import embedded.keycloak.models.Settings
 import os.Path
 import DownloaderExtensions._
+import embedded.keycloak.internal.DownloadProgress
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}

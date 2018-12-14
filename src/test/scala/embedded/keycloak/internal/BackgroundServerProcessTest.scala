@@ -7,8 +7,10 @@ import org.scalatest.{AsyncFunSuite, Matchers}
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-class KeycloakStartAndStopTest extends AsyncFunSuite with Matchers {
-  test("testStop") {
+class BackgroundServerProcessTest extends AsyncFunSuite with Matchers {
+  test(
+    "startServerInBackground should start the server as a child process" +
+      " and should stop when stop method is called") {
     implicit val actorSystem = ActorSystem()
     implicit val ec = actorSystem.dispatcher
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")

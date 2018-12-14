@@ -1,19 +1,22 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
+import embedded.keycloak.data.DataFeeder
 import embedded.keycloak.download.AkkaDownloader
 import embedded.keycloak.internal.Bash._
-import embedded.keycloak.models.Settings
+import embedded.keycloak.models.{Data, Settings}
 import os.Path
 
 import scala.concurrent.Future
 
-class Installer(settings: Settings)(implicit actorSystem: ActorSystem) {
+class Installer(settings: Settings, data: Data)(
+    implicit actorSystem: ActorSystem) {
 
   implicit val ec = actorSystem.dispatcher
   import settings._
 
   val downloader = new AkkaDownloader(settings)
+  val dataFeeder = new DataFeeder(settings, data)
 
   private def getInstallationDirectory = Path(installationDirectory) / version
 
@@ -40,18 +43,13 @@ class Installer(settings: Settings)(implicit actorSystem: ActorSystem) {
     exec(s"tar -xzf $getTarFilePath -C $getKeycloakRoot")
   }
 
-  private def addAdmin(): Unit = {
-    exec(
-      s"sh ${getBinDirectory / "add-user-keycloak.sh"} --user $username -p $password")
-  }
-
   def install(): Unit = {
     if (cleanInstall) clean()
 
     if (!isKeycloakInstalled) {
       downloader.download()
       decompress()
-      addAdmin()
+      dataFeeder.feedAdminUser()
     } else {
       Future.successful(())
     }

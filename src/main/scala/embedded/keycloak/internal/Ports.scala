@@ -20,6 +20,13 @@ class Ports {
     free
   }
 
+  def stop(port: Long): Unit = {
+    proc("lsof", "-n", s"-i4TCP:$port") |
+      proc("grep", "LISTEN") |
+      proc("awk", "{print $2}") |
+      proc("xargs", "kill", "-9")
+  }
+
   private def getProcessForPort(port: Int) = {
     val processName = (proc("lsof", "-n", s"-i4TCP:$port") |
       proc("grep", "LISTEN") |

@@ -16,14 +16,6 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
   var host: String =
     opt[String](default = default.host, description = "address to bind")
 
-  var username: String =
-    opt[String](default = default.username,
-                description = "username of super admin")
-
-  var password: String =
-    opt[String](default = default.password,
-                description = "password of super admin")
-
   var installationDirectory: String =
     opt[String](default = default.installationDirectory)
 
@@ -36,13 +28,7 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
   var version: String = opt[String](default = default.version)
 
   private def settings =
-    Settings(port,
-             host,
-             username,
-             password,
-             installationDirectory,
-             cleanInstall,
-             version)
+    Settings(port, host, installationDirectory, cleanInstall, version)
 
   def run(): Unit = {
     println(s"""
@@ -50,8 +36,6 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
          |
          |port: $port
          |host: $host
-         |username: $username
-         |password: XXXXXXXX
          |installationDirectory: $installationDirectory
          |cleanInstall: $cleanInstall
          |version: $version

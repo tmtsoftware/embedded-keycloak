@@ -4,9 +4,8 @@ import akka.Done
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import embedded.keycloak.models.DownloadProgress
-import embedded.keycloak.models.DownloadProgress.DownloadProgressWithTotalLength
-import os.{Path, SubProcess, proc}
+import embedded.keycloak.internal.DownloadProgress
+import embedded.keycloak.internal.DownloadProgress.DownloadProgressWithTotalLength
 
 import scala.concurrent.{ExecutionContext, Future}
 

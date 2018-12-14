@@ -1,6 +1,7 @@
-package embedded.keycloak.data
+package embedded.keycloak.models
 
-case class Data(adminUser: AdminUser, realms: Set[Realm] = Set.empty)
+case class Data(adminUser: AdminUser = AdminUser.default,
+                realms: Set[Realm] = Set.empty)
 
 case class Realm(name: String,
                  realmRoles: Set[String] = Set.empty,
@@ -23,6 +24,10 @@ case class AdminUser(username: String,
                      realmRoles: Set[String] = Set.empty,
                      resourceRoles: Set[String] = Set.empty)
     extends User
+
+object AdminUser {
+  val default: AdminUser = AdminUser(username = "admin", password = "admin")
+}
 
 case class ApplicationUser(username: String,
                            password: String,

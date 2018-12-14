@@ -1,9 +1,9 @@
-package embedded.keycloak.models
+package embedded.keycloak.internal
 
 import java.text.DecimalFormat
 
 import akka.util.ByteString
-import embedded.keycloak.models.DownloadProgress.{
+import embedded.keycloak.internal.DownloadProgress.{
   DownloadProgressWithTotalLength,
   DownloadProgressWithoutTotalLength
 }
