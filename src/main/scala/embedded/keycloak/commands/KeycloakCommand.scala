@@ -19,16 +19,26 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
   var installationDirectory: String =
     opt[String](default = default.installationDirectory)
 
-  var cleanInstall: Boolean = opt[Boolean](
-    default = default.cleanInstall,
+  var cleanPreviousData: Boolean = opt[Boolean](
+    default = default.cleanPreviousData,
     abbrev = "c",
     description =
-      "delete current installation if exists and installs a fresh instance")
+      "delete current date if exists and start with a fresh instance")
+
+  var alwaysDownload: Boolean = opt[Boolean](
+    default = default.alwaysDownload,
+    abbrev = "d",
+    description = "downloads keycloak again (results in slow start)")
 
   var version: String = opt[String](default = default.version)
 
   private def settings =
-    Settings(port, host, installationDirectory, cleanInstall, version)
+    Settings(port,
+             host,
+             installationDirectory,
+             cleanPreviousData,
+             alwaysDownload,
+             version)
 
   def run(): Unit = {
     println(s"""
@@ -37,7 +47,8 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
          |port: $port
          |host: $host
          |installationDirectory: $installationDirectory
-         |cleanInstall: $cleanInstall
+         |cleanPreviousData: $cleanPreviousData
+         |alwaysDownload: $alwaysDownload
          |version: $version
        """.stripMargin)
 

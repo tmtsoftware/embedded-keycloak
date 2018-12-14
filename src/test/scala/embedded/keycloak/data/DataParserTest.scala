@@ -2,9 +2,9 @@ package embedded.keycloak.data
 
 import embedded.keycloak.models.KeycloakData._
 import embedded.keycloak.models._
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 
-class KeycloakDataParserTest extends FunSuite with Matchers {
+class DataParserTest extends FunSuite with Matchers {
   test("testParsing") {
     val parsedData: KeycloakData = KeycloakData.fromConfig
 

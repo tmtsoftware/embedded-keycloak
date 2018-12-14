@@ -3,7 +3,8 @@ package embedded.keycloak.models
 case class Settings(port: Int,
                     host: String,
                     installationDirectory: String,
-                    cleanInstall: Boolean,
+                    cleanPreviousData: Boolean,
+                    alwaysDownload: Boolean,
                     version: String)
 
 object Settings {
@@ -11,6 +12,7 @@ object Settings {
     Settings(port = 8001,
              host = "0.0.0.0",
              installationDirectory = "/tmp/keycloak-installation/",
-             cleanInstall = false,
+             cleanPreviousData = true,
+             alwaysDownload = false,
              version = "4.6.0")
 }

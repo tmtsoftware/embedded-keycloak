@@ -2,12 +2,10 @@ package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
 import embedded.keycloak.data.DataFeeder
-import embedded.keycloak.download.AkkaDownloader
+import embedded.keycloak.download.{AkkaDownloader, CurlDownloader}
 import embedded.keycloak.internal.Bash._
 import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
-
-import scala.concurrent.Future
 
 class Installer(settings: Settings, data: KeycloakData)(
     implicit actorSystem: ActorSystem) {
@@ -15,10 +13,8 @@ class Installer(settings: Settings, data: KeycloakData)(
   implicit val ec = actorSystem.dispatcher
   import settings._
 
-  val downloader = new AkkaDownloader(settings)
+  val downloader = new CurlDownloader(settings)
   val dataFeeder = new DataFeeder(settings, data)
-
-  private def getInstallationDirectory = Path(installationDirectory) / version
 
   private def getKeycloakRoot =
     Path(installationDirectory) / version / s"binaries"
@@ -29,8 +25,8 @@ class Installer(settings: Settings, data: KeycloakData)(
   private def getTarFilePath =
     Path(installationDirectory) / version / s"keycloak-$version.Final.tar.gz"
 
-  private def clean(): Unit = {
-    os.remove.all(getInstallationDirectory)
+  private def cleanInstallation(): Unit = {
+    if (os.exists(getKeycloakRoot)) os.remove.all(getKeycloakRoot)
   }
 
   private def isKeycloakInstalled: Boolean = {
@@ -44,14 +40,14 @@ class Installer(settings: Settings, data: KeycloakData)(
   }
 
   def install(): Unit = {
-    if (cleanInstall) clean()
 
-    if (!isKeycloakInstalled) {
-      downloader.download()
+    downloader.download()
+
+    if (cleanPreviousData || !isKeycloakInstalled) {
+      cleanInstallation()
       decompress()
-      dataFeeder.feedAdminUser()
-    } else {
-      Future.successful(())
     }
+
+    dataFeeder.feedAdminUser()
   }
 }

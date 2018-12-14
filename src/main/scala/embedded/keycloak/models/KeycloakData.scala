@@ -26,6 +26,7 @@ object KeycloakData {
 
   case class Client(name: String,
                     clientType: String,
+                    authorizationEnabled: Boolean = true,
                     resourceRoles: Set[String] = Set.empty)
 
   trait User {

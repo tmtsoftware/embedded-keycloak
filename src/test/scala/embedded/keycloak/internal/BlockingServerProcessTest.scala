@@ -2,16 +2,22 @@ package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
 import embedded.keycloak.models.{KeycloakData, Settings}
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 
 import scala.concurrent.duration.DurationLong
 import scala.concurrent.{Await, Future}
 
-class BlockingServerProcessTest extends FunSuite with Matchers {
+class BlockingServerProcessTest
+    extends FunSuite
+    with Matchers
+    with BeforeAndAfterAll {
+
+  val settings: Settings = Settings.default.copy(port = 9005, version = "4.7.0")
+  val ports = new Ports()
+
   test(
     "startServer should start the keycloak server on " +
       "calling thread and should keep running until aborted") {
-    val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     implicit val actorSystem = ActorSystem()
     implicit val ec = actorSystem.dispatcher
     val keycloak = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
@@ -26,8 +32,8 @@ class BlockingServerProcessTest extends FunSuite with Matchers {
 
     actorSystem.terminate()
 
-    val ports = new Ports()
-    ports.stop(settings.port)
     ports.checkAvailability(settings.port) shouldBe true
   }
+
+  override def afterAll(): Unit = ports.stop(settings.port)
 }
