@@ -1,13 +1,14 @@
 package embedded.keycloak.data
 
+import embedded.keycloak.models.KeycloakData._
 import embedded.keycloak.models._
 import org.scalatest.{FunSuite, Matchers}
 
-class DataParserTest extends FunSuite with Matchers {
+class KeycloakDataParserTest extends FunSuite with Matchers {
   test("testParsing") {
     val parsedData = DataParser.parse
 
-    val expectedData = Data(
+    val expectedData = KeycloakData(
       adminUser = AdminUser("admin", "admin"),
       realms = Set(
         Realm(

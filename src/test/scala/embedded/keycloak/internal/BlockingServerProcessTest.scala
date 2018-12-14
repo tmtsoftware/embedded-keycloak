@@ -1,7 +1,7 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
-import embedded.keycloak.models.Settings
+import embedded.keycloak.models.{KeycloakData, Settings}
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.duration.DurationLong
@@ -14,7 +14,7 @@ class BlockingServerProcessTest extends FunSuite with Matchers {
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     implicit val actorSystem = ActorSystem()
     implicit val ec = actorSystem.dispatcher
-    val keycloak = new EmbeddedKeycloak(settings)
+    val keycloak = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
     val serverF = Future {
       scala.concurrent.blocking {
         keycloak.startServer()

@@ -4,12 +4,12 @@ import akka.actor.ActorSystem
 import embedded.keycloak.data.DataFeeder
 import embedded.keycloak.download.AkkaDownloader
 import embedded.keycloak.internal.Bash._
-import embedded.keycloak.models.{Data, Settings}
+import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
 
 import scala.concurrent.Future
 
-class Installer(settings: Settings, data: Data)(
+class Installer(settings: Settings, data: KeycloakData)(
     implicit actorSystem: ActorSystem) {
 
   implicit val ec = actorSystem.dispatcher

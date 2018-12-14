@@ -1,7 +1,7 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
-import embedded.keycloak.models.Settings
+import embedded.keycloak.models.{KeycloakData, Settings}
 import org.scalatest.{AsyncFunSuite, Matchers}
 
 import scala.concurrent.Await
@@ -14,7 +14,7 @@ class BackgroundServerProcessTest extends AsyncFunSuite with Matchers {
     implicit val actorSystem = ActorSystem()
     implicit val ec = actorSystem.dispatcher
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")
-    val keycloak = new EmbeddedKeycloak(settings)
+    val keycloak = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
 
     val healthCheck = new HealthCheck(settings)

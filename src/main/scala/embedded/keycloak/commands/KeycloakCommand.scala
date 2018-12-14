@@ -2,7 +2,7 @@ package embedded.keycloak.commands
 
 import akka.actor.ActorSystem
 import embedded.keycloak.internal.EmbeddedKeycloak
-import embedded.keycloak.models.Settings
+import embedded.keycloak.models.{KeycloakData, Settings}
 import org.backuity.clist._
 
 class KeycloakCommand extends Command(description = "starts keycloak server") {
@@ -46,7 +46,7 @@ class KeycloakCommand extends Command(description = "starts keycloak server") {
     implicit val actorSystem: ActorSystem = ActorSystem()
 
     val embeddedKeycloak =
-      new EmbeddedKeycloak(settings)
+      new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
 
     embeddedKeycloak.startServer()
   }

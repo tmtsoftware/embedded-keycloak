@@ -1,19 +1,18 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
-import embedded.keycloak.data.DataParser
 import embedded.keycloak.internal.Bash._
-import embedded.keycloak.models.{Data, Settings}
+import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmbeddedKeycloak(
-    settings: Settings = Settings.default,
-    data: Option[Data] = None)(implicit actorSystem: ActorSystem) {
+    data: KeycloakData,
+    settings: Settings = Settings.default)(implicit actorSystem: ActorSystem) {
 
   private val installer =
-    new Installer(settings, data.getOrElse(DataParser.parse))
+    new Installer(settings, data)
 
   private val healthCheck = new HealthCheck(settings)
   private val ports = new Ports()

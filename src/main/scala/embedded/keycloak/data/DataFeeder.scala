@@ -1,10 +1,10 @@
 package embedded.keycloak.data
 
 import embedded.keycloak.internal.Bash.exec
-import embedded.keycloak.models.{Data, Settings}
+import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
 
-class DataFeeder(settings: Settings, data: Data) {
+class DataFeeder(settings: Settings, data: KeycloakData) {
   import settings._
 
   private def getKeycloakRoot =
