@@ -6,7 +6,7 @@ import org.scalatest.{FunSuite, Matchers}
 
 class KeycloakDataParserTest extends FunSuite with Matchers {
   test("testParsing") {
-    val parsedData = DataParser.parse
+    val parsedData: KeycloakData = KeycloakData.fromConfig
 
     val expectedData = KeycloakData(
       adminUser = AdminUser("admin", "admin"),

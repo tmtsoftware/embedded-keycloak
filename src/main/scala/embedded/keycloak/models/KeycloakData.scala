@@ -1,6 +1,8 @@
 package embedded.keycloak.models
 
-import embedded.keycloak.data.DataParser
+import com.typesafe.config.ConfigFactory
+import net.ceedubs.ficus.Ficus._
+import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import embedded.keycloak.models.KeycloakData.{AdminUser, Realm}
 
 case class KeycloakData(adminUser: AdminUser = AdminUser.default,
@@ -9,7 +11,13 @@ case class KeycloakData(adminUser: AdminUser = AdminUser.default,
 object KeycloakData {
 
   lazy val empty: KeycloakData = KeycloakData()
-  lazy val fromConfig: KeycloakData = DataParser.parse
+  lazy val fromConfig: KeycloakData = {
+    val config = ConfigFactory
+      .load()
+      .getConfig("embedded-keycloak")
+      .getConfig("data")
+    config.as[KeycloakData]
+  }
 
   case class Realm(name: String,
                    realmRoles: Set[String] = Set.empty,
