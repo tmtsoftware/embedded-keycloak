@@ -32,7 +32,9 @@ object Bash {
     }
 
     def executeBackground(cwd: Path = null): SubProcess = {
-      proc.spawn(cwd = cwd)
+      val p = proc.spawn(cwd = cwd)
+
+      p
     }
   }
 
