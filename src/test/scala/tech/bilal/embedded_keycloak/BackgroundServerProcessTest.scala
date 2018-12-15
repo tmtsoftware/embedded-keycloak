@@ -13,7 +13,7 @@ class BackgroundServerProcessTest extends AsyncFunSuite with Matchers {
 
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     val keycloak = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
-    val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
+    val stopHandle = Await.result(keycloak.startServerInBackground(), 5.minutes)
 
     val healthCheck = new HealthCheck(settings)
 
