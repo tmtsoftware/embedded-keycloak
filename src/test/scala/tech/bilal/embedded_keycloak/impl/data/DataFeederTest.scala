@@ -1,17 +1,15 @@
 package tech.bilal.embedded_keycloak.impl.data
 
-import akka.actor.ActorSystem
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 import tech.bilal.embedded_keycloak.impl.Ports
 import tech.bilal.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
-
+import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationDouble
 
 class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
   test("test") {
-    implicit val actorSystem = ActorSystem()
-    implicit val ec = actorSystem.dispatcher
+
     val settings = Settings.default.copy(port = 9005, version = "4.6.0")
     val keycloakData = KeycloakData.fromConfig
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)

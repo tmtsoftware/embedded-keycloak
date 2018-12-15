@@ -1,6 +1,5 @@
 package tech.bilal.embedded_keycloak
 
-import akka.actor.ActorSystem
 import org.scalatest.{AsyncFunSuite, Matchers}
 import tech.bilal.embedded_keycloak.impl.{HealthCheck, Ports}
 
@@ -11,8 +10,7 @@ class BackgroundServerProcessTest extends AsyncFunSuite with Matchers {
   test(
     "startServerInBackground should start the server as a child process" +
       " and should stop when stop method is called") {
-    implicit val actorSystem = ActorSystem()
-    implicit val ec = actorSystem.dispatcher
+
     val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     val keycloak = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)

@@ -1,16 +1,13 @@
 package tech.bilal.embedded_keycloak.impl
 
-import akka.actor.ActorSystem
 import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.AdminFeeder
 import tech.bilal.embedded_keycloak.impl.download.CurlDownloader
 import tech.bilal.embedded_keycloak.{KeycloakData, Settings}
 
-class Installer(settings: Settings, data: KeycloakData)(
-    implicit actorSystem: ActorSystem) {
+class Installer(settings: Settings, data: KeycloakData) {
 
-  implicit val ec = actorSystem.dispatcher
   import settings._
 
   val downloader = new CurlDownloader(settings)

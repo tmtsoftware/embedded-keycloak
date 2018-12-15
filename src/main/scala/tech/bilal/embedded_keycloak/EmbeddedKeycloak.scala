@@ -1,6 +1,5 @@
 package tech.bilal.embedded_keycloak
 
-import akka.actor.ActorSystem
 import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.DataFeeder
@@ -13,9 +12,8 @@ import tech.bilal.embedded_keycloak.impl.{
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmbeddedKeycloak(
-    keycloakData: KeycloakData,
-    settings: Settings = Settings.default)(implicit actorSystem: ActorSystem) {
+class EmbeddedKeycloak(keycloakData: KeycloakData,
+                       settings: Settings = Settings.default) {
 
   private val installer =
     new Installer(settings, keycloakData)
