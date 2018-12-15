@@ -11,13 +11,10 @@ case class KeycloakData(adminUser: AdminUser = AdminUser.default,
 object KeycloakData {
 
   lazy val empty: KeycloakData = KeycloakData()
-  lazy val fromConfig: KeycloakData = {
-    val config = ConfigFactory
-      .load()
-      .getConfig("embedded-keycloak")
-      .getConfig("data")
-    config.as[KeycloakData]
-  }
+  lazy val fromConfig: KeycloakData = ConfigFactory
+    .load()
+    .getConfig("embedded-keycloak")
+    .as[KeycloakData]
 
   case class Realm(name: String,
                    realmRoles: Set[String] = Set.empty,
