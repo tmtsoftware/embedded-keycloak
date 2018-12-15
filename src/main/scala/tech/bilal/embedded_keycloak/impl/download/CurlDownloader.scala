@@ -1,8 +1,10 @@
 package tech.bilal.embedded_keycloak.impl.download
 
-import os.Path
+import os.{Path, proc}
 import tech.bilal.embedded_keycloak.Settings
 import tech.bilal.embedded_keycloak.impl.Bash.exec
+
+import scala.util.control.NonFatal
 
 private[embedded_keycloak] class CurlDownloader(settings: Settings) {
 
@@ -21,15 +23,40 @@ private[embedded_keycloak] class CurlDownloader(settings: Settings) {
     os.remove.all(getInstallationDirectory)
   }
 
-  def download(): Unit = {
+  protected val url =
+    s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
 
-    val url =
-      s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
+  def download(): Unit = {
 
     if (alwaysDownload || !isKeycloakDownloaded) {
       cleanEverything()
       os.makeDir.all(Path(installationDirectory) / version)
-      exec(s"curl -# -O $url", Path(installationDirectory) / version)
+
+      println("downloading keycloak...")
+
+      var line: String = ""
+
+      val reWriteLine: (Array[Byte], Int) => Unit = (buf, len) => {
+        val str = buf.slice(0, len).map(_.toChar).mkString
+        if (str.contains("\r")) {
+          line = str.split("\r").lastOption.getOrElse("")
+        } else {
+          line += str
+        }
+        print("\r" + line)
+      }
+
+      val exitCode = proc("curl", "-#", "-O", url)
+        .stream(
+          onOut = reWriteLine,
+          onErr = reWriteLine,
+          cwd = Path(installationDirectory) / version
+        )
+
+      if (exitCode != 0)
+        throw new RuntimeException("could not download keycloak")
+      else
+        exitCode
     }
   }
 }

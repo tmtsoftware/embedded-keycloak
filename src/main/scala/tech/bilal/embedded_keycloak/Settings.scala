@@ -9,7 +9,7 @@ case class Settings(port: Int,
 
 object Settings {
   val default =
-    Settings(port = 8001,
+    Settings(port = 8081,
              host = "0.0.0.0",
              installationDirectory = "/tmp/keycloak-installation/",
              cleanPreviousData = true,
