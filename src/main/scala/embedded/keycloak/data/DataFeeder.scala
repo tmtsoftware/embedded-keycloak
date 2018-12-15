@@ -85,10 +85,6 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
 
     val response = kPost(realmUrl(realmName) + "/clients", payload)
 
-    if (response.statusCode != 201)
-      throw new RuntimeException(
-        s"Could not create client $client.\nServer response: ${response.statusCode}\n${response.data.text}")
-
     client.resourceRoles.foreach(r =>
       feedResourceRole(r, getId(response), realmName))
   }
@@ -99,28 +95,17 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
   }
 
   private def feedRealmRole(roleName: String, realmName: String)(
-      implicit bearerToken: BearerToken): Unit = {
-    val response =
-      kPost(url = realmUrl(realmName) + "/roles", Map("name" -> Str(roleName)))
-
-    if (response.statusCode != 201)
-      throw new RuntimeException(
-        s"Could not create role $roleName.\nServer response: ${response.statusCode}\n${response.data.text}")
-  }
+      implicit bearerToken: BearerToken): Unit =
+    kPost(url = realmUrl(realmName) + "/roles", Map("name" -> Str(roleName)))
 
   private def feedResourceRole(
       roleName: String,
       clientId: String,
-      realmName: String)(implicit bearerToken: BearerToken): Unit = {
-    val response = kPost(realmUrl(realmName) + s"/clients/$clientId/roles",
-                         Map(
-                           "name" -> Str(roleName),
-                         ))
-
-    if (response.statusCode != 201)
-      throw new RuntimeException(
-        s"Could not create role $roleName.\nServer response: ${response.statusCode}\n${response.data.text}")
-  }
+      realmName: String)(implicit bearerToken: BearerToken): Unit =
+    kPost(realmUrl(realmName) + s"/clients/$clientId/roles",
+          Map(
+            "name" -> Str(roleName),
+          ))
 
   def feedUser(user: ApplicationUser, realmName: String)(
       implicit bearerToken: BearerToken): Unit = {
@@ -136,25 +121,14 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
       )
     )
 
-    if (creationResponse.statusCode != 201)
-      throw new RuntimeException(
-        s"could not create user ${user.username}. status: ${creationResponse.statusCode}\n" +
-          s"response: ${creationResponse.text()}")
-
     val userId = getId(creationResponse)
 
-    val resetResponse = kPut(
-      url = s"${realmUrl(realmName)}/users/$userId/reset-password",
-      Map(
-        "type" -> Str("password"),
-        "value" -> Str(user.password),
-        "temporary" -> jFalse
-      ))
-
-    if (resetResponse.statusCode != 200 && resetResponse.statusCode != 204)
-      throw new RuntimeException(
-        s"could not set password for user ${user.username}. status: ${resetResponse.statusCode}\n" +
-          s"response: ${resetResponse.text()}")
+    kPut(url = s"${realmUrl(realmName)}/users/$userId/reset-password",
+         Map(
+           "type" -> Str("password"),
+           "value" -> Str(user.password),
+           "temporary" -> jFalse
+         ))
 
     mapRealmRoles(realmName, userId, user.realmRoles)
   }
@@ -175,40 +149,26 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
 
     val realmRoles = {
       val rolesResponse = kGet(realmUrl(realmName) + "/roles")
-      if (rolesResponse.statusCode != 200 && rolesResponse.statusCode != 204)
-        throw new RuntimeException(
-          s"could not get realmRoles for user id $userId. status: ${rolesResponse.statusCode}\n" +
-            s"response: ${rolesResponse.text()}")
       upickle.default
         .read[Set[RoleRepresentation]](rolesResponse.text())
         .filter(r => roleNames.contains(r.name))
     }
 
-    //204 no content
     val url = realmUrl(realmName) + s"/users/$userId/role-mappings/realm"
 
-    val response = kPost(url, upickle.default.write(realmRoles))
-
-    if (response.statusCode != 200 && response.statusCode != 204)
-      throw new RuntimeException(
-        s"could not add realmRoles for user id $userId. status: ${response.statusCode}\n" +
-          s"response: ${response.text()}")
+    kPost(url, upickle.default.write(realmRoles))
   }
 
   def feedRealms: Unit = {
     implicit val bearerToken: BearerToken = getBearerToken
 
     data.realms.foreach(r => {
-      val response = kPost(realmUrl,
-                           Map(
-                             "enabled" -> jTrue,
-                             "id" -> Str(r.name),
-                             "realm" -> Str(r.name)
-                           ))
-      if (response.statusCode != 201)
-        throw new RuntimeException(
-          s"could not create realm ${r.name}. status: ${response.statusCode}\n" +
-            s"response: ${response.text()}")
+      kPost(realmUrl,
+            Map(
+              "enabled" -> jTrue,
+              "id" -> Str(r.name),
+              "realm" -> Str(r.name)
+            ))
 
       r.clients.foreach(feedClient(_, r.name))
       r.realmRoles.foreach(feedRealmRole(_, r.name))
@@ -245,7 +205,7 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
     sendRequest(requester("GET"), url)
   }
 
-  private def requester(method: String) = {
+  private def requester(method: String): Requester = {
     method match {
       case "POST" => post
       case "GET"  => get
@@ -257,7 +217,7 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
       requester: Requester,
       url: String,
       data: String = null)(implicit bearerToken: BearerToken): Response = {
-    requester(
+    val response = requester(
       url = url,
       auth = bearerToken,
       data =
@@ -267,5 +227,17 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
         "Content-Type" -> "application/json"
       )
     )
+
+    lazy val error = s"""
+      | request failed:
+      | request url: $url,
+      | method: ${requester.verb}
+      | response status: ${response.statusCode},
+      | response text: ${response.text()}
+    """.stripMargin
+
+    if (!Set(200, 201, 204).contains(response.statusCode))
+      throw new RuntimeException(error)
+    else response
   }
 }
