@@ -10,7 +10,7 @@ import scala.concurrent.duration.DurationDouble
 class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
   test("test") {
 
-    val settings = Settings.default.copy(port = 9005, version = "4.6.0")
+    val settings = Settings.default.copy(port = 9005, version = "4.7.0")
     val keycloakData = KeycloakData.fromConfig
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)

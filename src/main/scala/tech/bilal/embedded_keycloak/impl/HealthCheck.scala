@@ -3,10 +3,9 @@ package tech.bilal.embedded_keycloak.impl
 import requests.Response
 import retry.Success
 import tech.bilal.embedded_keycloak.Settings
-import scala.concurrent.ExecutionContext.Implicits._
 
+import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Future
-import scala.util.Try
 
 private[embedded_keycloak] class HealthCheck(settings: Settings) {
   def checkHealth(): Future[Unit] = {
@@ -16,21 +15,18 @@ private[embedded_keycloak] class HealthCheck(settings: Settings) {
 
     val f = retry
       .Backoff()
-      .apply(makeCall)
+      .apply(makeCall())
       .map(_ => ())
     f
   }
 
   private def makeCall(): Future[Response] = {
     println("RETRY: probing keycloak instance")
-
-    Future.fromTry {
-      Try {
-        val response = requests.get(s"http://${settings.host}:${settings.port}")
-        if (response.statusCode != 200)
-          throw new RuntimeException("keycloak health-check failed")
-        else response
-      }
+    Future {
+      val response = requests.get(s"http://${settings.host}:${settings.port}")
+      if (response.statusCode != 200)
+        throw new RuntimeException("keycloak health-check failed")
+      else response
     }
   }
 }
