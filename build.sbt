@@ -18,3 +18,5 @@ libraryDependencies ++= Seq(
 )
 
 parallelExecution in Test in ThisBuild := false
+
+resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
