@@ -4,6 +4,8 @@ Embedded keycloak server for jvm integration testing. (developed in scala)
 
 [![Build Status](https://travis-ci.com/bilal-fazlani/embedded-keycloak.svg?branch=master)](https://travis-ci.com/bilal-fazlani/embedded-keycloak)
 
+[![Coverage Status](https://coveralls.io/repos/github/bilal-fazlani/embedded-keycloak/badge.svg?branch=master)](https://coveralls.io/github/bilal-fazlani/embedded-keycloak?branch=master)
+
 # Usage
 
 ```scala

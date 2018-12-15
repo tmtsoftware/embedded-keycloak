@@ -1,5 +1,7 @@
 name := "embedded-keycloak"
 
+organization := "tech.bilal"
+
 version := "0.1"
 
 scalaVersion := "2.12.8"
@@ -16,6 +18,3 @@ libraryDependencies ++= Seq(
 )
 
 parallelExecution in Test in ThisBuild := false
-
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
-addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.2.7")
