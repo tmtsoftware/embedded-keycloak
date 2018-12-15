@@ -29,27 +29,16 @@ object KeycloakData {
                     authorizationEnabled: Boolean = false,
                     resourceRoles: Set[String] = Set.empty)
 
-  trait User {
-    val username: String
-    val password: String
-    val realmRoles: Set[String]
-    val resourceRoles: Set[String]
-  }
-
-  case class AdminUser(username: String,
-                       password: String,
-                       realmRoles: Set[String] = Set.empty,
-                       resourceRoles: Set[String] = Set.empty)
-      extends User
+  case class AdminUser(username: String = "admin", password: String = "admin")
 
   object AdminUser {
-    val default: AdminUser = AdminUser(username = "admin", password = "admin")
+    val default: AdminUser = AdminUser()
   }
 
   case class ApplicationUser(username: String,
                              password: String,
+                             firstName: String = "",
+                             lastName: String = "",
                              realmRoles: Set[String] = Set.empty,
                              resourceRoles: Set[String] = Set.empty)
-      extends User
-
 }

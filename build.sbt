@@ -10,6 +10,7 @@ libraryDependencies ++= Seq(
   "com.softwaremill.retry" %% "retry" % "0.3.0",
   "com.lihaoyi" %% "requests" % "0.1.4",
   "com.lihaoyi" %% "os-lib" % "0.2.5",
+  "com.lihaoyi" %% "upickle" % "0.7.1",
   "com.lihaoyi" %% "ujson" % "0.7.1",
   "org.backuity.clist" %% "clist-core"   % "3.4.0",
   "org.backuity.clist" %% "clist-macros" % "3.4.0" % "provided",

@@ -1,7 +1,7 @@
 package embedded.keycloak.data
 
 import embedded.keycloak.internal.Bash.exec
-import embedded.keycloak.models.KeycloakData.Client
+import embedded.keycloak.models.KeycloakData.{ApplicationUser, Client}
 import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
 import requests._
@@ -122,6 +122,79 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
         s"Could not create role $roleName.\nServer response: ${response.statusCode}\n${response.data.text}")
   }
 
+  def feedUser(user: ApplicationUser, realmName: String)(
+      implicit bearerToken: BearerToken): Unit = {
+    val creationResponse = kPost(
+      url = realmUrl(realmName) + "/users",
+      Map(
+        "enabled" -> jTrue,
+        "attributes" -> ujson.Arr(),
+        "username" -> Str(user.username),
+        "emailVerified" -> Str(""),
+        "firstName" -> Str(user.firstName),
+        "lastName" -> Str(user.lastName)
+      )
+    )
+
+    if (creationResponse.statusCode != 201)
+      throw new RuntimeException(
+        s"could not create user ${user.username}. status: ${creationResponse.statusCode}\n" +
+          s"response: ${creationResponse.text()}")
+
+    val userId = getId(creationResponse)
+
+    val resetResponse = kPut(
+      url = s"${realmUrl(realmName)}/users/$userId/reset-password",
+      Map(
+        "type" -> Str("password"),
+        "value" -> Str(user.password),
+        "temporary" -> jFalse
+      ))
+
+    if (resetResponse.statusCode != 200 && resetResponse.statusCode != 204)
+      throw new RuntimeException(
+        s"could not set password for user ${user.username}. status: ${resetResponse.statusCode}\n" +
+          s"response: ${resetResponse.text()}")
+
+    mapRealmRoles(realmName, userId, user.realmRoles)
+  }
+
+  case class RoleRepresentation(name: String,
+                                id: String,
+                                containerId: String,
+                                composite: Boolean,
+                                clientRole: Boolean)
+
+  object RoleRepresentation {
+    import upickle.default.{ReadWriter => RW, macroRW}
+    implicit val rw: RW[RoleRepresentation] = macroRW
+  }
+
+  def mapRealmRoles(realmName: String, userId: String, roleNames: Set[String])(
+      implicit bearerToken: BearerToken): Unit = {
+
+    val realmRoles = {
+      val rolesResponse = kGet(realmUrl(realmName) + "/roles")
+      if (rolesResponse.statusCode != 200 && rolesResponse.statusCode != 204)
+        throw new RuntimeException(
+          s"could not get realmRoles for user id $userId. status: ${rolesResponse.statusCode}\n" +
+            s"response: ${rolesResponse.text()}")
+      upickle.default
+        .read[Set[RoleRepresentation]](rolesResponse.text())
+        .filter(r => roleNames.contains(r.name))
+    }
+
+    //204 no content
+    val url = realmUrl(realmName) + s"/users/$userId/role-mappings/realm"
+
+    val response = kPost(url, upickle.default.write(realmRoles))
+
+    if (response.statusCode != 200 && response.statusCode != 204)
+      throw new RuntimeException(
+        s"could not add realmRoles for user id $userId. status: ${response.statusCode}\n" +
+          s"response: ${response.text()}")
+  }
+
   def feedRealms: Unit = {
     implicit val bearerToken: BearerToken = getBearerToken
 
@@ -139,14 +212,19 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
 
       r.clients.foreach(feedClient(_, r.name))
       r.realmRoles.foreach(feedRealmRole(_, r.name))
+      r.users.foreach(feedUser(_, r.name))
     })
   }
 
-  private implicit def toString(map: Map[String, Value]): String = {
+  private implicit def toMutableMap(
+      map: Map[String, Value]): MutableMap[String, Value] = {
     val mutableMap = MutableMap[String, Value]()
     map.foreach(mutableMap += _)
-    ujson.write(Obj(mutableMap))
+    mutableMap
   }
+
+  private implicit def toString(map: Map[String, Value]): String =
+    ujson.write(Obj(map))
 
   private def realmUrl = s"http://localhost:$port/auth/admin/realms"
 
@@ -158,21 +236,33 @@ class DataFeeder(settings: Settings, data: KeycloakData) {
     sendRequest(requester("POST"), url, data)
   }
 
+  private def kPut(url: String, data: String)(
+      implicit bearerToken: BearerToken): Response = {
+    sendRequest(requester("PUT"), url, data)
+  }
+
+  private def kGet(url: String)(implicit bearerToken: BearerToken): Response = {
+    sendRequest(requester("GET"), url)
+  }
+
   private def requester(method: String) = {
     method match {
-      case "GET"    => get
-      case "POST"   => post
-      case "PUT"    => put
-      case "DELETE" => delete
+      case "POST" => post
+      case "GET"  => get
+      case "PUT"  => put
     }
   }
 
-  private def sendRequest(requester: Requester, url: String, data: String)(
-      implicit bearerToken: BearerToken) = {
+  private def sendRequest(
+      requester: Requester,
+      url: String,
+      data: String = null)(implicit bearerToken: BearerToken): Response = {
     requester(
       url = url,
       auth = bearerToken,
-      data = RequestBlob.StringRequestBlob(data),
+      data =
+        if (data == null) RequestBlob.EmptyRequestBlob
+        else RequestBlob.StringRequestBlob(data),
       headers = Map(
         "Content-Type" -> "application/json"
       )
