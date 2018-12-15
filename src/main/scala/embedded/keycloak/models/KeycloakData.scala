@@ -24,6 +24,8 @@ object KeycloakData {
                    clients: Set[Client] = Set.empty,
                    users: Set[ApplicationUser] = Set.empty)
 
+  case class ResourceRole(clientName: String, roleName: String)
+
   case class Client(name: String,
                     clientType: String = "public",
                     authorizationEnabled: Boolean = false,
@@ -40,5 +42,5 @@ object KeycloakData {
                              firstName: String = "",
                              lastName: String = "",
                              realmRoles: Set[String] = Set.empty,
-                             resourceRoles: Set[String] = Set.empty)
+                             resourceRoles: Set[ResourceRole] = Set.empty)
 }

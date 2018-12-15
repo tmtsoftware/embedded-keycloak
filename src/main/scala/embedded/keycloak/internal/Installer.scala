@@ -1,8 +1,8 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
-import embedded.keycloak.data.DataFeeder
-import embedded.keycloak.download.{AkkaDownloader, CurlDownloader}
+import embedded.keycloak.data.AdminFeeder
+import embedded.keycloak.download.CurlDownloader
 import embedded.keycloak.internal.Bash._
 import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
@@ -14,7 +14,7 @@ class Installer(settings: Settings, data: KeycloakData)(
   import settings._
 
   val downloader = new CurlDownloader(settings)
-  val dataFeeder = new DataFeeder(settings, data)
+  val adminFeeder = new AdminFeeder(settings)
 
   private def getKeycloakRoot =
     Path(installationDirectory) / version / s"binaries"
@@ -48,6 +48,6 @@ class Installer(settings: Settings, data: KeycloakData)(
       decompress()
     }
 
-    dataFeeder.feedAdminUser()
+    adminFeeder.feedAdminUser(data.adminUser)
   }
 }

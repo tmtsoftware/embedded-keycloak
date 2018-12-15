@@ -1,6 +1,7 @@
 package embedded.keycloak.internal
 
 import akka.actor.ActorSystem
+import embedded.keycloak.data.DataFeeder
 import embedded.keycloak.internal.Bash._
 import embedded.keycloak.models.{KeycloakData, Settings}
 import os.Path
@@ -8,14 +9,15 @@ import os.Path
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmbeddedKeycloak(
-    data: KeycloakData,
+    keycloakData: KeycloakData,
     settings: Settings = Settings.default)(implicit actorSystem: ActorSystem) {
 
   private val installer =
-    new Installer(settings, data)
+    new Installer(settings, keycloakData)
 
   private val healthCheck = new HealthCheck(settings)
   private val ports = new Ports()
+  private val dataFeeder = new DataFeeder(settings, keycloakData)
 
   import settings._
 
@@ -46,6 +48,9 @@ class EmbeddedKeycloak(
 
     val stopHandle = new StopHandle(process)
 
-    healthCheck.checkHealth().map(_ => stopHandle)
+    healthCheck
+      .checkHealth()
+      .map(_ => dataFeeder.feed())
+      .map(_ => stopHandle)
   }
 }

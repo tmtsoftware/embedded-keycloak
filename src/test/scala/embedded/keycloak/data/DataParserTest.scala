@@ -28,7 +28,7 @@ class DataParserTest extends FunSuite with Matchers {
             ApplicationUser(
               username = "user2",
               password = "abcd",
-              resourceRoles = Set("server-user")
+              resourceRoles = Set(ResourceRole("some-server", "server-user"))
             )
           ),
           realmRoles = Set("super-admin")
