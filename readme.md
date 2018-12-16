@@ -10,8 +10,8 @@ Embedded keycloak server for jvm integration testing. (developed in scala)
 
 ```scala
 val keycloak = new EmbeddedKeycloak(
-      KeycloakData.fromConfig, 
-      Settings.default)
+      KeycloakData.fromConfig, // or directly: `KeycloakData(...)`
+      Settings.default) // or customize: Settings(...)
 
 val stopHandle = await(keycloak.startServerInBackground())
 
@@ -24,7 +24,7 @@ stopHandle.stop()
 
 the following settings options are available. 
 
-The default setting looks like this -
+The **default settings** looks like this -
 
 ```scala
 Settings(port = 8081,
@@ -79,3 +79,44 @@ embedded-keycloak{
     }]
 }
 ```
+
+Or the same data can be provided directly as shown below:
+
+```scala
+    val data = KeycloakData(
+      adminUser = AdminUser("admin", "admin"),
+      realms = Set(
+        Realm(
+          name = "example-realm",
+          clients = Set(
+            Client(
+              name = "some-server",
+              clientType = "bearer-only",
+              resourceRoles = Set("server-admin", "server-user"),
+              authorizationEnabled = true
+            ),
+            Client(name = "some-client")
+          ),
+          users = Set(
+            ApplicationUser(
+              username = "user1",
+              firstName = "john",
+              password = "abcd",
+              realmRoles = Set("super-admin")
+            ),
+            ApplicationUser(
+              username = "user2",
+              password = "abcd",
+              resourceRoles = Set(ResourceRole("some-server", "server-user"))
+            )
+          ),
+          realmRoles = Set("super-admin")
+        ))
+    )
+``` 
+
+### Limitations
+
+ - Does not support permissions
+ - Only supports the configs shown in the config file
+ - Does not support importing keycloak exported json file
