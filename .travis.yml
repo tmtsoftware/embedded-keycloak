@@ -21,8 +21,7 @@ jobs:
 #    # run ci-release only if previous stages passed
     - stage: release
       script:
-      - echo "releasing..."
-      #sbt ci-release
+      - sbt ci-release
 
 cache:
   directories:
