@@ -3,8 +3,29 @@ scala:
   - 2.12.8
 jdk:
   - oraclejdk8
-script: "sbt clean coverage test"
-after_success: "sbt coverageReport coveralls"
+
+before_install:
+  - git fetch --tags
+
+stages:
+  - name: compile
+  - name: test
+#  - name: release
+#    if: (branch = master AND type = push AND tag IS present)
+
+jobs:
+  include:
+    - stage: compile
+      script: sbt clean compile
+    - stage: test
+    - env: TEST=test
+      script: sbt coverage test
+    - env: TEST=converage
+      script: sbt coverageReport coveralls
+#    # run ci-release only if previous stages passed
+#    - stage: release
+#      script: sbt ci-release
+
 cache:
   directories:
     - "/tmp/keycloak-installation/"
