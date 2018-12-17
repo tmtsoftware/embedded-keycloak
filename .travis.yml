@@ -8,23 +8,21 @@ before_install:
   - git fetch --tags
 
 stages:
-  - name: compile
   - name: test
-#  - name: release
-#    if: (branch = master AND type = push AND tag IS present)
+  - name: release
+    if: (branch = master AND type = push AND tag IS present)
 
 jobs:
   include:
-    - stage: compile
-      script: sbt clean compile
     - stage: test
-    - env: TEST=test
-      script: sbt coverage test
-    - env: TEST=converage
-      script: sbt coverageReport coveralls
+      script:
+      - sbt clean coverage test
+      - sbt coverageReport coveralls
 #    # run ci-release only if previous stages passed
-#    - stage: release
-#      script: sbt ci-release
+    - stage: release
+      script:
+      - echo "releasing..."
+      #sbt ci-release
 
 cache:
   directories:
