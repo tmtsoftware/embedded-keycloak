@@ -4,13 +4,18 @@ scala:
 jdk:
   - oraclejdk8
 
+before_cache:
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
+
 before_install:
   - git fetch --tags
 
 stages:
   - name: test
   - name: release
-#    if: (branch = master AND type = push AND tag IS present)
+    if: (branch = master AND type = push AND tag IS present)
 
 jobs:
   include:
