@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits._
 
 class BlockingServerProcessTest extends FunSuite with Matchers {
 
-  val settings: Settings = Settings.default.copy(port = 9005, version = "4.7.0")
+  val settings: Settings = Settings.default.copy(port = 9005, version = "4.6.0")
   val ports = new Ports()
 
   test(
@@ -24,7 +24,7 @@ class BlockingServerProcessTest extends FunSuite with Matchers {
     }
     val healthCheck = new HealthCheck(settings)
 
-    Await.result(healthCheck.checkHealth(), 1.minute)
+    Await.result(healthCheck.checkHealth(), 10.minute)
 
     ports.stop(settings.port)
     ports.checkAvailability(settings.port) shouldBe true
