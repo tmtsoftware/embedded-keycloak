@@ -2,6 +2,7 @@ package tech.bilal.embedded_keycloak.impl.data
 
 import tech.bilal.embedded_keycloak.KeycloakData.{Client, Realm}
 import tech.bilal.embedded_keycloak.Settings
+import tech.bilal.embedded_keycloak.utils.BearerToken
 import ujson.Str
 
 import scala.io.Source

@@ -4,6 +4,8 @@ import com.typesafe.config.ConfigFactory
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import tech.bilal.embedded_keycloak.KeycloakData.{AdminUser, Realm}
+import tech.bilal.embedded_keycloak.impl.data.DataFetcher
+import tech.bilal.embedded_keycloak.utils.BearerToken
 
 case class KeycloakData(adminUser: AdminUser = AdminUser.default,
                         realms: Set[Realm] = Set.empty)
@@ -15,6 +17,15 @@ object KeycloakData {
     .load()
     .getConfig("embedded-keycloak")
     .as[KeycloakData]
+
+  def fromServer(settings: Settings,
+                 adminUsername: String,
+                 adminPassword: String): KeycloakData = {
+    implicit val token: BearerToken =
+      BearerToken.getBearerToken(settings.port, adminUsername, adminPassword)
+    KeycloakData(AdminUser(adminUsername, adminPassword),
+                 new DataFetcher(settings).getRealms)
+  }
 
   case class Realm(name: String,
                    realmRoles: Set[String] = Set.empty,

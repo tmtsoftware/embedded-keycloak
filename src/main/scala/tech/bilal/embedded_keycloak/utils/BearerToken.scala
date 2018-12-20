@@ -1,25 +1,30 @@
-package tech.bilal.embedded_keycloak.impl.data
+package tech.bilal.embedded_keycloak.utils
 
 import requests.{RequestAuth, RequestBlob, get}
-import tech.bilal.embedded_keycloak.KeycloakData.AdminUser
 
-private[embedded_keycloak] case class BearerToken(token: String)
+case class BearerToken(token: String)
     extends RequestAuth {
   override def header: Option[String] = Some(s"Bearer $token")
 }
 
-private[embedded_keycloak] object BearerToken {
-  def getBearerToken(port: Int, adminUser: AdminUser): BearerToken = {
+object BearerToken {
+  def getBearerToken(
+                      port: Int,
+                      username:String,
+                      password:String,
+                      realm:String = "master",
+                      client:String = "admin-cli"
+                    ): BearerToken = {
     val response = get(
       url =
-        s"http://localhost:$port/auth/realms/master/protocol/openid-connect/token",
+        s"http://localhost:$port/auth/realms/$realm/protocol/openid-connect/token",
       headers = Map("Content-Type" -> "application/x-www-form-urlencoded"),
       data = RequestBlob.FormEncodedRequestBlob(
         Map(
-          "client_id" -> "admin-cli",
+          "client_id" -> client,
           "grant_type" -> "password",
-          "username" -> adminUser.username,
-          "password" -> adminUser.password
+          "username" -> username,
+          "password" -> password
         ))
     )
 

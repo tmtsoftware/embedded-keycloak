@@ -2,6 +2,7 @@ package tech.bilal.embedded_keycloak.impl.data
 
 import tech.bilal.embedded_keycloak.KeycloakData.{Realm, ResourceRole}
 import tech.bilal.embedded_keycloak.Settings
+import tech.bilal.embedded_keycloak.utils.BearerToken
 
 private[embedded_keycloak] class RoleMapper(clientIds: Map[String, String],
                                             realm: Realm,

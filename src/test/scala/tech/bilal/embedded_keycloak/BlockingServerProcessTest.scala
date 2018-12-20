@@ -1,7 +1,8 @@
 package tech.bilal.embedded_keycloak
 
 import org.scalatest.{FunSuite, Matchers}
-import tech.bilal.embedded_keycloak.impl.{HealthCheck, Ports}
+import tech.bilal.embedded_keycloak.impl.HealthCheck
+import tech.bilal.embedded_keycloak.utils.Ports
 
 import scala.concurrent.duration.DurationLong
 import scala.concurrent.{Await, Future}

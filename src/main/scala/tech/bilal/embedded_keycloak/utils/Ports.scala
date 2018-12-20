@@ -1,11 +1,11 @@
-package tech.bilal.embedded_keycloak.impl
+package tech.bilal.embedded_keycloak.utils
 
 import os.proc
 import tech.bilal.embedded_keycloak.impl.OsLibExtensions._
 
-private[embedded_keycloak] class Ports {
+class Ports {
 
-  def checkAvailability(port: Int, `throw`: Boolean = false): Boolean = {
+  private[embedded_keycloak] def checkAvailability(port: Int, `throw`: Boolean = false): Boolean = {
     val commandResult =
       proc("lsof", "-n", s"-i4TCP:$port") | proc("grep", "LISTEN")
 

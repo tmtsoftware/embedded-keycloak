@@ -3,12 +3,8 @@ package tech.bilal.embedded_keycloak
 import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.DataFeeder
-import tech.bilal.embedded_keycloak.impl.{
-  HealthCheck,
-  Installer,
-  Ports,
-  StopHandle
-}
+import tech.bilal.embedded_keycloak.impl.{HealthCheck, Installer, StopHandle}
+import tech.bilal.embedded_keycloak.utils.Ports
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -20,7 +16,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
 
   private val healthCheck = new HealthCheck(settings)
   private val ports = new Ports()
-  private val dataFeeder = new DataFeeder(settings, keycloakData)
+  private val dataFeeder = new DataFeeder(settings)
 
   import settings._
 
@@ -53,7 +49,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
 
     healthCheck
       .checkHealth()
-      .map(_ => dataFeeder.feed())
+      .map(_ => dataFeeder.feed(keycloakData))
       .map(_ => stopHandle)
   }
 }

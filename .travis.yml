@@ -23,7 +23,7 @@ jobs:
       script:
       - sbt clean coverage test
       - sbt coverageReport coveralls
-#    # run ci-release only if previous stages passed
+    # run ci-release only if previous stages passed
     - stage: release
       script:
       - sbt ci-release

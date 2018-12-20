@@ -2,6 +2,7 @@ package tech.bilal.embedded_keycloak.impl.data
 
 import tech.bilal.embedded_keycloak.KeycloakData.{ApplicationUser, Realm}
 import tech.bilal.embedded_keycloak.Settings
+import tech.bilal.embedded_keycloak.utils.BearerToken
 import ujson.Str
 
 private[embedded_keycloak] class UserFeeder(clientIds: Map[String, String],

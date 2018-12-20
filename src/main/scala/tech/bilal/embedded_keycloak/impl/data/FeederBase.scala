@@ -2,6 +2,7 @@ package tech.bilal.embedded_keycloak.impl.data
 
 import requests._
 import tech.bilal.embedded_keycloak.Settings
+import tech.bilal.embedded_keycloak.utils.BearerToken
 import ujson.{Bool, Obj, Value}
 
 import scala.collection.mutable.{LinkedHashMap => MutableMap}
