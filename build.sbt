@@ -16,6 +16,13 @@ name := "embedded-keycloak"
 
 scalaVersion := "2.12.8"
 
+version := {
+  sys.env.get("CI") match {
+    case Some("true") => version.value
+    case _            => "0.1-SNAPSHOT"
+  }
+}
+
 //resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
 libraryDependencies ++= Seq(
