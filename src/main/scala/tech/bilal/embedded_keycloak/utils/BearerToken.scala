@@ -12,11 +12,12 @@ object BearerToken {
       username: String,
       password: String,
       realm: String = "master",
-      client: String = "admin-cli"
+      client: String = "admin-cli",
+      host: String = "localhost",
   ): BearerToken = {
     val response = get(
       url =
-        s"http://localhost:$port/auth/realms/$realm/protocol/openid-connect/token",
+        s"http://$host:$port/auth/realms/$realm/protocol/openid-connect/token",
       headers = Map("Content-Type" -> "application/x-www-form-urlencoded"),
       data = RequestBlob.FormEncodedRequestBlob(
         Map(
