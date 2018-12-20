@@ -21,6 +21,8 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings)
     j.update("clientId", Str(client.name))
     j.update("authorizationServicesEnabled",
              ujson.Bool(client.authorizationEnabled))
+    j.update("directAccessGrantsEnabled",
+             ujson.Bool(client.passwordGrantEnabled))
 
     client.clientType match {
       case "bearer-only" =>

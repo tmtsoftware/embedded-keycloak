@@ -2,19 +2,18 @@ package tech.bilal.embedded_keycloak.utils
 
 import requests.{RequestAuth, RequestBlob, get}
 
-case class BearerToken(token: String)
-    extends RequestAuth {
+case class BearerToken(token: String) extends RequestAuth {
   override def header: Option[String] = Some(s"Bearer $token")
 }
 
 object BearerToken {
   def getBearerToken(
-                      port: Int,
-                      username:String,
-                      password:String,
-                      realm:String = "master",
-                      client:String = "admin-cli"
-                    ): BearerToken = {
+      port: Int,
+      username: String,
+      password: String,
+      realm: String = "master",
+      client: String = "admin-cli"
+  ): BearerToken = {
     val response = get(
       url =
         s"http://localhost:$port/auth/realms/$realm/protocol/openid-connect/token",
@@ -28,8 +27,12 @@ object BearerToken {
         ))
     )
 
-    if (response.statusCode != 200)
-      throw new RuntimeException(s"Could not log in to keycloak")
+    if (response.statusCode != 200) {
+      val error = Seq("Could not log in to keycloak", response.text())
+        .filter(_ != "")
+        .mkString("\n")
+      throw new RuntimeException(error)
+    }
 
     val tokenString =
       ujson.read(response.data.bytes).obj.get("access_token").map(_.str).get

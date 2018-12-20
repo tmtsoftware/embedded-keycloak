@@ -37,6 +37,7 @@ object KeycloakData {
   case class Client(name: String,
                     clientType: String = "public",
                     authorizationEnabled: Boolean = false,
+                    passwordGrantEnabled: Boolean = true,
                     resourceRoles: Set[String] = Set.empty)
 
   case class AdminUser(username: String = "admin", password: String = "admin")
