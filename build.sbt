@@ -23,8 +23,6 @@ version := {
   }
 }
 
-//resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
-
 libraryDependencies ++= Seq(
   "com.softwaremill.retry" %% "retry" % "0.3.0",
   "com.lihaoyi" %% "requests" % "0.1.4",
@@ -32,6 +30,9 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "upickle" % "0.7.1",
   "com.lihaoyi" %% "ujson" % "0.7.1",
   "com.iheart" %% "ficus" % "1.4.3",
+  //AKKA-DOWNLOADER
+  "com.typesafe.akka" %% "akka-http" % "10.1.5",
+  "com.typesafe.akka" %% "akka-stream" % "2.5.19",
   //TEST
   "org.scalatest" %% "scalatest" % "3.0.5" % Test
 )

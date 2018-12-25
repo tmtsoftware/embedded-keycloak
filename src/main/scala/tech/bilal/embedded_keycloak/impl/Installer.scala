@@ -3,14 +3,17 @@ package tech.bilal.embedded_keycloak.impl
 import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.AdminFeeder
-import tech.bilal.embedded_keycloak.impl.download.CurlDownloader
+import tech.bilal.embedded_keycloak.impl.download.{
+  AkkaDownloader,
+  CurlDownloader
+}
 import tech.bilal.embedded_keycloak.{KeycloakData, Settings}
 
 class Installer(settings: Settings, data: KeycloakData) {
 
   import settings._
 
-  val downloader = new CurlDownloader(settings)
+  val downloader = new AkkaDownloader(settings)
   val adminFeeder = new AdminFeeder(settings)
 
   private def getKeycloakRoot =
