@@ -33,12 +33,12 @@ the following settings options are available.
 The **default settings** looks like this -
 
 ```scala
-Settings(port = 8081,
-         host = "0.0.0.0",
-         installationDirectory = "/tmp/keycloak-installation/",
-         cleanPreviousData = true,
-         alwaysDownload = false,
-         version = "4.6.0")
+Settings(port: Int = 8081,
+         host: String = "0.0.0.0",
+         keycloakDirectory: String = "/tmp/embedded-keycloak/",
+         cleanPreviousData: Boolean = true,
+         alwaysDownload: Boolean = false,
+         version: String = "4.6.0")
 ```
 
 # Keycloak Data
