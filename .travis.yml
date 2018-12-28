@@ -29,6 +29,6 @@ jobs:
 
 cache:
   directories:
-    - "/tmp/keycloak-installation/"
+    - "/tmp/embedded-keycloak/"
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot
