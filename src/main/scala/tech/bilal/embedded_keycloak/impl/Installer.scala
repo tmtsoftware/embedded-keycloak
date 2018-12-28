@@ -3,10 +3,7 @@ package tech.bilal.embedded_keycloak.impl
 import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.AdminFeeder
-import tech.bilal.embedded_keycloak.impl.download.{
-  AkkaDownloader,
-  CurlDownloader
-}
+import tech.bilal.embedded_keycloak.impl.download.AkkaDownloader
 import tech.bilal.embedded_keycloak.{KeycloakData, Settings}
 
 class Installer(settings: Settings, data: KeycloakData) {
