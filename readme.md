@@ -2,6 +2,8 @@
 
 Embedded keycloak server for jvm integration testing. (developed in scala)
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/tech.bilal/embedded-keycloak_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-centraltech.bilal/embedded-keycloak_2.12)
+
 [![Build Status](https://travis-ci.com/bilal-fazlani/embedded-keycloak.svg?branch=master)](https://travis-ci.com/bilal-fazlani/embedded-keycloak)
 
 [![Coverage Status](https://coveralls.io/repos/github/bilal-fazlani/embedded-keycloak/badge.svg?branch=master)](https://coveralls.io/github/bilal-fazlani/embedded-keycloak?branch=master)
