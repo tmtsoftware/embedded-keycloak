@@ -3,7 +3,8 @@ package tech.bilal.embedded_keycloak.impl.download
 import os.{Path, proc}
 import tech.bilal.embedded_keycloak.Settings
 
-private[embedded_keycloak] class CurlDownloader(settings: Settings) {
+private[embedded_keycloak] class CurlDownloader(settings: Settings)
+    extends Downloader {
 
   import settings._
 

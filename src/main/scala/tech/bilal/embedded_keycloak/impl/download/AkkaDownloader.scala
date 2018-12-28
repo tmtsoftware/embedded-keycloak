@@ -15,7 +15,8 @@ import tech.bilal.embedded_keycloak.impl.download.DownloaderExtensions._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}
 
-private[embedded_keycloak] class AkkaDownloader(settings: Settings) {
+private[embedded_keycloak] class AkkaDownloader(settings: Settings)
+    extends Downloader {
 
   import settings._
 
