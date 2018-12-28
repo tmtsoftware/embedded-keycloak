@@ -7,13 +7,13 @@ Embedded keycloak server for jvm integration testing. (developed in scala)
 [![Coverage Status](https://coveralls.io/repos/github/bilal-fazlani/embedded-keycloak/badge.svg?branch=master)](https://coveralls.io/github/bilal-fazlani/embedded-keycloak?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/39e38c33fbab49f996971aab557a072a)](https://www.codacy.com/app/bilal-fazlani/embedded-keycloak?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bilal-fazlani/embedded-keycloak&amp;utm_campaign=Badge_Grade)
 
-# Installation
+## Installation
 
-```
+```scala
 libraryDependencies += "tech.bilal" %% "embedded-keycloak" % "<ADD_VERSION_HERE>"
 ```
 
-# Usage
+## Usage
 
 ```scala
 val keycloak = new EmbeddedKeycloak(
@@ -27,7 +27,7 @@ val stopHandle = await(keycloak.startServerInBackground())
 stopHandle.stop()
 ```
 
-# Settings
+## Settings
 
 the following settings options are available. 
 
@@ -42,7 +42,7 @@ Settings(port: Int = 8081,
          version: String = "4.6.0")
 ```
 
-# Keycloak Data
+## Keycloak Data
 
 The test data can be provided in application.conf of test scope.
 
@@ -122,8 +122,8 @@ Or the same data can be provided directly as shown below:
     )
 ``` 
 
-### Limitations
+## Limitations
 
- - Does not support permissions
- - Only supports the configs shown in the config file
- - Does not support importing keycloak exported json file
+- Does not support permissions
+- Only supports the configs shown in the config file
+- Does not support importing keycloak exported json file
