@@ -62,7 +62,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
 
       val materializedValue =
         source.runForeach { progress =>
-          print(s"\r${math.round(progress.percentage)} %")
+          print(s"\r$progress")
         }
 
       materializedValue.onComplete(_ => {

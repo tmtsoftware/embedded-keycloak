@@ -15,7 +15,8 @@ private[embedded_keycloak] case class DownloadProgress(downloadedBytes: Long,
                      lastChunk = newData)
 
   override def toString: String =
-    s"${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)}"
+    s"${math.round(percentage)}% " +
+      s"(${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)})"
 
   def percentage: Double =
     (downloadedBytes.toDouble / totalBytes.toDouble) * 100
