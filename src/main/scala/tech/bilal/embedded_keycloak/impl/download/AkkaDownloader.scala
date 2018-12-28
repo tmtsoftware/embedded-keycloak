@@ -56,7 +56,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
       val source: Source[DownloadProgress, Future[Done]] =
         responseFuture.toByteStringSource
           .toProgressSource(contentLength)
-          .writeToFile(fileIO.tarFilePath)
+          .writeToFile(fileIO.incompleteTarFilePath)
           .untilDownloadCompletes
           .compressForPrinting
 
@@ -67,6 +67,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
 
       materializedValue.onComplete(_ => {
         actorSystem.terminate()
+        fileIO.moveIncompleteFile()
         println()
         println("keycloak downloaded")
       })

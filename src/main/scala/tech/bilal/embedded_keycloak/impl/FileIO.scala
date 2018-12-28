@@ -18,6 +18,9 @@ class FileIO(settings: Settings) {
 
   def binariesDirectory: Path = versionDirectory / "binaries"
 
+  def incompleteTarFilePath: Path =
+    downloadDirectory / s"keycloak-$version.Final.tar.gz.incomplete"
+
   def tarFilePath: Path = downloadDirectory / s"keycloak-$version.Final.tar.gz"
 
   def addUserExecutablePath: Path =
@@ -37,4 +40,11 @@ class FileIO(settings: Settings) {
   def deleteVersion(): Unit = os.remove.all(versionDirectory)
 
   def deleteBinaries(): Unit = os.remove.all(binariesDirectory)
+
+  def moveIncompleteFile(): Unit =
+    os.move(from = incompleteTarFilePath,
+            to = tarFilePath,
+            replaceExisting = true,
+            atomicMove = true,
+            createFolders = true)
 }
