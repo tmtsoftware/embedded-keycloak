@@ -1,9 +1,13 @@
 package tech.bilal.embedded_keycloak
 
-import os.Path
 import tech.bilal.embedded_keycloak.impl.Bash._
 import tech.bilal.embedded_keycloak.impl.data.DataFeeder
-import tech.bilal.embedded_keycloak.impl.{HealthCheck, Installer, StopHandle}
+import tech.bilal.embedded_keycloak.impl.{
+  FileIO,
+  HealthCheck,
+  Installer,
+  StopHandle
+}
 import tech.bilal.embedded_keycloak.utils.Ports
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -20,8 +24,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
 
   import settings._
 
-  private def getBinDirectory =
-    Path(installationDirectory) / version / s"binaries" / s"keycloak-$version.Final" / "bin"
+  val fileIO = new FileIO(settings)
 
   def preRun(): Unit = {
     installer.install()
@@ -31,7 +34,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
   def startServer()(implicit ec: ExecutionContext): Unit = {
     preRun()
     exec(
-      s"sh ${getBinDirectory / "standalone.sh"} " +
+      s"sh ${fileIO.keycloakExecutablePath} " +
         s"-Djboss.bind.address=$host " +
         s"-Djboss.http.port=$port")
   }
@@ -41,7 +44,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
     preRun()
 
     val process = background(
-      s"sh ${getBinDirectory / "standalone.sh"} " +
+      s"sh ${fileIO.keycloakExecutablePath} " +
         s"-Djboss.bind.address=$host " +
         s"-Djboss.http.port=$port")
 

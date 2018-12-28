@@ -7,9 +7,8 @@ import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
-import os.Path
 import tech.bilal.embedded_keycloak.Settings
-import tech.bilal.embedded_keycloak.impl.download.DownloadProgress.DownloadProgressWithTotalLength
+import tech.bilal.embedded_keycloak.impl.FileIO
 import tech.bilal.embedded_keycloak.impl.download.DownloaderExtensions._
 
 import scala.concurrent.duration.DurationInt
@@ -20,27 +19,18 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
 
   import settings._
 
-  private def getInstallationDirectory = Path(installationDirectory) / version
-
-  private def getTarFilePath =
-    Path(installationDirectory) / version / s"keycloak-$version.Final.tar.gz"
+  val fileIO = new FileIO(settings)
 
   private def getUrl =
+//    s"http://localhost:9090/keycloak-4.6.0.Final.tar.gz"
     s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
 
-  private def isKeycloakDownloaded: Boolean = {
-    os.exists(getTarFilePath)
-  }
-
-  private def cleanEverything(): Unit = {
-    os.remove.all(getInstallationDirectory)
-  }
+  private def isKeycloakDownloaded: Boolean = os.exists(fileIO.tarFilePath)
 
   def download(): Unit = {
-    println("downloading keycloak...")
-
     if (alwaysDownload || !isKeycloakDownloaded) {
-      cleanEverything()
+      println("downloading keycloak...")
+      fileIO.deleteVersion()
 
       val config = ConfigFactory
         .load()
@@ -56,23 +46,30 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
 
       val contentLength = responseFuture.map {
         case HttpResponse(StatusCodes.OK, _, entity, _) =>
-          entity.contentLengthOption
+          entity.contentLengthOption.getOrElse(
+            throw new RuntimeException("content length is not provided"))
+        case HttpResponse(statusCode, _, _, _) =>
+          throw new RuntimeException(
+            s"ERROR: error while downloading. status code: $statusCode")
       }
 
       val source: Source[DownloadProgress, Future[Done]] =
         responseFuture.toByteStringSource
           .toProgressSource(contentLength)
-          .writeToFile(getTarFilePath)
+          .writeToFile(fileIO.tarFilePath)
           .untilDownloadCompletes
           .compressForPrinting
 
       val materializedValue =
-        source.runForeach {
-          case progress: DownloadProgressWithTotalLength =>
-            print(s"\r${math.ceil(progress.percentage).toInt} %")
+        source.runForeach { progress =>
+          print(s"\r${math.round(progress.percentage)} %")
         }
 
-      materializedValue.onComplete(_ => actorSystem.terminate())
+      materializedValue.onComplete(_ => {
+        actorSystem.terminate()
+        println()
+        println("keycloak downloaded")
+      })
 
       Await.result(materializedValue, 20.minutes)
     }

@@ -4,7 +4,6 @@ import akka.Done
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import tech.bilal.embedded_keycloak.impl.download.DownloadProgress.DownloadProgressWithTotalLength
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,31 +21,19 @@ private[embedded_keycloak] object DownloaderExtensions {
       }
     }
 
-    def untilDownloadCompletes: Source[DownloadProgress, Future[Done]] = {
-      source.takeWhile {
-        case DownloadProgressWithTotalLength(downloadedBytes, totalBytes, _) =>
-          downloadedBytes != totalBytes
-        //todo:handle this scenario
-        case _ => false
-      }
-    }
+    def untilDownloadCompletes: Source[DownloadProgress, Future[Done]] =
+      source.takeWhile(p => p.downloadedBytes <= p.totalBytes)
 
     def compressForPrinting: Source[DownloadProgress, Future[Done]] = {
       source
         .statefulMapConcat(() => {
           var lastProgressPercentage = 0D
-          p =>
-            p match {
-              case thisProgress: DownloadProgressWithTotalLength => {
-                if (thisProgress.percentage - lastProgressPercentage > 10D | thisProgress.percentage == 100D) {
-                  lastProgressPercentage = thisProgress.percentage
-                  List(p)
-                } else {
-                  List.empty[DownloadProgress]
-                }
-              }
-              //todo: Handle this
-              case _ => List.empty[DownloadProgress]
+          thisProgress =>
+            if (thisProgress.percentage - lastProgressPercentage > 10D | thisProgress.percentage == 100D | thisProgress.percentage == 0D) {
+              lastProgressPercentage = thisProgress.percentage
+              List(thisProgress)
+            } else {
+              List.empty[DownloadProgress]
             }
         })
     }
@@ -54,7 +41,7 @@ private[embedded_keycloak] object DownloaderExtensions {
 
   implicit class RichByteStringSourceOfDone(
       source: Source[ByteString, Future[Done]]) {
-    def toProgressSource(contentLength: Future[Option[Long]])(
+    def toProgressSource(contentLength: Future[Long])(
         implicit ec: ExecutionContext)
       : Source[DownloadProgress, Future[Done]] = {
       source
@@ -78,7 +65,6 @@ private[embedded_keycloak] object DownloaderExtensions {
   implicit class RichHttpResponseFuture(responseF: Future[HttpResponse])(
       implicit ec: ExecutionContext) {
     def toByteStringSource: Source[ByteString, Future[Done]] = {
-
       Source
         .fromFutureSource(
           responseF
