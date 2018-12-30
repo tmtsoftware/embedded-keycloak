@@ -11,9 +11,9 @@ class DataFeeder(settings: Settings) {
 
   def feed(keycloakData: KeycloakData): Unit = {
     implicit val bearerToken: BearerToken =
-      BearerToken.getBearerToken(settings.port,
-                                 keycloakData.adminUser.username,
-                                 keycloakData.adminUser.password)
+      BearerToken.fromServer(settings.port,
+                             keycloakData.adminUser.username,
+                             keycloakData.adminUser.password)
 
     keycloakData.realms.foreach(realmFeeder.feedRealm)
   }

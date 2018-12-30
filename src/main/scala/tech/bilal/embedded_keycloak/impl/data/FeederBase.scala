@@ -4,7 +4,7 @@ import requests._
 import tech.bilal.embedded_keycloak.Settings
 import tech.bilal.embedded_keycloak.utils.BearerToken
 import ujson.{Bool, Obj, Value}
-
+import upickle.default.{macroRW, ReadWriter => RW}
 import scala.collection.mutable.{LinkedHashMap => MutableMap}
 import scala.language.implicitConversions
 
@@ -22,7 +22,6 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
                                 clientRole: Boolean)
 
   object RoleRepresentation {
-    import upickle.default.{macroRW, ReadWriter => RW}
     implicit val rw: RW[RoleRepresentation] = macroRW
   }
 

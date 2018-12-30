@@ -138,12 +138,12 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
     def getBool(key: String): Boolean = map.get(key).exists(_.bool)
 
     def getClientType: String = {
-      if (map.getBool("publicClient"))
-        "public"
-      else if (map.getBool("bearerOnly"))
-        "bearerOnly"
-      else
-        "confidential"
+      (map.getBool("publicClient"), map.getBool("bearerOnly")) match {
+        case (true, false)  => "public"
+        case (false, true)  => "bearerOnly"
+        case (false, false) => "confidential"
+        case _              => throw new RuntimeException("invalid client type")
+      }
     }
   }
 }

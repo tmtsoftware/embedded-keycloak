@@ -14,7 +14,7 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
 
-    val token = BearerToken.getBearerToken(9005, "admin", "admin")
+    val token = BearerToken.fromServer(9005, "admin", "admin")
     token.header should not be empty
     stopHandle.stop()
   }
@@ -25,11 +25,12 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
 
-    val token = BearerToken.getBearerToken(9005,
-                                           "user1",
-                                           "abcd",
-                                           "example-realm",
-                                           "some-client")
+    val token =
+      BearerToken.fromServer(9005,
+                             "user1",
+                             "abcd",
+                             "example-realm",
+                             "some-client")
     token.header should not be empty
     stopHandle.stop()
   }

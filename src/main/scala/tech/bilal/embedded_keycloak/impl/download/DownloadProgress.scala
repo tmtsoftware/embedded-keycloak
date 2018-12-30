@@ -22,11 +22,15 @@ private[embedded_keycloak] case class DownloadProgress(downloadedBytes: Long,
     (downloadedBytes.toDouble / totalBytes.toDouble) * 100
 
   private def readableFileSize(size: Long): String = {
-    if (size <= 0) return "0"
-    val units = Array[String]("B", "kB", "MB", "GB", "TB")
-    val digitGroups = (Math.log10(size) / Math.log10(1024)).toInt
-    new DecimalFormat("#,##0.#")
-      .format(size / Math.pow(1024, digitGroups)) + " " + units(digitGroups)
+    if (size <= 0) "0 B"
+    else {
+      val units = Array[String]("B", "kB", "MB", "GB", "TB")
+      val digitGroups = (Math.log10(size) / Math.log10(1024)).toInt
+      val decimalFormat = new DecimalFormat("#,##0.#")
+      val number = size / Math.pow(1024, digitGroups)
+      val formattedNumber = decimalFormat.format(number)
+      s"$formattedNumber ${units(digitGroups)}"
+    }
   }
 }
 

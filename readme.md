@@ -124,6 +124,6 @@ Or the same data can be provided directly as shown below:
 
 ## Limitations
 
-  - Does not support permissions
-  - Only supports the configs shown in the config file
-  - Does not support importing keycloak exported json file
+- Does not support permissions
+- Only supports the configs shown in the config file
+- Does not support importing keycloak exported json file

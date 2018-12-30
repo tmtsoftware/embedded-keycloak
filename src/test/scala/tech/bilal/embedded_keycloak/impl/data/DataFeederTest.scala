@@ -4,7 +4,6 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 import tech.bilal.embedded_keycloak.KeycloakData.{ApplicationUser, ResourceRole}
 import tech.bilal.embedded_keycloak.utils.{BearerToken, Ports}
 import tech.bilal.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
-
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationDouble
@@ -18,7 +17,7 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
     val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
 
     implicit val bearerToken: BearerToken =
-      BearerToken.getBearerToken(9005, "admin", "admin")
+      BearerToken.fromServer(9005, "admin", "admin")
 
     val actualRealms =
       KeycloakData.fromServer(settings, "admin", "admin").realms

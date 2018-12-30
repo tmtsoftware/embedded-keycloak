@@ -7,7 +7,7 @@ case class BearerToken(token: String) extends RequestAuth {
 }
 
 object BearerToken {
-  def getBearerToken(
+  def fromServer(
       port: Int,
       username: String,
       password: String,

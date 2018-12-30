@@ -22,7 +22,7 @@ object KeycloakData {
                  adminUsername: String,
                  adminPassword: String): KeycloakData = {
     implicit val token: BearerToken =
-      BearerToken.getBearerToken(settings.port, adminUsername, adminPassword)
+      BearerToken.fromServer(settings.port, adminUsername, adminPassword)
     KeycloakData(AdminUser(adminUsername, adminPassword),
                  new DataFetcher(settings).getRealms)
   }

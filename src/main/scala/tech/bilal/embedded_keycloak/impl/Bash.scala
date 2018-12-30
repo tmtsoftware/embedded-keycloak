@@ -5,7 +5,7 @@ import os.{Path, SubProcess, proc}
 private[embedded_keycloak] object Bash {
 
   implicit class RichProc(proc: proc) {
-    def executeAndShow(`throw`: Boolean = false, cwd: Path = null): Int = {
+    def executeAndShow(throwOnError: Boolean = false, cwd: Path = null): Int = {
       val exitCode = proc.stream(
         cwd = cwd,
         onOut = (buffer, length) =>
@@ -24,7 +24,7 @@ private[embedded_keycloak] object Bash {
             .foreach(System.err.println)
       )
 
-      if (`throw` && exitCode != 0)
+      if (throwOnError && exitCode != 0)
         throw new RuntimeException(
           s"the command $proc resulted in exit code $exitCode")
 
@@ -38,7 +38,7 @@ private[embedded_keycloak] object Bash {
 
   def exec(command: String, cwd: Path = null) = {
     os.proc(command.split(" "))
-      .executeAndShow(`throw` = true, cwd = cwd)
+      .executeAndShow(throwOnError = true, cwd = cwd)
   }
 
   def background(command: String, cwd: Path = null) = {
