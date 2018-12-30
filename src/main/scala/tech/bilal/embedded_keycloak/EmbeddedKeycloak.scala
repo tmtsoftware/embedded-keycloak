@@ -28,7 +28,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
 
   def preRun(): Unit = {
     installer.install()
-    ports.checkAvailability(port = port, `throw` = true)
+    ports.checkAvailability(port = port, throwOnError = true)
   }
 
   def startServer()(implicit ec: ExecutionContext): Unit = {

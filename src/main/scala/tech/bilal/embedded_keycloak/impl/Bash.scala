@@ -36,11 +36,23 @@ private[embedded_keycloak] object Bash {
     }
   }
 
+  /**
+    * Execute on current thread
+    * @param command
+    * @param cwd
+    * @return
+    */
   def exec(command: String, cwd: Path = null) = {
     os.proc(command.split(" "))
       .executeAndShow(throwOnError = true, cwd = cwd)
   }
 
+  /**
+    * Execute in background
+    * @param command
+    * @param cwd
+    * @return
+    */
   def background(command: String, cwd: Path = null) = {
     os.proc(command.split(" "))
       .executeBackground(cwd = cwd)

@@ -5,13 +5,15 @@ import tech.bilal.embedded_keycloak.impl.OsLibExtensions._
 
 class Ports {
 
-  private[embedded_keycloak] def checkAvailability(port: Int, `throw`: Boolean = false): Boolean = {
+  private[embedded_keycloak] def checkAvailability(
+      port: Int,
+      throwOnError: Boolean = false): Boolean = {
     val commandResult =
       proc("lsof", "-n", s"-i4TCP:$port") | proc("grep", "LISTEN")
 
     val free = commandResult.output.isEmpty
 
-    if (`throw` && !free) {
+    if (throwOnError && !free) {
       val (processName, pid) = getProcessForPort(port)
       throw new RuntimeException(
         s"port $port is not available. a $processName process with " +

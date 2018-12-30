@@ -21,7 +21,8 @@ class BackgroundServerProcessTest extends AsyncFunSuite with Matchers {
 
     healthCheck.checkHealth().map { _ =>
       stopHandle.stop()
-      new Ports().checkAvailability(settings.port, `throw` = true) shouldBe true
+      new Ports()
+        .checkAvailability(settings.port, throwOnError = true) shouldBe true
     }
   }
 }
