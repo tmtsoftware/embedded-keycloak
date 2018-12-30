@@ -31,7 +31,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
     ports.checkAvailability(port = port, throwOnError = true)
   }
 
-  def startServer()(implicit ec: ExecutionContext): Unit = {
+  def startServer(): Unit = {
     preRun()
     exec(
       s"sh ${fileIO.keycloakExecutablePath} " +
