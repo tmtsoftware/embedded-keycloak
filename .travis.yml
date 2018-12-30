@@ -21,8 +21,9 @@ jobs:
   include:
     - stage: test
       script:
-      - sbt clean coverage test
-      - sbt coverageReport coveralls
+      - sbt clean coverage test # compile and run tests
+      - sbt coverageReport coverageAggregate # create coverage reports
+      - sbt coveralls codacyCoverage # upload coverage to coveralls and codacy
     - stage: release
       script:
       - sbt ci-release
