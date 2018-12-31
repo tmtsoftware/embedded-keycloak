@@ -5,7 +5,7 @@ import os.{Path, SubProcess, proc}
 private[embedded_keycloak] object Bash {
 
   implicit class RichProc(proc: proc) {
-    def executeAndShow(throwOnError: Boolean = false, cwd: Path = null): Int = {
+    def executeAndShow(throwOnError: Boolean = false, cwd: Path = null): Int = { // scalastyle:ignore
       val exitCode = proc.stream(
         cwd = cwd,
         onOut = (buffer, length) =>
@@ -31,7 +31,7 @@ private[embedded_keycloak] object Bash {
       exitCode
     }
 
-    def executeBackground(cwd: Path = null): SubProcess = {
+    def executeBackground(cwd: Path = null): SubProcess = { // scalastyle:ignore
       proc.spawn(cwd = cwd)
     }
   }
@@ -42,7 +42,7 @@ private[embedded_keycloak] object Bash {
     * @param cwd
     * @return
     */
-  def exec(command: String, cwd: Path = null) = {
+  def exec(command: String, cwd: Path = null) = { // scalastyle:ignore
     os.proc(command.split(" "))
       .executeAndShow(throwOnError = true, cwd = cwd)
   }
@@ -53,7 +53,7 @@ private[embedded_keycloak] object Bash {
     * @param cwd
     * @return
     */
-  def background(command: String, cwd: Path = null) = {
+  def background(command: String, cwd: Path = null) = { // scalastyle:ignore
     os.proc(command.split(" "))
       .executeBackground(cwd = cwd)
   }

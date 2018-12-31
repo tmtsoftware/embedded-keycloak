@@ -68,10 +68,10 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
     }
   }
 
-  private def sendRequest(
-      requester: Requester,
-      url: String,
-      data: String = null)(implicit bearerToken: BearerToken): Response = {
+  private def sendRequest(requester: Requester,
+                          url: String,
+                          data: String = null)( // scalastyle:ignore
+      implicit bearerToken: BearerToken): Response = {
     val response = requester(
       url = url,
       auth = bearerToken,
