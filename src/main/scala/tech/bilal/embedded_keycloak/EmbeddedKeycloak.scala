@@ -31,16 +31,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
     ports.checkAvailability(port = port, throwOnError = true)
   }
 
-  def startServer(): Unit = {
-    preRun()
-    exec(
-      s"sh ${fileIO.keycloakExecutablePath} " +
-        s"-Djboss.bind.address=$host " +
-        s"-Djboss.http.port=$port")
-  }
-
-  def startServerInBackground()(
-      implicit ec: ExecutionContext): Future[StopHandle] = {
+  def startServer()(implicit ec: ExecutionContext): Future[StopHandle] = {
     preRun()
 
     val process = background(

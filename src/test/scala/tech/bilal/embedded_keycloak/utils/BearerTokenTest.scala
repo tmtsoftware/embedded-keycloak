@@ -12,7 +12,7 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
     val settings = Settings.default.copy(port = 9005, version = "4.6.0")
     val keycloakData = KeycloakData.fromConfig
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)
-    val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
+    val stopHandle = Await.result(keycloak.startServer(), 2.minutes)
 
     val token = BearerToken.fromServer(9005, "admin", "admin")
     token.header should not be empty
@@ -23,7 +23,7 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
     val settings = Settings.default.copy(port = 9005, version = "4.6.0")
     val keycloakData = KeycloakData.fromConfig
     val keycloak = new EmbeddedKeycloak(keycloakData, settings)
-    val stopHandle = Await.result(keycloak.startServerInBackground(), 2.minutes)
+    val stopHandle = Await.result(keycloak.startServer(), 2.minutes)
 
     val token =
       BearerToken.fromServer(9005,
