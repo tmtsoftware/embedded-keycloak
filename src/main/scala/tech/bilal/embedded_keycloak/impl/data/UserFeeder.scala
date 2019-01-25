@@ -37,6 +37,6 @@ private[embedded_keycloak] class UserFeeder(clientIds: Map[String, String],
 
     roleMapper.mapRealmRoles(userId, user.realmRoles)
 
-    roleMapper.mapResourceRoles(userId, user.resourceRoles)
+    roleMapper.mapClientRoles(userId, user.clientRoles)
   }
 }

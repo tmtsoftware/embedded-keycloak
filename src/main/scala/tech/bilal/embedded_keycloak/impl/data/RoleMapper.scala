@@ -1,6 +1,6 @@
 package tech.bilal.embedded_keycloak.impl.data
 
-import tech.bilal.embedded_keycloak.KeycloakData.{Realm, ResourceRole}
+import tech.bilal.embedded_keycloak.KeycloakData.{Realm, ClientRole}
 import tech.bilal.embedded_keycloak.Settings
 import tech.bilal.embedded_keycloak.utils.BearerToken
 
@@ -23,10 +23,10 @@ private[embedded_keycloak] class RoleMapper(clientIds: Map[String, String],
     kPost(url, upickle.default.write(realmRoles))
   }
 
-  def mapResourceRoles(userId: String, resourceRoles: Set[ResourceRole])(
+  def mapClientRoles(userId: String, clientRoles: Set[ClientRole])(
       implicit bearerToken: BearerToken): Unit = {
 
-    resourceRoles
+    clientRoles
       .groupBy(x => x.clientName)
       .map {
         case (k, v) => (k, v.map(_.roleName))

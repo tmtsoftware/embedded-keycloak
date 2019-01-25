@@ -1,7 +1,7 @@
 package tech.bilal.embedded_keycloak.impl.data
 
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
-import tech.bilal.embedded_keycloak.KeycloakData.{ApplicationUser, ResourceRole}
+import tech.bilal.embedded_keycloak.KeycloakData.{ApplicationUser, ClientRole}
 import tech.bilal.embedded_keycloak.utils.{BearerToken, Ports}
 import tech.bilal.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
 import scala.concurrent.Await
@@ -38,18 +38,17 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
           password = "[HIDDEN]",
           firstName = "john",
           realmRoles = Set("super-admin", "uma_authorization", "offline_access"),
-          resourceRoles =
-            Set(ResourceRole("${client_account}", "view-profile"),
-                ResourceRole("${client_account}", "manage-account"))
+          clientRoles = Set(ClientRole("${client_account}", "view-profile"),
+                            ClientRole("${client_account}", "manage-account"))
         ),
         ApplicationUser(
           "user2",
           "[HIDDEN]",
           realmRoles = Set("uma_authorization", "offline_access"),
-          resourceRoles = Set(
-            ResourceRole(clientName = "some-server", roleName = "server-user"),
-            ResourceRole("${client_account}", "view-profile"),
-            ResourceRole("${client_account}", "manage-account")
+          clientRoles = Set(
+            ClientRole(clientName = "some-server", roleName = "server-user"),
+            ClientRole("${client_account}", "view-profile"),
+            ClientRole("${client_account}", "manage-account")
           )
         )
       )
@@ -57,8 +56,8 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
       clients.find(c => {
         c.name == "some-server" &&
         c.authorizationEnabled &&
-        c.resourceRoles.contains("server-admin") &&
-        c.resourceRoles.contains("server-user")
+        c.clientRoles.contains("server-admin") &&
+        c.clientRoles.contains("server-user")
       }) should not be empty
 
       clients.find(c => {

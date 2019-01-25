@@ -44,11 +44,11 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings)
 
     val clientId = getId(response)
 
-    client.resourceRoles.foreach(r => feedResourceRole(r, clientId))
+    client.clientRoles.foreach(r => feedClientRole(r, clientId))
     (client.name, clientId)
   }
 
-  private def feedResourceRole(roleName: String, clientId: String)(
+  private def feedClientRole(roleName: String, clientId: String)(
       implicit bearerToken: BearerToken): Unit =
     kPost(realmUrl(realm.name) + s"/clients/$clientId/roles",
           Map(

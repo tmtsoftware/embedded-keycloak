@@ -4,7 +4,7 @@ import tech.bilal.embedded_keycloak.KeycloakData.{
   ApplicationUser,
   Client,
   Realm,
-  ResourceRole
+  ClientRole
 }
 import tech.bilal.embedded_keycloak.Settings
 import tech.bilal.embedded_keycloak.utils.BearerToken
@@ -55,7 +55,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
       .read(clientsResponse.data.bytes)
       .arr
 
-    def getResourceRolesForClient(clientId: String) = {
+    def getClientRolesForClient(clientId: String) = {
       val response = kGet(realmUrl(realm) + s"/clients/$clientId/roles")
       ujson
         .read(response.data.bytes)
@@ -73,7 +73,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
             name = obj.getStr("name"),
             clientType = obj.getClientType,
             authorizationEnabled = obj.getBool("authorizationServicesEnabled"),
-            resourceRoles = getResourceRolesForClient(obj.getStr("id"))
+            clientRoles = getClientRolesForClient(obj.getStr("id"))
           )
       })
       .toMap
@@ -95,7 +95,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
         .toSet
     }
 
-    def getResourcesRoleMappings(userId: String): Set[ResourceRole] = {
+    def getClientsRoleMappings(userId: String): Set[ClientRole] = {
       clientIds.keys
         .map(
           clientId =>
@@ -109,7 +109,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
         .toMap
         .flatMap {
           case (k, v) =>
-            v.map(roleName => ResourceRole(clientIds(k).name, roleName))
+            v.map(roleName => ClientRole(clientIds(k).name, roleName))
         }
         .toSet
     }
@@ -123,7 +123,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
           firstName = obj.getStr("firstName"),
           lastName = obj.getStr("lastName"),
           realmRoles = getRealmRoleMappings(obj.getStr("id")),
-          resourceRoles = getResourcesRoleMappings(obj.getStr("id"))
+          clientRoles = getClientsRoleMappings(obj.getStr("id"))
         )
       })
       .toSet

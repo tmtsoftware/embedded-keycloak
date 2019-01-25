@@ -17,7 +17,7 @@ class DataParserTest extends FunSuite with Matchers {
             Client(
               name = "some-server",
               clientType = "bearer-only",
-              resourceRoles = Set("server-admin", "server-user"),
+              clientRoles = Set("server-admin", "server-user"),
               authorizationEnabled = true
             ),
             Client(name = "some-client")
@@ -32,7 +32,7 @@ class DataParserTest extends FunSuite with Matchers {
             ApplicationUser(
               username = "user2",
               password = "abcd",
-              resourceRoles = Set(ResourceRole("some-server", "server-user"))
+              clientRoles = Set(ClientRole("some-server", "server-user"))
             )
           ),
           realmRoles = Set("super-admin")
