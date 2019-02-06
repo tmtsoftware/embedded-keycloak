@@ -28,25 +28,12 @@ private[embedded_keycloak] class RestAdminFeeder(settings: Settings)
     with AdminFeeder {
 
   override def feedAdminUser(admin: AdminUser): Unit = {
-    val origin = s"http://${settings.host}:${settings.port}"
+    val origin = s"http://localhost:${settings.port}"
     val referer = origin + "/"
     val url = referer + "auth/"
     val cookieName = "WELCOME_STATE_CHECKER"
 
-    val getResponse = get(
-      url = url,
-      headers = Map(
-        "Connection" -> "keep-alive",
-        "Pragma" -> "no-cache",
-        "Cache-Control" -> "Cache-Control",
-        "Upgrade-Insecure-Requests" -> "1",
-        "User-Agent" -> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
-        "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-        "Referer" -> referer,
-        "Accept-Encoding" -> "gzip, deflate, br",
-        "Accept-Language" -> "en-US,en;q=0.9"
-      ),
-    )
+    val getResponse = get(url = url)
 
     if (getResponse.statusCode != 200)
       throw new RuntimeException("could not create admin user")
@@ -58,17 +45,6 @@ private[embedded_keycloak] class RestAdminFeeder(settings: Settings)
 
       val postResponse = post(
         url = url,
-        headers = Map(
-          "Connection" -> "keep-alive",
-          "Cache-Control" -> "max-age=0",
-          "Origin" -> origin,
-          "Upgrade-Insecure-Requests" -> "1",
-          "Content-Type" -> "application/x-www-form-urlencoded",
-          "User-Agent" -> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
-          "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-          "Referer" -> url,
-          "Accept-Language" -> "en-US,en;q=0.9,gl;q=0.8,de;q=0.7"
-        ),
         cookies = cookies,
         data = RequestBlob.FormEncodedRequestBlob(
           Map(

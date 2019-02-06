@@ -26,7 +26,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData,
 
   val fileIO = new FileIO(settings)
 
-  def preRun(): Unit = {
+  private def preRun(): Unit = {
     installer.install()
     ports.checkAvailability(port = port, throwOnError = true)
   }
