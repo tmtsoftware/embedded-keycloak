@@ -24,14 +24,14 @@ version := {
 }
 
 libraryDependencies ++= Seq(
-  "com.softwaremill.retry" %% "retry" % "0.3.0",
-  "com.lihaoyi" %% "requests" % "0.1.4",
-  "com.lihaoyi" %% "os-lib" % "0.2.5",
+  "com.softwaremill.retry" %% "retry" % "0.3.1",
+  "com.lihaoyi" %% "requests" % "0.1.7",
+  "com.lihaoyi" %% "os-lib" % "0.2.6",
   "com.lihaoyi" %% "upickle" % "0.7.1",
   "com.lihaoyi" %% "ujson" % "0.7.1",
-  "com.iheart" %% "ficus" % "1.4.3",
+  "com.iheart" %% "ficus" % "1.4.4",
   //AKKA-DOWNLOADER
-  "com.typesafe.akka" %% "akka-http" % "10.1.5",
+  "com.typesafe.akka" %% "akka-http" % "10.1.7",
   "com.typesafe.akka" %% "akka-stream" % "2.5.19",
   //TEST
   "org.scalatest" %% "scalatest" % "3.0.5" % Test
