@@ -1,7 +1,6 @@
 package tech.bilal.embedded_keycloak.impl
 
 import tech.bilal.embedded_keycloak.impl.Bash._
-import tech.bilal.embedded_keycloak.impl.data.AdminFeeder
 import tech.bilal.embedded_keycloak.impl.download.AkkaDownloader
 import tech.bilal.embedded_keycloak.{KeycloakData, Settings}
 
@@ -12,7 +11,6 @@ class Installer(settings: Settings, data: KeycloakData) {
   val fileIO = new FileIO(settings)
 
   val downloader = new AkkaDownloader(settings)
-  val adminFeeder = new AdminFeeder(settings)
 
   private def extractArchive(): Unit = {
     os.makeDir.all(fileIO.binariesDirectory)
@@ -26,7 +24,5 @@ class Installer(settings: Settings, data: KeycloakData) {
       fileIO.deleteBinaries()
       extractArchive()
     }
-
-    adminFeeder.feedAdminUser(data.adminUser)
   }
 }
