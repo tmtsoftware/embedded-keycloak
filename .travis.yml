@@ -14,19 +14,19 @@ before_install:
 
 stages:
   - name: test
-  - name: release
-    if: tag IS present
+#  - name: release
+#    if: tag IS present
 
 jobs:
   include:
     - stage: test
       script:
-      - sbt clean coverage test # compile and run tests
-      - sbt coverageReport coverageAggregate # create coverage reports
-      - sbt coveralls codacyCoverage # upload coverage to coveralls and codacy
-    - stage: release
-      script:
-      - sbt ci-release
+      - sbt clean test # compile and run tests
+#      - sbt coverageReport coverageAggregate # create coverage reports
+#      - sbt coveralls codacyCoverage # upload coverage to coveralls and codacy
+#    - stage: release
+#      script:
+#      - sbt ci-release
 
 cache:
   directories:
