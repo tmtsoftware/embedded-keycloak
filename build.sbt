@@ -1,13 +1,13 @@
 inThisBuild(List(
-  organization := "tech.bilal",
+  organization := "org.tmt",
   homepage := Some(url("https://github.com/bilal-fazlani/embedded-keycloak")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
     Developer(
-      "bilal-fazlani",
-      "Bilal Fazlani",
-      "bilal.m.fazlani@gmail.com",
-      url("https://github.com/bilal-fazlani")
+      "tmtsoftware",
+      "TMT",
+      "",
+      url("https://github.com/tmtsoftware")
     )
   )
 ))

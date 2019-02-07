@@ -2,15 +2,19 @@
 
 Embedded keycloak server for jvm integration testing. (developed in scala)
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/tech.bilal/embedded-keycloak_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tech.bilal/embedded-keycloak_2.12)
-[![Build Status](https://travis-ci.com/bilal-fazlani/embedded-keycloak.svg?branch=master)](https://travis-ci.com/bilal-fazlani/embedded-keycloak)
-[![Coverage Status](https://coveralls.io/repos/github/bilal-fazlani/embedded-keycloak/badge.svg?branch=master)](https://coveralls.io/github/bilal-fazlani/embedded-keycloak?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/39e38c33fbab49f996971aab557a072a)](https://www.codacy.com/app/bilal-fazlani/embedded-keycloak?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bilal-fazlani/embedded-keycloak&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/tmtsoftware/embedded-keycloak.svg?branch=master)](https://travis-ci.com/tmtsoftware/embedded-keycloak)
 
 ## Installation
 
+add the resolver: 
+
 ```scala
-libraryDependencies += "tech.bilal" %% "embedded-keycloak" % "<ADD_VERSION_HERE>"
+resolvers += "jitpack" at "https://jitpack.io"
+```
+
+add the dependency:
+```scala
+libraryDependencies += "org.tmt" %% "embedded-keycloak" % "<ADD_LATEST_VERSION_HERE>"
 ```
 
 ## Usage
@@ -121,9 +125,3 @@ Or the same data can be provided directly as shown below:
         ))
     )
 ``` 
-
-## Limitations
-
-- Does not support permissions
-- Only supports the configs shown in the config file
-- Does not support importing keycloak exported json file
