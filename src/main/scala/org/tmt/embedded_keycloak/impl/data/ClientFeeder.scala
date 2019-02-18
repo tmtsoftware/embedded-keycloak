@@ -7,11 +7,9 @@ import ujson.Str
 
 import scala.io.Source
 
-private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings)
-    extends FeederBase(settings) {
+private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings) extends FeederBase(settings) {
 
-  def feedClient(client: Client)(
-      implicit bearerToken: BearerToken): (String, String) = {
+  def feedClient(client: Client)(implicit bearerToken: BearerToken): (String, String) = {
 
     val defaultRequestString =
       Source.fromResource("create-client-request.json").mkString
@@ -19,10 +17,9 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings)
     val j = ujson.read(defaultRequestString)
     j.update("name", Str(client.name))
     j.update("clientId", Str(client.name))
-    j.update("authorizationServicesEnabled",
-             ujson.Bool(client.authorizationEnabled))
-    j.update("directAccessGrantsEnabled",
-             ujson.Bool(client.passwordGrantEnabled))
+    j.update("authorizationServicesEnabled", ujson.Bool(client.authorizationEnabled))
+    j.update("implicitFlowEnabled", ujson.Bool(client.implicitFlowEnabled))
+    j.update("directAccessGrantsEnabled", ujson.Bool(client.passwordGrantEnabled))
 
     client.clientType match {
       case "bearer-only" =>
@@ -48,8 +45,7 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings)
     (client.name, clientId)
   }
 
-  private def feedClientRole(roleName: String, clientId: String)(
-      implicit bearerToken: BearerToken): Unit =
+  private def feedClientRole(roleName: String, clientId: String)(implicit bearerToken: BearerToken): Unit =
     kPost(realmUrl(realm.name) + s"/clients/$clientId/roles",
           Map(
             "name" -> Str(roleName),
