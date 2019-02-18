@@ -9,10 +9,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 private[embedded_keycloak] object DownloaderExtensions {
 
-  implicit class ProgressSource(
-      source: Source[DownloadProgress, Future[Done]]) {
-    def writeToFile(path: os.Path)(implicit ec: ExecutionContext)
-      : Source[DownloadProgress, Future[Done]] = {
+  implicit class ProgressSource(source: Source[DownloadProgress, Future[Done]]) {
+    def writeToFile(path: os.Path): Source[DownloadProgress, Future[Done]] = {
       source.map { progress =>
         val osSource =
           os.Source.BytesSource(progress.lastChunk.toArray)
@@ -39,31 +37,24 @@ private[embedded_keycloak] object DownloaderExtensions {
     }
   }
 
-  implicit class RichByteStringSourceOfDone(
-      source: Source[ByteString, Future[Done]]) {
-    def toProgressSource(contentLength: Future[Long])(
-        implicit ec: ExecutionContext)
-      : Source[DownloadProgress, Future[Done]] = {
+  implicit class RichByteStringSourceOfDone(source: Source[ByteString, Future[Done]]) {
+    def toProgressSource(contentLength: Future[Long])(implicit ec: ExecutionContext): Source[DownloadProgress, Future[Done]] = {
       source
-        .scan(DownloadProgress.empty(contentLength)) {
-          (lastProgressF, currentData) =>
-            lastProgressF.map(lastProgress => lastProgress + currentData)
+        .scan(DownloadProgress.empty(contentLength)) { (lastProgressF, currentData) =>
+          lastProgressF.map(lastProgress => lastProgress + currentData)
         }
         .mapAsync(1)(identity)
     }
   }
 
-  implicit class RichByteStringSourceOfAny(
-      sourceF: Source[ByteString, Future[Any]]) {
-    def addMaterializer(
-        implicit ec: ExecutionContext): Source[ByteString, Future[Done]] = {
+  implicit class RichByteStringSourceOfAny(sourceF: Source[ByteString, Future[Any]]) {
+    def addMaterializer(implicit ec: ExecutionContext): Source[ByteString, Future[Done]] = {
       sourceF
         .mapMaterializedValue(matF => matF.map(_ => Done))
     }
   }
 
-  implicit class RichHttpResponseFuture(responseF: Future[HttpResponse])(
-      implicit ec: ExecutionContext) {
+  implicit class RichHttpResponseFuture(responseF: Future[HttpResponse])(implicit ec: ExecutionContext) {
     def toByteStringSource: Source[ByteString, Future[Done]] = {
       Source
         .fromFutureSource(
@@ -72,8 +63,7 @@ private[embedded_keycloak] object DownloaderExtensions {
               case HttpResponse(StatusCodes.OK, _, entity, _) =>
                 entity.withoutSizeLimit.dataBytes
               case HttpResponse(statusCode, _, _, _) =>
-                throw new RuntimeException(
-                  s"failed to download keycloak. Status code: $statusCode")
+                throw new RuntimeException(s"failed to download keycloak. Status code: $statusCode")
             }
         )
         .addMaterializer

@@ -1,16 +1,15 @@
 package org.tmt.embedded_keycloak.impl
 
-import os.{SubProcess, proc}
+import os.{proc, SubProcess}
 import OsLibExtensions._
 
 import scala.util.Try
 
-private[embedded_keycloak] class StopHandle(subProcess: SubProcess) {
+class StopHandle private[embedded_keycloak] (subProcess: SubProcess) {
   def stop(): Unit = {
     val process: Process = subProcess.wrapped.asInstanceOf[java.lang.Process]
 
-    getPidOfProcess(process).foreach(pid =>
-      getAllChildPids(pid).foreach(killPid))
+    getPidOfProcess(process).foreach(pid => getAllChildPids(pid).foreach(killPid))
 
     subProcess.destroyForcibly()
   }

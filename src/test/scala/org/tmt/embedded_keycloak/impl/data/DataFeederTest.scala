@@ -2,7 +2,7 @@ package org.tmt.embedded_keycloak.impl.data
 
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, ClientRole}
-import org.tmt.embedded_keycloak.utils.{BearerToken, Ports}
+import org.tmt.embedded_keycloak.utils.Ports
 import org.tmt.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
 
 import scala.concurrent.Await
@@ -12,13 +12,10 @@ import scala.concurrent.duration.DurationDouble
 class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
   test("test data integration") {
 
-    val settings = Settings.default.copy(port = 9005, version = "4.6.0")
+    val settings     = Settings.default.copy(port = 9005, version = "4.6.0")
     val keycloakData = KeycloakData.fromConfig
-    val keycloak = new EmbeddedKeycloak(keycloakData, settings)
-    val stopHandle = Await.result(keycloak.startServer(), 2.minutes)
-
-    implicit val bearerToken: BearerToken =
-      BearerToken.fromServer(9005, "admin", "admin")
+    val keycloak     = new EmbeddedKeycloak(keycloakData, settings)
+    val stopHandle   = Await.result(keycloak.startServer(), 2.minutes)
 
     val actualRealms =
       KeycloakData.fromServer(settings, "admin", "admin").realms
@@ -39,8 +36,7 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
           password = "[HIDDEN]",
           firstName = "john",
           realmRoles = Set("super-admin", "uma_authorization", "offline_access"),
-          clientRoles = Set(ClientRole("${client_account}", "view-profile"),
-                            ClientRole("${client_account}", "manage-account"))
+          clientRoles = Set(ClientRole("${client_account}", "view-profile"), ClientRole("${client_account}", "manage-account"))
         ),
         ApplicationUser(
           "user2",
