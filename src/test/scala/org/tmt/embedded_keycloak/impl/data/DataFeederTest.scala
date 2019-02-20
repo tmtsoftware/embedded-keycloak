@@ -67,6 +67,6 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
   }
 
   override def afterAll(): Unit = {
-    new Ports().stop(9005)
+    Ports.stop(9005)
   }
 }

@@ -14,12 +14,9 @@ import org.tmt.embedded_keycloak.impl.download.DownloaderExtensions._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}
 
-private[embedded_keycloak] class AkkaDownloader(settings: Settings)
-    extends Downloader {
+private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: FileIO) extends Downloader {
 
   import settings._
-
-  val fileIO = new FileIO(settings)
 
   private def getUrl =
 //    s"http://localhost:9090/keycloak-4.6.0.Final.tar.gz"
@@ -37,8 +34,8 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
         .withValue("akka.loglevel", ConfigValueFactory.fromAnyRef("OFF"))
         .withValue("akka.stdout-loglevel", ConfigValueFactory.fromAnyRef("OFF"))
 
-      implicit val actorSystem = ActorSystem("download-actor-system", config)
-      implicit val ec = actorSystem.dispatcher
+      implicit val actorSystem                     = ActorSystem("download-actor-system", config)
+      implicit val ec                              = actorSystem.dispatcher
       implicit val materializer: ActorMaterializer = ActorMaterializer()
 
       val responseFuture: Future[HttpResponse] =
@@ -46,11 +43,9 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings)
 
       val contentLength = responseFuture.map {
         case HttpResponse(StatusCodes.OK, _, entity, _) =>
-          entity.contentLengthOption.getOrElse(
-            throw new RuntimeException("content length is not provided"))
+          entity.contentLengthOption.getOrElse(throw new RuntimeException("content length is not provided"))
         case HttpResponse(statusCode, _, _, _) =>
-          throw new RuntimeException(
-            s"ERROR: error while downloading. status code: $statusCode")
+          throw new RuntimeException(s"ERROR: error while downloading. status code: $statusCode")
       }
 
       val source: Source[DownloadProgress, Future[Done]] =

@@ -42,9 +42,11 @@ class FileIO(settings: Settings) {
   def deleteBinaries(): Unit = os.remove.all(binariesDirectory)
 
   def moveIncompleteFile(): Unit =
-    os.move(from = incompleteTarFilePath,
-            to = tarFilePath,
-            replaceExisting = true,
-            atomicMove = true,
-            createFolders = true)
+    os.move(
+      from = incompleteTarFilePath,
+      to = tarFilePath,
+      replaceExisting = true,
+      atomicMove = true,
+      createFolders = true
+    )
 }

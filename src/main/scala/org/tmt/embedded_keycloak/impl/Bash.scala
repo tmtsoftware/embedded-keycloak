@@ -1,13 +1,12 @@
 package org.tmt.embedded_keycloak.impl
 
-import os.{Path, SubProcess, proc}
+import os.proc
 
 private[embedded_keycloak] object Bash {
 
   implicit class RichProc(proc: proc) {
-    def executeAndShow(throwOnError: Boolean = false, cwd: Path = null): Int = { // scalastyle:ignore
+    def executeAndShow(throwOnError: Boolean = false): Int = {
       val exitCode = proc.stream(
-        cwd = cwd,
         onOut = (buffer, length) =>
           buffer
             .slice(0, length)
@@ -25,36 +24,15 @@ private[embedded_keycloak] object Bash {
       )
 
       if (throwOnError && exitCode != 0)
-        throw new RuntimeException(
-          s"the command $proc resulted in exit code $exitCode")
+        throw new RuntimeException(s"the command $proc resulted in exit code $exitCode")
 
       exitCode
     }
-
-    def executeBackground(cwd: Path = null): SubProcess = { // scalastyle:ignore
-      proc.spawn(cwd = cwd)
-    }
   }
 
   /**
-    * Execute on current thread
-    * @param command
-    * @param cwd
-    * @return
-    */
-  def exec(command: String, cwd: Path = null) = { // scalastyle:ignore
-    os.proc(command.split(" "))
-      .executeAndShow(throwOnError = true, cwd = cwd)
-  }
+   * Execute on current thread
+   */
+  def exec(cmd: String*): Int = os.proc(cmd).executeAndShow(throwOnError = true)
 
-  /**
-    * Execute in background
-    * @param command
-    * @param cwd
-    * @return
-    */
-  def background(command: String, cwd: Path = null) = { // scalastyle:ignore
-    os.proc(command.split(" "))
-      .executeBackground(cwd = cwd)
-  }
 }
