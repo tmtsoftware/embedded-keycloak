@@ -2,7 +2,7 @@ language: scala
 scala:
   - 2.12.8
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates
