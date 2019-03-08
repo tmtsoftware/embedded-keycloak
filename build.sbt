@@ -39,7 +39,7 @@ version := {
 libraryDependencies ++= Seq(
   "com.softwaremill.retry" %% "retry" % "0.3.1",
   "com.lihaoyi" %% "requests" % "0.1.7",
-  "com.lihaoyi" %% "os-lib" % "0.2.7",
+  "com.lihaoyi" %% "os-lib" % "0.2.8",
   "com.lihaoyi" %% "upickle" % "0.7.1",
   "com.lihaoyi" %% "ujson" % "0.7.1",
   "com.iheart" %% "ficus" % "1.4.4",
@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http" % "10.1.7",
   "com.typesafe.akka" %% "akka-stream" % "2.5.21",
   //TEST
-  "org.scalatest" %% "scalatest" % "3.0.5" % Test
+  "org.scalatest" %% "scalatest" % "3.0.6" % Test
 )
 
 parallelExecution in Test in ThisBuild := false

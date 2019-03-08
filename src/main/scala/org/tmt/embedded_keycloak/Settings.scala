@@ -6,7 +6,7 @@ case class Settings(
     keycloakDirectory: String = "/tmp/embedded-keycloak/",
     cleanPreviousData: Boolean = true,
     alwaysDownload: Boolean = false,
-    version: String = "4.6.0"
+    version: String = "5.0.0"
 )
 
 object Settings {
