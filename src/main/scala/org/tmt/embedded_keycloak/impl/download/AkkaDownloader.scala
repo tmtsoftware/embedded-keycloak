@@ -19,8 +19,8 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
   import settings._
 
   private def getUrl =
-//    s"http://localhost:9090/keycloak-4.6.0.Final.tar.gz"
-    s"https://downloads.jboss.org/keycloak/$version.Final/keycloak-$version.Final.tar.gz"
+//    s"http://localhost:9090/keycloak-5.0.0.tar.gz"
+    s"https://downloads.jboss.org/keycloak/$version/keycloak-$version.tar.gz"
 
   private def isKeycloakDownloaded: Boolean = os.exists(fileIO.tarFilePath)
 

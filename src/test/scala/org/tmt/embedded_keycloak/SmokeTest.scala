@@ -12,7 +12,7 @@ class SmokeTest extends FunSuite with Matchers {
 
   test("startServer should start the server as a child process and should stop when stop method is called") {
 
-    val settings   = Settings.default.copy(port = 9005, version = "4.6.0")
+    val settings   = Settings.default.copy(port = 9005)
     val keycloak   = new EmbeddedKeycloak(KeycloakData.fromConfig, settings)
     val stopHandle = Await.result(keycloak.startServer(), 5.minutes)
 

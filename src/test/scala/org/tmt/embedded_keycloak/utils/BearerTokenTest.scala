@@ -9,7 +9,7 @@ import scala.concurrent.duration.DurationDouble
 
 class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
   test("can login admin") {
-    val settings     = Settings.default.copy(port = 9005, version = "4.6.0")
+    val settings     = Settings.default.copy(port = 9005)
     val keycloakData = KeycloakData.fromConfig
     val keycloak     = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle   = Await.result(keycloak.startServer(), 2.minutes)
@@ -20,7 +20,7 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
   }
 
   test("can login application user") {
-    val settings     = Settings.default.copy(port = 9005, version = "4.6.0")
+    val settings     = Settings.default.copy(port = 9005)
     val keycloakData = KeycloakData.fromConfig
     val keycloak     = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle   = Await.result(keycloak.startServer(), 2.minutes)

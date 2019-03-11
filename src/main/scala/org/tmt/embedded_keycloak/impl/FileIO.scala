@@ -19,15 +19,15 @@ class FileIO(settings: Settings) {
   def binariesDirectory: Path = versionDirectory / "binaries"
 
   def incompleteTarFilePath: Path =
-    downloadDirectory / s"keycloak-$version.Final.tar.gz.incomplete"
+    downloadDirectory / s"keycloak-$version.tar.gz.incomplete"
 
-  def tarFilePath: Path = downloadDirectory / s"keycloak-$version.Final.tar.gz"
+  def tarFilePath: Path = downloadDirectory / s"keycloak-$version.tar.gz"
 
   def addUserExecutablePath: Path =
-    binariesDirectory / s"keycloak-$version.Final" / "bin" / "add-user-keycloak.sh"
+    binariesDirectory / s"keycloak-$version" / "bin" / "add-user-keycloak.sh"
 
   def keycloakExecutablePath: Path =
-    binariesDirectory / s"keycloak-$version.Final" / "bin" / "standalone.sh"
+    binariesDirectory / s"keycloak-$version" / "bin" / "standalone.sh"
 
   // CHECKS
 
