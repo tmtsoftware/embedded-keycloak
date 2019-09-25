@@ -34,8 +34,8 @@ lazy val `embedded-keycloak` = project.settings(
     //  "com.softwaremill.retry" %% "retry"    % "0.3.2",
     "com.lihaoyi" %% "requests" % "0.2.0",
     "com.lihaoyi" %% "os-lib" % "0.3.0",
-    "com.lihaoyi" %% "upickle" % "0.7.5",
-    "com.lihaoyi" %% "ujson" % "0.7.5",
+    "com.lihaoyi" %% "upickle" % "0.8.0",
+    "com.lihaoyi" %% "ujson" % "0.8.0",
     "com.iheart" %% "ficus" % "1.4.7",
     //AKKA-DOWNLOADER
     "com.typesafe.akka" %% "akka-http" % "10.1.8",
