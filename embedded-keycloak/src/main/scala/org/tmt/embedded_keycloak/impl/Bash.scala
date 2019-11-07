@@ -6,22 +6,7 @@ private[embedded_keycloak] object Bash {
 
   implicit class RichProc(proc: proc) {
     def executeAndShow(throwOnError: Boolean = false): Int = {
-      val exitCode = proc.stream(
-        onOut = (buffer, length) =>
-          buffer
-            .slice(0, length)
-            .map(x => x.toChar)
-            .mkString
-            .split("\n")
-            .foreach(println),
-        onErr = (buffer, length) =>
-          buffer
-            .slice(0, length)
-            .map(x => x.toChar)
-            .mkString
-            .split("\n")
-            .foreach(System.err.println)
-      )
+      val exitCode = proc.call().exitCode
 
       if (throwOnError && exitCode != 0)
         throw new RuntimeException(s"the command $proc resulted in exit code $exitCode")

@@ -57,7 +57,7 @@ private[embedded_keycloak] object DownloaderExtensions {
   implicit class RichHttpResponseFuture(responseF: Future[HttpResponse])(implicit ec: ExecutionContext) {
     def toByteStringSource: Source[ByteString, Future[Done]] = {
       Source
-        .fromFutureSource(
+        .futureSource(
           responseF
             .map {
               case HttpResponse(StatusCodes.OK, _, entity, _) =>
