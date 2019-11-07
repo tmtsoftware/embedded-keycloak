@@ -4,7 +4,6 @@ import akka.Done
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
-import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import com.typesafe.config.{ConfigFactory, ConfigValueFactory}
 import org.tmt.embedded_keycloak.Settings
@@ -36,7 +35,6 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
 
       implicit val actorSystem                     = ActorSystem("download-actor-system", config)
       implicit val ec                              = actorSystem.dispatcher
-      implicit val materializer: ActorMaterializer = ActorMaterializer()
 
       val responseFuture: Future[HttpResponse] =
         Http().singleRequest(HttpRequest(uri = getUrl))
