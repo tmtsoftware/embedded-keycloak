@@ -10,4 +10,4 @@ jobs:
         with:
           java-version: adopt@1.11
       - name: Test
-        run: sbt test
+        run: sbt clean test
