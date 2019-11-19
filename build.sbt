@@ -1,5 +1,6 @@
 inThisBuild(
   List(
+    scalaVersion := "2.13.1",
     organization := "org.tmt",
     homepage := Some(url("https://github.com/bilal-fazlani/embedded-keycloak")),
     licenses := List(
@@ -22,8 +23,6 @@ inThisBuild(
 
 lazy val `embedded-keycloak` = project.settings(
   name := "embedded-keycloak",
-  scalaVersion := "2.13.0",
-  crossScalaVersions := List("2.12.8", "2.13.0"),
   version := {
     sys.env.get("CI") match {
       case Some("true") => version.value
@@ -32,12 +31,12 @@ lazy val `embedded-keycloak` = project.settings(
   },
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "requests" % "0.2.0",
-    "com.lihaoyi" %% "os-lib" % "0.4.2",
-    "com.lihaoyi" %% "upickle" % "0.8.0",
-    "com.lihaoyi" %% "ujson" % "0.8.0",
-    "com.iheart" %% "ficus" % "1.4.7",
+    "com.lihaoyi" %% "os-lib"   % "0.4.2",
+    "com.lihaoyi" %% "upickle"  % "0.8.0",
+    "com.lihaoyi" %% "ujson"    % "0.8.0",
+    "com.iheart"  %% "ficus"    % "1.4.7",
     //AKKA-DOWNLOADER
-    "com.typesafe.akka" %% "akka-http" % "10.1.10",
+    "com.typesafe.akka" %% "akka-http"   % "10.1.10",
     "com.typesafe.akka" %% "akka-stream" % "2.6.0",
     //TEST
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
