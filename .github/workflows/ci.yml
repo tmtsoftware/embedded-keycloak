@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@v1
       - uses: olafurpg/setup-scala@v5
         with:
-          - java-version: adopt@1.11
+          java-version: adopt@1.11
       - name: Test
-          run: sbt clean test
+        run: sbt test
