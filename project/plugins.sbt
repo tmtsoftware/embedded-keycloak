@@ -1,4 +1,4 @@
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.0")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.2.7")
 addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.4.31")
 addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "3.0.3")
