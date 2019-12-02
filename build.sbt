@@ -36,7 +36,7 @@ lazy val `embedded-keycloak` = project.settings(
     "com.lihaoyi" %% "ujson"    % "0.8.0",
     "com.iheart"  %% "ficus"    % "1.4.7",
     //AKKA-DOWNLOADER
-    "com.typesafe.akka" %% "akka-http"   % "10.1.10",
+    "com.typesafe.akka" %% "akka-http"   % "10.1.11",
     "com.typesafe.akka" %% "akka-stream" % "2.6.0",
     //TEST
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
