@@ -31,9 +31,9 @@ lazy val `embedded-keycloak` = project.settings(
   },
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "requests" % "0.2.0",
-    "com.lihaoyi" %% "os-lib"   % "0.4.2",
-    "com.lihaoyi" %% "upickle"  % "0.9.6",
-    "com.lihaoyi" %% "ujson"    % "0.9.6",
+    "com.lihaoyi" %% "os-lib"   % "0.5.0",
+    "com.lihaoyi" %% "upickle"  % "0.8.0",
+    "com.lihaoyi" %% "ujson"    % "0.8.0",
     "com.iheart"  %% "ficus"    % "1.4.7",
     //AKKA-DOWNLOADER
     "com.typesafe.akka" %% "akka-http"   % "10.1.10",
