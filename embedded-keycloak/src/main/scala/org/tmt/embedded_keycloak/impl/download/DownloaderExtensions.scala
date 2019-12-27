@@ -12,8 +12,7 @@ private[embedded_keycloak] object DownloaderExtensions {
   implicit class ProgressSource(source: Source[DownloadProgress, Future[Done]]) {
     def writeToFile(path: os.Path): Source[DownloadProgress, Future[Done]] = {
       source.map { progress =>
-        val osSource =
-          os.Source.BytesSource(progress.lastChunk.toArray)
+        val osSource = os.Source.WritableSource(progress.lastChunk.toArray)
         os.write.append(path, osSource, createFolders = true)
         progress
       }
