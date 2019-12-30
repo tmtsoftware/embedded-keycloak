@@ -22,10 +22,10 @@ object Ports {
   def stop(port: Int): Unit = {
     val consumed = !isFree(port)
     if (consumed) {
-      proc("lsof", "-n", s"-i4TCP:$port") |
-      proc("grep", "LISTEN") |
-      proc("awk", "{print $2}") |
-      proc("xargs", "kill", "-9")
+      proc("sh", "-c", "lsof", "-n", s"-i4TCP:$port") |
+      proc("sh", "-c", "grep", "LISTEN") |
+      proc("sh", "-c", "awk", "{print $2}") |
+      proc("sh", "-c", "xargs", "kill", "-9")
     }
   }
 
