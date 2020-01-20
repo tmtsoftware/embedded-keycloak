@@ -1,10 +1,10 @@
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.0")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.2.7")
-addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.4.31")
+addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.5.0")
 addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "3.0.3")
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
-addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.2.11")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.0")
+addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.2.12")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.2.1")
 
 scalacOptions ++= Seq(
   "-encoding",

@@ -1,6 +1,6 @@
 package org.tmt.embedded_keycloak.utils
 
-import requests.{RequestAuth, RequestBlob, get}
+import requests.{post, RequestAuth}
 
 case class BearerToken(token: String) extends RequestAuth {
   override def header: Option[String] = Some(s"Bearer $token")
@@ -15,17 +15,15 @@ object BearerToken {
       client: String = "admin-cli",
       host: String = "localhost",
   ): BearerToken = {
-    val response = get(
-      url =
-        s"http://$host:$port/auth/realms/$realm/protocol/openid-connect/token",
+    val response = post(
+      url = s"http://$host:$port/auth/realms/$realm/protocol/openid-connect/token",
       headers = Map("Content-Type" -> "application/x-www-form-urlencoded"),
-      data = RequestBlob.FormEncodedRequestBlob(
-        Map(
-          "client_id" -> client,
-          "grant_type" -> "password",
-          "username" -> username,
-          "password" -> password
-        ))
+      data = Map(
+        "client_id"  -> client,
+        "grant_type" -> "password",
+        "username"   -> username,
+        "password"   -> password
+      )
     )
 
     if (response.statusCode != 200) {
@@ -36,7 +34,7 @@ object BearerToken {
     }
 
     val tokenString =
-      ujson.read(response.data.bytes).obj.get("access_token").map(_.str).get
+      ujson.read(response.bytes).obj.get("access_token").map(_.str).get
     BearerToken(tokenString)
   }
 }

@@ -6,7 +6,7 @@ case class Settings(
     keycloakDirectory: String = System.getProperty("user.home") + "/embedded-keycloak/",
     cleanPreviousData: Boolean = true,
     alwaysDownload: Boolean = false,
-    version: String = "5.0.0"
+    version: String = "8.0.1"
 )
 
 object Settings {

@@ -12,7 +12,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
 
   def getRealms(implicit bearerToken: BearerToken): Set[Realm] = {
     val response = kGet(realmUrl)
-    val json = ujson.read(response.data.bytes).arr
+    val json = ujson.read(response.bytes).arr
     json
       .map(_.obj)
       .map(
@@ -34,7 +34,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
       implicit bearerToken: BearerToken): Set[String] = {
     val realmRolesResponse = kGet(realmUrl(realm) + "/roles")
     ujson
-      .read(realmRolesResponse.data.bytes)
+      .read(realmRolesResponse.bytes)
       .arr
       .map(r => r.obj.get("name"))
       .toSet
@@ -47,13 +47,13 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
     val clientsResponse = kGet(realmUrl(realm) + "/clients")
 
     val json = ujson
-      .read(clientsResponse.data.bytes)
+      .read(clientsResponse.bytes)
       .arr
 
     def getClientRolesForClient(clientId: String) = {
       val response = kGet(realmUrl(realm) + s"/clients/$clientId/roles")
       ujson
-        .read(response.data.bytes)
+        .read(response.bytes)
         .arr
         .map(_.obj)
         .map(_.getStr("name"))
@@ -77,13 +77,13 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
   private def getUsers(realm: String, clientIds: Map[String, Client])(
       implicit bearerToken: BearerToken): Set[ApplicationUser] = {
     val response = kGet(realmUrl(realm) + "/users")
-    val arr = ujson.read(response.data.bytes).arr
+    val arr = ujson.read(response.bytes).arr
 
     def getRealmRoleMappings(userId: String): Set[String] = {
       val response = kGet(
         realmUrl(realm) + s"/users/$userId/role-mappings/realm")
       ujson
-        .read(response.data.bytes)
+        .read(response.bytes)
         .arr
         .map(_.obj)
         .map(_.getStr("name"))
@@ -97,7 +97,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings)
             clientId ->
               ujson
                 .read(kGet(
-                  realmUrl(realm) + s"/users/$userId/role-mappings/clients/$clientId").data.bytes)
+                  realmUrl(realm) + s"/users/$userId/role-mappings/clients/$clientId").bytes)
                 .arr
                 .map(_.obj)
                 .map(_.getStr("name")))

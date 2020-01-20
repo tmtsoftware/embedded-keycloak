@@ -16,7 +16,7 @@ class DataParserTest extends FunSuite with Matchers {
           clients = Set(
             Client(
               name = "some-server",
-              clientType = "bearer-only",
+              clientType = "confidential",
               clientRoles = Set("server-admin", "server-user"),
               authorizationEnabled = true
             ),
@@ -36,7 +36,8 @@ class DataParserTest extends FunSuite with Matchers {
             )
           ),
           realmRoles = Set("super-admin")
-        ))
+        )
+      )
     )
 
     parsedData shouldBe expectedData

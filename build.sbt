@@ -26,18 +26,18 @@ lazy val `embedded-keycloak` = project.settings(
   version := {
     sys.env.get("CI") match {
       case Some("true") => version.value
-      case _            => "0.1-SNAPSHOT"
+      case _            => "0.1.0-SNAPSHOT"
     }
   },
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "requests" % "0.2.0",
-    "com.lihaoyi" %% "os-lib"   % "0.4.2",
-    "com.lihaoyi" %% "upickle"  % "0.8.0",
-    "com.lihaoyi" %% "ujson"    % "0.8.0",
+    "com.lihaoyi" %% "requests" % "0.5.0",
+    "com.lihaoyi" %% "os-lib"   % "0.6.3",
+    "com.lihaoyi" %% "upickle"  % "0.9.8",
+    "com.lihaoyi" %% "ujson"    % "0.9.8",
     "com.iheart"  %% "ficus"    % "1.4.7",
     //AKKA-DOWNLOADER
-    "com.typesafe.akka" %% "akka-http"   % "10.1.10",
-    "com.typesafe.akka" %% "akka-stream" % "2.6.0",
+    "com.typesafe.akka" %% "akka-http"   % "10.1.11",
+    "com.typesafe.akka" %% "akka-stream" % "2.6.1",
     //TEST
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
   ),

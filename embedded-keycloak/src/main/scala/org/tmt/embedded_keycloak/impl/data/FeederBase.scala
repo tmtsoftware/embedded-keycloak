@@ -13,31 +13,24 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
 
   import settings._
 
-  protected val jTrue = Bool(true)
+  protected val jTrue  = Bool(true)
   protected val jFalse = Bool(false)
 
-  case class RoleRepresentation(name: String,
-                                id: String,
-                                containerId: String,
-                                composite: Boolean,
-                                clientRole: Boolean)
+  case class RoleRepresentation(name: String, id: String, containerId: String, composite: Boolean, clientRole: Boolean)
 
   object RoleRepresentation {
     implicit val rw: RW[RoleRepresentation] = macroRW
   }
 
-  protected def kPost(url: String, data: String)(
-      implicit bearerToken: BearerToken): Response = {
+  protected def kPost(url: String, data: String)(implicit bearerToken: BearerToken): Response = {
     sendRequest("POST", url, data)
   }
 
-  protected def kPut(url: String, data: String)(
-      implicit bearerToken: BearerToken): Response = {
+  protected def kPut(url: String, data: String)(implicit bearerToken: BearerToken): Response = {
     sendRequest("PUT", url, data)
   }
 
-  protected def kGet(url: String)(
-      implicit bearerToken: BearerToken): Response = {
+  protected def kGet(url: String)(implicit bearerToken: BearerToken): Response = {
     sendRequest("GET", url)
   }
 
@@ -46,8 +39,7 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
   protected def realmUrl(realmName: String): String =
     s"http://localhost:$port/auth/admin/realms/$realmName"
 
-  protected implicit def toMutableMap(
-      map: Map[String, Value]): MutableMap[String, Value] = {
+  protected implicit def toMutableMap(map: Map[String, Value]): MutableMap[String, Value] = {
     val mutableMap = MutableMap[String, Value]()
     map.foreach(mutableMap += _)
     mutableMap
@@ -69,16 +61,15 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
     }
   }
 
-  private def sendRequest(requester: Requester,
-                          url: String,
-                          data: String = null)( // scalastyle:ignore
-      implicit bearerToken: BearerToken): Response = {
+  private def sendRequest(requester: Requester, url: String, stringData: String = null)( // scalastyle:ignore
+      implicit bearerToken: BearerToken
+  ): Response = {
     val response = requester(
       url = url,
       auth = bearerToken,
       data =
-        if (data == null) RequestBlob.EmptyRequestBlob
-        else RequestBlob.StringRequestBlob(data),
+        if (stringData == null || stringData.isBlank) RequestBlob.EmptyRequestBlob
+        else stringData,
       headers = Map(
         "Content-Type" -> "application/json"
       )
