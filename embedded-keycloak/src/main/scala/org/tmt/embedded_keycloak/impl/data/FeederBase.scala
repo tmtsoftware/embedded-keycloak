@@ -61,14 +61,15 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
     }
   }
 
-  private def sendRequest(requester: Requester, url: String, data: String = null)( // scalastyle:ignore
-                                                                                  implicit bearerToken: BearerToken): Response = {
+  private def sendRequest(requester: Requester, url: String, stringData: String = null)( // scalastyle:ignore
+      implicit bearerToken: BearerToken
+  ): Response = {
     val response = requester(
       url = url,
       auth = bearerToken,
       data =
-        if (data == null) RequestBlob.EmptyRequestBlob
-        else data,
+        if (stringData == null || stringData.isBlank) RequestBlob.EmptyRequestBlob
+        else stringData,
       headers = Map(
         "Content-Type" -> "application/json"
       )
