@@ -36,7 +36,7 @@ object BearerToken {
     }
 
     val tokenString =
-      ujson.read(response.data.bytes).obj.get("access_token").map(_.str).get
+      ujson.read(response.bytes).obj.get("access_token").map(_.str).get
     BearerToken(tokenString)
   }
 }
