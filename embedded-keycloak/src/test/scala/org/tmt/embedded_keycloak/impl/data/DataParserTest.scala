@@ -16,9 +16,9 @@ class DataParserTest extends FunSuite with Matchers {
           clients = Set(
             Client(
               name = "some-server",
-              clientType = "confidential",
+              clientType = "bearer-only",
               clientRoles = Set("server-admin", "server-user"),
-              authorizationEnabled = true
+              authorizationEnabled = false
             ),
             Client(name = "some-client")
           ),
