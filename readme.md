@@ -14,7 +14,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 
 add the dependency:
 ```scala
-libraryDependencies += "org.tmt" %% "embedded-keycloak" % "<ADD_LATEST_VERSION_HERE>"
+libraryDependencies += "com.github.tmtsoftware.embedded-keycloak" %% "embedded-keycloak" % "<ADD_LATEST_VERSION_HERE>"
 ```
 
 ## Usage
