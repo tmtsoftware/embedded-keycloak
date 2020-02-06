@@ -30,7 +30,7 @@ lazy val `embedded-keycloak` = project.settings(
     }
   },
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "requests" % "0.5.0",
+    "com.lihaoyi" %% "requests" % "0.5.1",
     "com.lihaoyi" %% "os-lib"   % "0.6.3",
     "com.lihaoyi" %% "upickle"  % "0.9.8",
     "com.lihaoyi" %% "ujson"    % "0.9.8",
