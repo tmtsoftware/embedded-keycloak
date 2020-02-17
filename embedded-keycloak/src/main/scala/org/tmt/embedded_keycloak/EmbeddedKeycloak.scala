@@ -2,7 +2,7 @@ package org.tmt.embedded_keycloak
 
 import org.tmt.embedded_keycloak.impl._
 import org.tmt.embedded_keycloak.utils.Ports
-import os.Inherit
+import os.{Inherit, Pipe}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -27,7 +27,10 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
         s"-Djboss.bind.address=$host",
         s"-Djboss.http.port=$port"
       )
-      .spawn(stdout = Inherit)
+      .spawn(
+        stdout = if (settings.printProcessLogs) Inherit else Pipe,
+        stderr = if (settings.printProcessLogs) Inherit else Pipe
+      )
 
     val stopHandle = new StopHandle(process, port)
 
