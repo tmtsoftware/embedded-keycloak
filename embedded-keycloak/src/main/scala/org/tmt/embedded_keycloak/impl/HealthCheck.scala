@@ -49,7 +49,7 @@ private[embedded_keycloak] class HealthCheck(settings: Settings) {
   private def makeCall(): Future[Response] = {
     println("RETRY: probing keycloak instance")
     Future {
-      val response = requests.get(s"http://${settings.host}:${settings.port}")
+      val response = requests.get(s"http://localhost:${settings.port}")
       if (response.statusCode != 200)
         throw new RuntimeException("keycloak health-check failed")
       else response
