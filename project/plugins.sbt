@@ -4,7 +4,7 @@ addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.5.0")
 addSbtPlugin("com.codacy" % "sbt-codacy-coverage" % "3.0.3")
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
 addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.2.12")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.2.1")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.2")
 
 scalacOptions ++= Seq(
   "-encoding",
