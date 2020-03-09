@@ -2,7 +2,6 @@ package org.tmt.embedded_keycloak.impl.data
 
 import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
 import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, ClientRole}
-import org.tmt.embedded_keycloak.utils.Ports
 import org.tmt.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
 
 import scala.concurrent.Await
@@ -64,9 +63,5 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
 
       stopHandle.stop()
     }
-  }
-
-  override def afterAll(): Unit = {
-    Ports.stop(9005)
   }
 }

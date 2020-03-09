@@ -1,8 +1,7 @@
 package org.tmt.embedded_keycloak.impl
 
 import org.tmt.embedded_keycloak.impl.OsLibExtensions._
-import org.tmt.embedded_keycloak.utils.Ports
-import os.{proc, SubProcess}
+import os.{SubProcess, proc}
 
 class StopHandle private[embedded_keycloak] (subProcess: SubProcess, port: Int) {
   def stop(): Unit = {
@@ -11,7 +10,6 @@ class StopHandle private[embedded_keycloak] (subProcess: SubProcess, port: Int) 
     (getChildPids andThen killAll)(process.pid())
 
     subProcess.destroyForcibly()
-    Ports.stop(port)
   }
 
   private val killAll: List[Long] => Unit = _.foreach(proc("kill", "-9", _).call())

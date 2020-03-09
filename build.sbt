@@ -1,7 +1,7 @@
 inThisBuild(
   List(
     scalaVersion := "2.13.1",
-    organization := "org.tmt",
+    organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
     licenses := List(
       "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")

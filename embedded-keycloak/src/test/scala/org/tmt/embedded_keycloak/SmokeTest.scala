@@ -20,6 +20,4 @@ class SmokeTest extends FunSuite with Matchers with BeforeAndAfterAll {
 
     Eventually.eventually(Ports.checkAvailability(settings.port) shouldBe true)
   }
-
-  override def afterAll(): Unit = Ports.stop(9005)
 }

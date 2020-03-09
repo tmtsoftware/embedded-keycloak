@@ -33,11 +33,9 @@ class BearerTokenTest extends FunSuite with Matchers with BeforeAndAfterEach {
 
   override def beforeEach(): Unit = {
     super.afterEach()
-    Ports.stop(9005)
   }
 
   override def afterEach(): Unit = {
     super.afterEach()
-    Ports.stop(9005)
   }
 }
