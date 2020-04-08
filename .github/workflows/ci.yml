@@ -1,6 +1,10 @@
 name: CI
 on:
+  pull_request:
+    branches: [master]
   push:
+    branches: [master]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,5 +13,15 @@ jobs:
       - uses: olafurpg/setup-scala@v5
         with:
           java-version: adopt@1.11
+
       - name: Test
         run: sbt clean test
+
+      - name: Notify slack
+        if: always()
+        continue-on-error: true
+        uses: kpritam/slack-job-status-action@v1
+        with:
+          job-status: ${{ job.status }}
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: csw-build
