@@ -24,7 +24,7 @@ inThisBuild(
 lazy val `embedded-keycloak` = (project in file("."))
   .settings(
     version := {
-      sys.env.get("prod.publish") match {
+      sys.props.get("prod.publish") match {
         case Some("true") => version.value
         case _            => "0.1.0-SNAPSHOT"
       }
