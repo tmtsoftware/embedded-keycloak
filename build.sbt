@@ -22,7 +22,7 @@ inThisBuild(
   )
 )
 
-lazy val `embedded-keycloak` = (project in file("."))
+lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
         "com.lihaoyi" %% "requests" % "0.5.1",
