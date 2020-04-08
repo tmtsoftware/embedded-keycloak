@@ -1,6 +1,8 @@
 package org.tmt.embedded_keycloak.impl.data
 
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, ClientRole}
 import org.tmt.embedded_keycloak.{EmbeddedKeycloak, KeycloakData, Settings}
 
@@ -8,7 +10,7 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationDouble
 
-class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
+class DataFeederTest extends AnyFunSuite with Matchers with BeforeAndAfterAll {
   test("test data integration") {
 
     val settings     = Settings.default.copy(port = 9005)
@@ -21,7 +23,7 @@ class DataFeederTest extends FunSuite with Matchers with BeforeAndAfterAll {
 
     val mayBeActualRealm = actualRealms.find(x => x.name == "example-realm")
 
-    mayBeActualRealm should not be empty
+    mayBeActualRealm shouldBe defined
 
     mayBeActualRealm.foreach { actualRealm =>
       import actualRealm._

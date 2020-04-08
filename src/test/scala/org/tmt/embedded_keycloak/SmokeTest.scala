@@ -1,14 +1,16 @@
 package org.tmt.embedded_keycloak
 
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.Eventually
-import org.scalatest.{BeforeAndAfterAll, FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.tmt.embedded_keycloak.utils.Ports
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class SmokeTest extends FunSuite with Matchers with BeforeAndAfterAll {
+class SmokeTest extends AnyFunSuite with Matchers with BeforeAndAfterAll {
 
   test("startServer should start the server as a child process and should stop when stop method is called") {
 

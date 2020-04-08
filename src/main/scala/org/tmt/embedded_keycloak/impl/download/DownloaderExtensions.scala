@@ -37,13 +37,12 @@ private[embedded_keycloak] object DownloaderExtensions {
   }
 
   implicit class RichByteStringSourceOfDone(source: Source[ByteString, Future[Done]]) {
-    def toProgressSource(contentLength: Future[Long])(implicit ec: ExecutionContext): Source[DownloadProgress, Future[Done]] = {
+    def toProgressSource(contentLength: Future[Long])(implicit ec: ExecutionContext): Source[DownloadProgress, Future[Done]] =
       source
         .scan(DownloadProgress.empty(contentLength)) { (lastProgressF, currentData) =>
           lastProgressF.map(lastProgress => lastProgress + currentData)
         }
         .mapAsync(1)(identity)
-    }
   }
 
   implicit class RichByteStringSourceOfAny(sourceF: Source[ByteString, Future[Any]]) {

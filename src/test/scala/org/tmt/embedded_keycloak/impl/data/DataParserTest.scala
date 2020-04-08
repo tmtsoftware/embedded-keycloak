@@ -1,10 +1,11 @@
 package org.tmt.embedded_keycloak.impl.data
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.tmt.embedded_keycloak.KeycloakData
 import org.tmt.embedded_keycloak.KeycloakData._
 
-class DataParserTest extends FunSuite with Matchers {
+class DataParserTest extends AnyFunSuite with Matchers {
   test("testParsing") {
     val parsedData: KeycloakData = KeycloakData.fromConfig
 
