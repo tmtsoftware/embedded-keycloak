@@ -20,6 +20,6 @@ class SmokeTest extends AnyFunSuite with Matchers with BeforeAndAfterAll {
 
     stopHandle.stop()
 
-    Eventually.eventually(Ports.checkAvailability(settings.port) shouldBe true)
+    Eventually.eventually(Ports.isFree(settings.port) shouldBe true)
   }
 }

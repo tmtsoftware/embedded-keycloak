@@ -2,7 +2,6 @@ package org.tmt.embedded_keycloak
 
 import org.tmt.embedded_keycloak.impl._
 import org.tmt.embedded_keycloak.utils.Ports
-import os.{Inherit, Pipe}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -14,7 +13,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
 
   private def preRun(): Unit = {
     installer.install()
-    Ports.checkAvailability(port = port, throwOnError = true)
+    if (!Ports.isFree(port)) throw new RuntimeException(s"Failed to start keycloak server, $port is not available")
   }
 
   def startServer()(implicit ec: ExecutionContext): Future[StopHandle] = {
@@ -28,8 +27,8 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
         s"-Djboss.http.port=$port"
       )
       .spawn(
-        stdout = if (settings.printProcessLogs) Inherit else Pipe,
-        stderr = if (settings.printProcessLogs) Inherit else Pipe
+        stdout = processLogger,
+        stderr = processLogger
       )
 
     val stopHandle = new StopHandle(process, port)
