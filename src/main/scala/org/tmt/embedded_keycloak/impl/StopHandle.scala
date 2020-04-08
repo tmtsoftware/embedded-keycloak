@@ -3,7 +3,7 @@ package org.tmt.embedded_keycloak.impl
 import org.tmt.embedded_keycloak.impl.OsLibExtensions._
 import os.{proc, SubProcess}
 
-class StopHandle private[embedded_keycloak] (subProcess: SubProcess, port: Int) {
+class StopHandle private[embedded_keycloak] (subProcess: SubProcess) {
   def stop(): Unit = {
     val process: Process = subProcess.wrapped
 

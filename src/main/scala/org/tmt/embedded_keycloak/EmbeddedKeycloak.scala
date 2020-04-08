@@ -28,7 +28,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
       s"-Djboss.http.port=$port"
     )
 
-    val stopHandle = new StopHandle(process, port)
+    val stopHandle = new StopHandle(process)
 
     val healthCheckResult = healthCheck.keycloakHealth()
     healthCheckResult.onComplete(_ => wiring.actorSystem.terminate())

@@ -28,6 +28,7 @@ private[embedded_keycloak] class HealthCheck(settings: Settings)(implicit val sy
       Source
         .future {
           Future {
+            println("[Embedded-Keycloak] RETRY: probing keycloak instance")
             val response = Try(requests.get(url)).recover(_ => throw HealthCheckFailedException).get
             if (response.statusCode != successCode) throw HealthCheckFailedException
             else response

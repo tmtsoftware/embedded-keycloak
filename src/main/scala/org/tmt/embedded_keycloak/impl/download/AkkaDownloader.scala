@@ -28,7 +28,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
 
   def download(): Unit = {
     if (alwaysDownload || !isKeycloakDownloaded) {
-      println(s"Downloading keycloak at location: [${fileIO.downloadDirectory}]")
+      println(s"[Embedded-Keycloak] Downloading keycloak at location: [${fileIO.downloadDirectory}]")
       fileIO.deleteVersion()
 
       val responseFuture = Http().singleRequest(HttpRequest(uri = keycloakDownloadUrl))
@@ -45,7 +45,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
 
       Await.result(downloadCompleteF, 20.minutes)
       fileIO.moveIncompleteFile()
-      println(s"\nKeycloak downloaded successfully at location: [${fileIO.tarFilePath}]")
+      println(s"\n[Embedded-Keycloak] Keycloak downloaded successfully at location: [${fileIO.tarFilePath}]")
     }
   }
 }
