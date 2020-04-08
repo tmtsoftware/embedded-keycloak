@@ -35,10 +35,8 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings) 
         throw new RuntimeException(s"$other client type is invalid")
     }
 
-    val payload = ujson.write(j, indent = 4)
-
+    val payload  = ujson.write(j, indent = 4)
     val response = kPost(realmUrl(realm.name) + "/clients", payload)
-
     val clientId = getId(response)
 
     client.clientRoles.foreach(r => feedClientRole(r, clientId))
@@ -48,8 +46,6 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings) 
   private def feedClientRole(roleName: String, clientId: String)(implicit bearerToken: BearerToken): Unit =
     kPost(
       realmUrl(realm.name) + s"/clients/$clientId/roles",
-      Map(
-        "name" -> Str(roleName)
-      )
+      Map("name" -> Str(roleName))
     )
 }

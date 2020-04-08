@@ -14,10 +14,10 @@ class AkkaDownloaderTest extends AnyFunSuite with BeforeAndAfterAll with ScalaFu
   override protected def afterAll(): Unit = system.terminate().futureValue
 
   test("should download keycloak") {
-    val settings   = Settings(alwaysDownload = false)
+    val settings   = Settings(alwaysDownload = true)
     val io         = new FileIO(settings)
     val downloader = new AkkaDownloader(settings, io)
     downloader.download()
-    os.exists(io.tarFilePath) shouldBe true
+    io.isKeycloakDownloaded shouldBe true
   }
 }

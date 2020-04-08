@@ -34,8 +34,7 @@ private[embedded_keycloak] class RestAdminFeeder(settings: Settings) extends Fee
 
     val getResponse = get(url = url)
 
-    if (getResponse.statusCode != 200)
-      throw new RuntimeException("could not create admin user")
+    if (getResponse.statusCode != 200) throw new RuntimeException("could not create admin user")
 
     val cookies = getResponse.cookies
 
@@ -55,8 +54,7 @@ private[embedded_keycloak] class RestAdminFeeder(settings: Settings) extends Fee
         )
       )
 
-      if (postResponse.statusCode != 200)
-        throw new RuntimeException("could not create admin user")
+      if (postResponse.statusCode != 200) throw new RuntimeException("could not create admin user")
     }
   }
 }

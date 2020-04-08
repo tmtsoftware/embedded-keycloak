@@ -82,8 +82,7 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
                         | response text: ${response.text()}
     """.stripMargin
 
-    if (!Set(200, 201, 204).contains(response.statusCode))
-      throw new RuntimeException(error)
+    if (!Set(200, 201, 204).contains(response.statusCode)) throw new RuntimeException(error)
     else response
   }
 }
