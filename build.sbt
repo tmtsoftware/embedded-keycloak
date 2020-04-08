@@ -39,7 +39,7 @@ lazy val `embedded-keycloak` = (project in file("."))
         "com.typesafe.akka" %% "akka-http"   % "10.1.11",
         "com.typesafe.akka" %% "akka-stream" % "2.6.1",
         //TEST
-        "org.scalatest" %% "scalatest" % "3.0.8" % Test
+        "org.scalatest" %% "scalatest" % "3.1.1" % Test
       ),
     parallelExecution in Test in ThisBuild := false
   )
