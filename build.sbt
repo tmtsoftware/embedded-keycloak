@@ -1,6 +1,7 @@
 inThisBuild(
   List(
     scalaVersion := "2.13.1",
+    version := "0.1.0-SNAPSHOT",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
     licenses := List(
@@ -23,12 +24,6 @@ inThisBuild(
 
 lazy val `embedded-keycloak` = (project in file("."))
   .settings(
-    version := {
-      sys.props.get("prod.publish") match {
-        case Some("true") => version.value
-        case _            => "0.1.0-SNAPSHOT"
-      }
-    },
     libraryDependencies ++= Seq(
         "com.lihaoyi" %% "requests" % "0.5.1",
         "com.lihaoyi" %% "os-lib"   % "0.6.3",
