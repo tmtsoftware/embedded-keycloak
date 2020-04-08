@@ -4,7 +4,7 @@ import org.tmt.embedded_keycloak.KeycloakData.AdminUser
 import org.tmt.embedded_keycloak.Settings
 import org.tmt.embedded_keycloak.impl.Bash.exec
 import org.tmt.embedded_keycloak.impl.FileIO
-import requests.{RequestBlob, get, post}
+import requests.{get, post, RequestBlob}
 
 sealed trait AdminFeeder {
   def feedAdminUser(admin: AdminUser): Unit
@@ -16,6 +16,7 @@ private[embedded_keycloak] class JavaAdminFeeder(settings: Settings, fileIO: Fil
 
   override def feedAdminUser(admin: AdminUser): Unit =
     exec(
+      settings.stdOutLogger,
       "sh",
       fileIO.addUserExecutablePath.toString,
       s"--user ${admin.username}",

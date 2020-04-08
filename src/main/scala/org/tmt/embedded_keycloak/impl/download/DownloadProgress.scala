@@ -14,8 +14,7 @@ private[embedded_keycloak] case class DownloadProgress(downloadedBytes: Long, to
     s"${math.round(percentage)}% " +
     s"(${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)})"
 
-  def percentage: Double =
-    (downloadedBytes.toDouble / totalBytes.toDouble) * 100
+  def percentage: Double = (downloadedBytes.toDouble / totalBytes.toDouble) * 100
 
   private def readableFileSize(size: Long): String = {
     if (size <= 0) "0 B"

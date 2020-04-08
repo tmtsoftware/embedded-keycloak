@@ -1,6 +1,6 @@
 package org.tmt.embedded_keycloak
 
-import os.{Inherit, Pipe, ProcessInput, ProcessOutput}
+import os.{Inherit, Pipe, ProcessOutput}
 
 case class Settings(
     port: Int = 8081,
@@ -11,7 +11,7 @@ case class Settings(
     version: String = "9.0.2",
     printProcessLogs: Boolean = true
 ) {
-  val processLogger: ProcessInput with ProcessOutput = if (printProcessLogs) Inherit else Pipe
+  val stdOutLogger: ProcessOutput = if (printProcessLogs) Inherit else Pipe
 }
 
 object Settings {

@@ -1,23 +1,17 @@
 package org.tmt.embedded_keycloak.impl
 
-import os.proc
+import os.{ProcessOutput, SubProcess}
 
 private[embedded_keycloak] object Bash {
 
-  implicit class RichProc(proc: proc) {
-    def executeAndShow(throwOnError: Boolean = false): Int = {
-      val exitCode = proc.call().exitCode
-
-      if (throwOnError && exitCode != 0)
-        throw new RuntimeException(s"the command $proc resulted in exit code $exitCode")
-
-      exitCode
-    }
+  def spawn(stdOut: ProcessOutput, cmd: String*): SubProcess = {
+    println(s"[os.spawn] Executing command: [${cmd.mkString(" ")}]")
+    os.proc(cmd).spawn(stdout = stdOut)
   }
 
-  /**
-   * Execute on current thread
-   */
-  def exec(cmd: String*): Int = os.proc(cmd).executeAndShow(throwOnError = true)
+  def exec(out: ProcessOutput, cmd: String*): Int = {
+    println(s"[os.call] Executing command: [${cmd.mkString(" ")}]")
+    os.proc(cmd).call(stdout = out).exitCode
+  }
 
 }

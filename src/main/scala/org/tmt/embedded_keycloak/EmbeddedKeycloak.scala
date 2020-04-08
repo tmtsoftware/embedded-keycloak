@@ -1,5 +1,6 @@
 package org.tmt.embedded_keycloak
 
+import org.tmt.embedded_keycloak.impl.Bash.spawn
 import org.tmt.embedded_keycloak.impl._
 import org.tmt.embedded_keycloak.utils.Ports
 
@@ -19,22 +20,20 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
   def startServer()(implicit ec: ExecutionContext): Future[StopHandle] = {
     preRun()
 
-    val process = os
-      .proc(
-        "sh",
-        fileIO.keycloakExecutablePath.toString,
-        s"-Djboss.bind.address=$host",
-        s"-Djboss.http.port=$port"
-      )
-      .spawn(
-        stdout = processLogger,
-        stderr = processLogger
-      )
+    val process = spawn(
+      stdOutLogger,
+      "sh",
+      fileIO.keycloakExecutablePath.toString,
+      s"-Djboss.bind.address=$host",
+      s"-Djboss.http.port=$port"
+    )
 
     val stopHandle = new StopHandle(process, port)
 
-    healthCheck
-      .checkHealth()
+    val healthCheckResult = healthCheck.keycloakHealth()
+    healthCheckResult.onComplete(_ => wiring.actorSystem.terminate())
+
+    healthCheckResult
       .map(_ => dataFeeder.feed(keycloakData))
       .map(_ => stopHandle)
   }

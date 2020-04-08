@@ -11,18 +11,14 @@ import org.tmt.embedded_keycloak.impl.download.DownloaderExtensions._
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.control.NonFatal
 
-private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: FileIO) extends Downloader {
+private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: FileIO)(implicit system: ActorSystem) {
   import settings._
 
   private def keycloakDownloadUrl  = s"https://downloads.jboss.org/keycloak/$version/keycloak-$version.tar.gz"
   private def isKeycloakDownloaded = os.exists(fileIO.tarFilePath)
 
-  implicit private lazy val actorSystem: ActorSystem = ActorSystem("download-actor-system")
-  implicit private lazy val ec: ExecutionContext     = actorSystem.dispatcher
-
-  private def terminateActorSystem() = Await.result(actorSystem.terminate(), 5.seconds)
+  implicit private lazy val ec: ExecutionContext = system.dispatcher
 
   private def getContentLength(response: HttpResponse) = response match {
     case HttpResponse(StatusCodes.OK, _, entity, _) =>
@@ -35,12 +31,8 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
       println(s"Downloading keycloak at location: [${fileIO.downloadDirectory}]")
       fileIO.deleteVersion()
 
-      val responseFuture: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = keycloakDownloadUrl))
-      val contentLength = responseFuture.map(getContentLength).recoverWith {
-        case NonFatal(e) =>
-          terminateActorSystem()
-          throw e
-      }
+      val responseFuture = Http().singleRequest(HttpRequest(uri = keycloakDownloadUrl))
+      val contentLength  = responseFuture.map(getContentLength)
 
       val source: Source[DownloadProgress, Future[Done]] =
         responseFuture.toByteStringSource
@@ -54,7 +46,6 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
       Await.result(downloadCompleteF, 20.minutes)
       fileIO.moveIncompleteFile()
       println(s"\nKeycloak downloaded successfully at location: [${fileIO.tarFilePath}]")
-      Await.result(actorSystem.terminate(), 5.seconds)
     }
   }
 }
