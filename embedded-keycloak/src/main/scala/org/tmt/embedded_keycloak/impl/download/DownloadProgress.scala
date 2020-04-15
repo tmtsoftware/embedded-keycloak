@@ -12,7 +12,7 @@ private[embedded_keycloak] case class DownloadProgress(downloadedBytes: Long, to
 
   override def toString: String =
     s"${math.round(percentage)}% " +
-    s"(${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)})"
+      s"(${readableFileSize(downloadedBytes)} of ${readableFileSize(totalBytes)})"
 
   def percentage: Double = (downloadedBytes.toDouble / totalBytes.toDouble) * 100
 
@@ -34,7 +34,5 @@ private[embedded_keycloak] object DownloadProgress {
     new DownloadProgress(downloadedBytes, totalBytes, lastChunk)
 
   def empty(totalBytes: Future[Long])(implicit ec: ExecutionContext): Future[DownloadProgress] =
-    totalBytes.map { bytes =>
-      DownloadProgress(downloadedBytes = 0, totalBytes = bytes, lastChunk = ByteString.empty)
-    }
+    totalBytes.map { bytes => DownloadProgress(downloadedBytes = 0, totalBytes = bytes, lastChunk = ByteString.empty) }
 }

@@ -14,18 +14,16 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
     val json     = ujson.read(response.bytes).arr
     json
       .map(_.obj)
-      .map(
-        obj => {
-          val realmName = obj.getStr("realm")
-          val clients   = getClients(realmName)
-          Realm(
-            name = realmName,
-            clients = clients.values.toSet,
-            users = getUsers(realmName, clients),
-            realmRoles = getRealmRoles(realmName)
-          )
-        }
-      )
+      .map(obj => {
+        val realmName = obj.getStr("realm")
+        val clients   = getClients(realmName)
+        Realm(
+          name = realmName,
+          clients = clients.values.toSet,
+          users = getUsers(realmName, clients),
+          realmRoles = getRealmRoles(realmName)
+        )
+      })
       .toSet
   }
 
@@ -61,12 +59,12 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
       .map(_.obj)
       .map(obj => {
         obj.getStr("id") ->
-        Client(
-          name = obj.getStr("name"),
-          clientType = obj.getClientType,
-          authorizationEnabled = obj.getBool("authorizationServicesEnabled"),
-          clientRoles = getClientRolesForClient(obj.getStr("id"))
-        )
+          Client(
+            name = obj.getStr("name"),
+            clientType = obj.getClientType,
+            authorizationEnabled = obj.getBool("authorizationServicesEnabled"),
+            clientRoles = getClientRolesForClient(obj.getStr("id"))
+          )
       })
       .toMap
   }
@@ -87,9 +85,8 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
 
     def getClientsRoleMappings(userId: String): Set[ClientRole] = {
       clientIds.keys
-        .map(
-          clientId =>
-            clientId ->
+        .map(clientId =>
+          clientId ->
             ujson
               .read(kGet(realmUrl(realm) + s"/users/$userId/role-mappings/clients/$clientId").bytes)
               .arr

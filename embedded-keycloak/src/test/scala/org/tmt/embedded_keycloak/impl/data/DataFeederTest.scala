@@ -53,14 +53,14 @@ class DataFeederTest extends AnyFunSuite with Matchers with BeforeAndAfterAll {
 
       clients.find(c => {
         c.name == "some-server" &&
-        !c.authorizationEnabled &&
-        c.clientRoles.contains("server-admin") &&
-        c.clientRoles.contains("server-user")
+          !c.authorizationEnabled &&
+          c.clientRoles.contains("server-admin") &&
+          c.clientRoles.contains("server-user")
       }) should not be empty
 
       clients.find(c => {
         c.name == "some-client" &&
-        !c.authorizationEnabled
+          !c.authorizationEnabled
       }) should not be empty
 
       stopHandle.stop()

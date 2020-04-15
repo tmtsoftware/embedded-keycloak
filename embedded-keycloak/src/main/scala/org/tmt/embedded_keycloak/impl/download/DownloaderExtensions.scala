@@ -28,16 +28,15 @@ private[embedded_keycloak] object DownloaderExtensions {
             if (thisProgress.percentage - lastProgressPercentage > 10d | thisProgress.percentage == 100d | thisProgress.percentage == 0d) {
               lastProgressPercentage = thisProgress.percentage
               List(thisProgress)
-            } else List.empty[DownloadProgress]
+            }
+            else List.empty[DownloadProgress]
         }
   }
 
   implicit class RichByteStringSourceOfDone(source: Source[ByteString, Future[Done]]) {
     def toProgressSource(contentLength: Future[Long])(implicit ec: ExecutionContext): Source[DownloadProgress, Future[Done]] =
       source
-        .scan(DownloadProgress.empty(contentLength)) { (lastProgressF, currentData) =>
-          lastProgressF.map(_ + currentData)
-        }
+        .scan(DownloadProgress.empty(contentLength)) { (lastProgressF, currentData) => lastProgressF.map(_ + currentData) }
         .mapAsync(1)(identity)
   }
 
