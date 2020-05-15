@@ -1,5 +1,5 @@
 addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.2.13")
-addSbtPlugin("com.timushev.sbt" % "sbt-updates"               % "0.5.0")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates"               % "0.5.1")
 addSbtPlugin("org.scalameta"    % "sbt-scalafmt"              % "2.3.2")
 
 scalacOptions ++= Seq(
