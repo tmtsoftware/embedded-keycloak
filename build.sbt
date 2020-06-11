@@ -25,16 +25,16 @@ inThisBuild(
 lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
-        "com.lihaoyi" %% "requests" % "0.5.2",
+        "com.lihaoyi" %% "requests" % "0.6.2",
         "com.lihaoyi" %% "os-lib"   % "0.6.3",
         "com.lihaoyi" %% "upickle"  % "1.1.0",
         "com.lihaoyi" %% "ujson"    % "1.1.0",
         "com.iheart"  %% "ficus"    % "1.4.7",
         //AKKA-DOWNLOADER
         "com.typesafe.akka" %% "akka-http"   % "10.1.12",
-        "com.typesafe.akka" %% "akka-stream" % "2.6.5",
+        "com.typesafe.akka" %% "akka-stream" % "2.6.6",
         //TEST
-        "org.scalatest" %% "scalatest" % "3.1.1" % Test
+        "org.scalatest" %% "scalatest" % "3.1.2" % Test
       ),
     parallelExecution in Test in ThisBuild := false
   )
