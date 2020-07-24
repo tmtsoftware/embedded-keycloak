@@ -20,7 +20,7 @@ private[embedded_keycloak] case class DownloadProgress(downloadedBytes: Long, to
     if (size <= 0) "0 B"
     else {
       val units           = Array[String]("B", "kB", "MB", "GB", "TB")
-      val digitGroups     = (Math.log10(size) / Math.log10(1024)).toInt
+      val digitGroups     = (Math.log10(size.toDouble) / Math.log10(1024)).toInt
       val decimalFormat   = new DecimalFormat("#,##0.#")
       val number          = size / Math.pow(1024, digitGroups)
       val formattedNumber = decimalFormat.format(number)
