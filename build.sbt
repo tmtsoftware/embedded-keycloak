@@ -29,7 +29,7 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
         "com.lihaoyi" %% "os-lib"   % "0.7.1",
         "com.lihaoyi" %% "upickle"  % "1.2.0",
         "com.lihaoyi" %% "ujson"    % "1.2.0",
-        "com.iheart"  %% "ficus"    % "1.4.7",
+        "com.iheart"  %% "ficus"    % "1.5.0",
         //AKKA-DOWNLOADER
         "com.typesafe.akka" %% "akka-http"   % "10.1.12",
         "com.typesafe.akka" %% "akka-stream" % "2.6.8",
