@@ -20,11 +20,12 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
 
   implicit private lazy val ec: ExecutionContext = system.dispatcher
 
-  private def getContentLength(response: HttpResponse) = response match {
-    case HttpResponse(StatusCodes.OK, _, entity, _) =>
-      entity.contentLengthOption.getOrElse(throw new RuntimeException("Content length is not provided"))
-    case HttpResponse(statusCode, _, _, _) => throw new RuntimeException(s"Downloading failed with. status code: $statusCode")
-  }
+  private def getContentLength(response: HttpResponse) =
+    response match {
+      case HttpResponse(StatusCodes.OK, _, entity, _) =>
+        entity.contentLengthOption.getOrElse(throw new RuntimeException("Content length is not provided"))
+      case HttpResponse(statusCode, _, _, _)          => throw new RuntimeException(s"Downloading failed with. status code: $statusCode")
+    }
 
   def download(): Unit = {
     if (alwaysDownload || !isKeycloakDownloaded) {

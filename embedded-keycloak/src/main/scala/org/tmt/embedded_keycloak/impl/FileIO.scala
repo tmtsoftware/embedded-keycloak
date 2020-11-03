@@ -24,8 +24,8 @@ class FileIO(settings: Settings) {
   def isKeycloakDownloaded: Boolean = os.exists(tarFilePath)
 
   //OPERATIONS
-  def deleteVersion(): Unit  = os.remove.all(versionDirectory)
-  def deleteBinaries(): Unit = os.remove.all(binariesDirectory)
+  def deleteVersion(): Unit      = os.remove.all(versionDirectory)
+  def deleteBinaries(): Unit     = os.remove.all(binariesDirectory)
   def moveIncompleteFile(): Unit =
     os.move(
       from = incompleteTarFilePath,

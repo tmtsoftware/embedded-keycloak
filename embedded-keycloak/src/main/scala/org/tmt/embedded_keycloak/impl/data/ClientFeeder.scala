@@ -22,16 +22,16 @@ private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings) 
     j.update("directAccessGrantsEnabled", ujson.Bool(client.passwordGrantEnabled))
 
     client.clientType match {
-      case "bearer-only" =>
+      case "bearer-only"  =>
         j.update("bearerOnly", jTrue)
         j.update("publicClient", jFalse)
-      case "public" =>
+      case "public"       =>
         j.update("bearerOnly", jFalse)
         j.update("publicClient", jTrue)
       case "confidential" =>
         j.update("bearerOnly", jFalse)
         j.update("publicClient", jFalse)
-      case other =>
+      case other          =>
         throw new RuntimeException(s"$other client type is invalid")
     }
 

@@ -11,7 +11,7 @@ case class KeycloakData(adminUser: AdminUser = AdminUser.default, realms: Set[Re
 
 object KeycloakData {
 
-  lazy val empty: KeycloakData = KeycloakData()
+  lazy val empty: KeycloakData      = KeycloakData()
   lazy val fromConfig: KeycloakData = ConfigFactory
     .load()
     .getConfig("embedded-keycloak")

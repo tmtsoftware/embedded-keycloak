@@ -25,7 +25,9 @@ private[embedded_keycloak] object DownloaderExtensions {
         .statefulMapConcat { () =>
           var lastProgressPercentage = 0d
           thisProgress =>
-            if (thisProgress.percentage - lastProgressPercentage > 10d | thisProgress.percentage == 100d | thisProgress.percentage == 0d) {
+            if (
+              thisProgress.percentage - lastProgressPercentage > 10d | thisProgress.percentage == 100d | thisProgress.percentage == 0d
+            ) {
               lastProgressPercentage = thisProgress.percentage
               List(thisProgress)
             }
@@ -52,7 +54,7 @@ private[embedded_keycloak] object DownloaderExtensions {
           responseF
             .map {
               case HttpResponse(StatusCodes.OK, _, entity, _) => entity.withoutSizeLimit.dataBytes
-              case HttpResponse(statusCode, _, _, _) =>
+              case HttpResponse(statusCode, _, _, _)          =>
                 throw new RuntimeException(s"Keycloak downloading failed with status code: $statusCode")
             }
         )

@@ -21,7 +21,7 @@ private[embedded_keycloak] class RealmFeeder(settings: Settings) extends FeederB
     val clientFeeder = new ClientFeeder(realm, settings)
     val clientIds    = realm.clients.map(c => clientFeeder.feedClient(c)).toMap
     realm.realmRoles.foreach(feedRealmRole(_, realm.name))
-    val userFeeder = new UserFeeder(clientIds, realm, settings)
+    val userFeeder   = new UserFeeder(clientIds, realm, settings)
     realm.users.foreach(userFeeder.feedUser)
   }
 
