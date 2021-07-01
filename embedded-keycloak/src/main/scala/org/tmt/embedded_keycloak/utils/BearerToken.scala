@@ -1,6 +1,6 @@
 package org.tmt.embedded_keycloak.utils
 
-import requests.{post, RequestAuth}
+import requests.{RequestAuth, post}
 
 case class BearerToken(token: String) extends RequestAuth {
   override def header: Option[String] = Some(s"Bearer $token")
@@ -33,8 +33,7 @@ object BearerToken {
       throw new RuntimeException(error)
     }
 
-    val tokenString =
-      ujson.read(response.bytes).obj.get("access_token").map(_.str).get
+    val tokenString = ujson.read(response.bytes).obj.get("access_token").map(_.str).get
     BearerToken(tokenString)
   }
 }

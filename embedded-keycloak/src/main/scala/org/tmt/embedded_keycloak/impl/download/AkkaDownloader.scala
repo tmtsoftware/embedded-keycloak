@@ -2,7 +2,6 @@ package org.tmt.embedded_keycloak.impl.download
 
 import akka.Done
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.scaladsl.Source
 import org.tmt.embedded_keycloak.Settings
@@ -15,7 +14,6 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: FileIO)(implicit system: ActorSystem) {
   import settings._
 
-  private def keycloakDownloadUrl  = s"https://downloads.jboss.org/keycloak/$version/keycloak-$version.tar.gz"
   private def isKeycloakDownloaded = os.exists(fileIO.tarFilePath)
 
   implicit private lazy val ec: ExecutionContext = system.dispatcher
@@ -29,10 +27,11 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
 
   def download(): Unit = {
     if (alwaysDownload || !isKeycloakDownloaded) {
+      println(s"[Embedded-Keycloak] Downloading keycloak from URL: [$keycloakDownloadUrl]")
       println(s"[Embedded-Keycloak] Downloading keycloak at location: [${fileIO.downloadDirectory}]")
       fileIO.deleteVersion()
 
-      val responseFuture = Http().singleRequest(HttpRequest(uri = keycloakDownloadUrl))
+      val responseFuture = AkkaHttpUtils.singleRequestWithRedirect(HttpRequest(uri = keycloakDownloadUrl))
       val contentLength  = responseFuture.map(getContentLength)
 
       val source: Source[DownloadProgress, Future[Done]] =

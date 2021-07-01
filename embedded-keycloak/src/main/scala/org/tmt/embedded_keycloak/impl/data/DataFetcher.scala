@@ -14,7 +14,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
     val json     = ujson.read(response.bytes).arr
     json
       .map(_.obj)
-      .map(obj => {
+      .map { obj =>
         val realmName = obj.getStr("realm")
         val clients   = getClients(realmName)
         Realm(
@@ -23,7 +23,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
           users = getUsers(realmName, clients),
           realmRoles = getRealmRoles(realmName)
         )
-      })
+      }
       .toSet
   }
 
@@ -94,10 +94,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
               .map(_.getStr("name"))
         )
         .toMap
-        .flatMap {
-          case (k, v) =>
-            v.map(roleName => ClientRole(clientIds(k).name, roleName))
-        }
+        .flatMap { case (k, v) => v.map(roleName => ClientRole(clientIds(k).name, roleName)) }
         .toSet
     }
 
@@ -117,9 +114,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
   }
 
   private[this] implicit class RichLinkedHashMap(map: mutable.LinkedHashMap[String, Value]) {
-    def getStr(key: String): String = {
-      map.get(key).map(_.str).getOrElse("")
-    }
+    def getStr(key: String): String = map.get(key).map(_.str).getOrElse("")
 
     def getBool(key: String): Boolean = map.get(key).exists(_.bool)
 

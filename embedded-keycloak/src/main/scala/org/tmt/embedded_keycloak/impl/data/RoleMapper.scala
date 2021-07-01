@@ -30,17 +30,14 @@ private[embedded_keycloak] class RoleMapper(
 
     clientRoles
       .groupBy(x => x.clientName)
-      .map {
-        case (k, v) => (k, v.map(_.roleName))
-      }
-      .foreach {
-        case (clientName, groupedRoles) =>
-          val clientId = clientIds(clientName)
+      .map { case (k, v) => (k, v.map(_.roleName)) }
+      .foreach { case (clientName, groupedRoles) =>
+        val clientId = clientIds(clientName)
 
-          val clientRolesResponse = kGet(realmUrl(realm.name) + s"/users/$userId/role-mappings/clients/$clientId/available")
-          val clientRoles         = roleRepresentations(clientRolesResponse.text(), r => groupedRoles.contains(r.name))
+        val clientRolesResponse = kGet(realmUrl(realm.name) + s"/users/$userId/role-mappings/clients/$clientId/available")
+        val clientRoles         = roleRepresentations(clientRolesResponse.text(), r => groupedRoles.contains(r.name))
 
-          kPost(realmUrl(realm.name) + s"/users/$userId/role-mappings/clients/$clientId", upickle.default.write(clientRoles))
+        kPost(realmUrl(realm.name) + s"/users/$userId/role-mappings/clients/$clientId", upickle.default.write(clientRoles))
       }
   }
 }

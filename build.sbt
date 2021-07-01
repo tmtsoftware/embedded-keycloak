@@ -36,5 +36,5 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
       //TEST
       "org.scalatest"     %% "scalatest"   % "3.2.9" % Test
     ),
-    parallelExecution in Test in ThisBuild := false
+    ThisBuild / Test / parallelExecution := false
   )

@@ -13,8 +13,8 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
 
   import settings._
 
-  protected val jTrue  = Bool(true)
-  protected val jFalse = Bool(false)
+  protected val jTrue: Bool  = Bool(true)
+  protected val jFalse: Bool = Bool(false)
 
   case class RoleRepresentation(name: String, id: String, containerId: String, composite: Boolean, clientRole: Boolean)
 
@@ -36,8 +36,7 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
 
   protected def realmUrl = s"http://localhost:$port/auth/admin/realms"
 
-  protected def realmUrl(realmName: String): String =
-    s"http://localhost:$port/auth/admin/realms/$realmName"
+  protected def realmUrl(realmName: String): String = s"http://localhost:$port/auth/admin/realms/$realmName"
 
   protected implicit def toMutableMap(map: Map[String, Value]): MutableMap[String, Value] = {
     val mutableMap = MutableMap[String, Value]()
@@ -50,15 +49,12 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
     url.split("/").last
   }
 
-  protected implicit def toString(map: Map[String, Value]): String =
-    ujson.write(Obj(map))
+  protected implicit def toString(map: Map[String, Value]): String = ujson.write(Obj(map))
 
-  protected implicit def requester(method: String): Requester = {
-    method match {
-      case "POST" => post
-      case "GET"  => get
-      case "PUT"  => put
-    }
+  protected implicit def requester(method: String): Requester = method match {
+    case "POST" => post
+    case "GET"  => get
+    case "PUT"  => put
   }
 
   private def sendRequest(requester: Requester, url: String, stringData: String = null)( // scalastyle:ignore
@@ -70,9 +66,7 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
       data =
         if (stringData == null || stringData.isBlank) RequestBlob.EmptyRequestBlob
         else stringData,
-      headers = Map(
-        "Content-Type" -> "application/json"
-      )
+      headers = Map("Content-Type" -> "application/json")
     )
 
     lazy val error = s"""
