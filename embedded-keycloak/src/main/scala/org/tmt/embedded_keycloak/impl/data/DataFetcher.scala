@@ -59,12 +59,12 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
       .map(_.obj)
       .map(obj => {
         obj.getStr("id") ->
-          Client(
-            name = obj.getStr("name"),
-            clientType = obj.getClientType,
-            authorizationEnabled = obj.getBool("authorizationServicesEnabled"),
-            clientRoles = getClientRolesForClient(obj.getStr("id"))
-          )
+        Client(
+          name = obj.getStr("name"),
+          clientType = obj.getClientType,
+          authorizationEnabled = obj.getBool("authorizationServicesEnabled"),
+          clientRoles = getClientRolesForClient(obj.getStr("id"))
+        )
       })
       .toMap
   }

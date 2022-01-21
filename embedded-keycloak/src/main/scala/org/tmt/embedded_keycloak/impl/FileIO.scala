@@ -9,7 +9,7 @@ class FileIO(settings: Settings) {
   import settings._
   private[this] implicit def toPath(path: String): Path = Path(path)
 
-  //PATHS
+  // PATHS
   private val versionDirectory: Path = keycloakDirectory / version
 
   def downloadDirectory: Path      = versionDirectory / "downloads"
@@ -23,7 +23,7 @@ class FileIO(settings: Settings) {
   def isKeycloakInstalled: Boolean  = os.exists(keycloakExecutablePath)
   def isKeycloakDownloaded: Boolean = os.exists(tarFilePath)
 
-  //OPERATIONS
+  // OPERATIONS
   def deleteVersion(): Unit      = os.remove.all(versionDirectory)
   def deleteBinaries(): Unit     = os.remove.all(binariesDirectory)
   def moveIncompleteFile(): Unit =
