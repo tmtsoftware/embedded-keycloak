@@ -54,8 +54,8 @@ private[embedded_keycloak] object DownloaderExtensions {
           responseF
             .map {
               case HttpResponse(StatusCodes.OK, _, entity, _) => entity.withoutSizeLimit.dataBytes
-              case HttpResponse(statusCode, _, _, _)          =>
-                throw new RuntimeException(s"Keycloak downloading failed with status code: $statusCode")
+              case x                                          =>
+                throw new RuntimeException(s"Keycloak downloading failed with status code: ${x.status}")
             }
         )
         .addMaterializer

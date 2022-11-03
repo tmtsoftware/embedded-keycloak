@@ -1,6 +1,6 @@
 inThisBuild(
   List(
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.10",
     version := "0.6.0",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
@@ -25,16 +25,16 @@ inThisBuild(
 lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi"       %% "requests"    % "0.7.0",
-      "com.lihaoyi"       %% "os-lib"      % "0.8.0",
-      "com.lihaoyi"       %% "upickle"     % "1.4.4",
-      "com.lihaoyi"       %% "ujson"       % "1.4.4",
-      "com.iheart"        %% "ficus"       % "1.5.1",
+      "com.lihaoyi"       %% "requests"    % "0.7.1",
+      "com.lihaoyi"       %% "os-lib"      % "0.8.1",
+      "com.lihaoyi"       %% "upickle"     % "2.0.0",
+      "com.lihaoyi"       %% "ujson"       % "2.0.0",
+      "com.iheart"        %% "ficus"       % "1.5.2",
       //AKKA-DOWNLOADER
-      "com.typesafe.akka" %% "akka-http"   % "10.2.7",
-      "com.typesafe.akka" %% "akka-stream" % "2.6.18",
+      "com.typesafe.akka" %% "akka-http"   % "10.4.0",
+      "com.typesafe.akka" %% "akka-stream" % "2.7.0",
       //TEST
-      "org.scalatest"     %% "scalatest"   % "3.2.10" % Test
+      "org.scalatest"     %% "scalatest"   % "3.2.14" % Test
     ),
     ThisBuild / Test / parallelExecution := false
   )

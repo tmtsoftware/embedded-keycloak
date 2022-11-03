@@ -22,7 +22,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
     response match {
       case HttpResponse(StatusCodes.OK, _, entity, _) =>
         entity.contentLengthOption.getOrElse(throw new RuntimeException("Content length is not provided"))
-      case HttpResponse(statusCode, _, _, _)          => throw new RuntimeException(s"Downloading failed with. status code: $statusCode")
+      case _                                          => throw new RuntimeException(s"Downloading failed with. status code: ${response.status}")
     }
 
   def download(): Unit = {
