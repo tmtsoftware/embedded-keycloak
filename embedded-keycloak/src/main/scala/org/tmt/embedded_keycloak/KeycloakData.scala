@@ -1,8 +1,6 @@
 package org.tmt.embedded_keycloak
 
-import com.typesafe.config.ConfigFactory
-import net.ceedubs.ficus.Ficus._
-import net.ceedubs.ficus.readers.ArbitraryTypeReader._
+import com.typesafe.config.{ConfigFactory, ConfigRenderOptions}
 import org.tmt.embedded_keycloak.KeycloakData.{AdminUser, Realm}
 import org.tmt.embedded_keycloak.impl.data.DataFetcher
 import org.tmt.embedded_keycloak.utils.BearerToken
@@ -11,11 +9,21 @@ case class KeycloakData(adminUser: AdminUser = AdminUser.default, realms: Set[Re
 
 object KeycloakData {
 
-  lazy val empty: KeycloakData      = KeycloakData()
-  lazy val fromConfig: KeycloakData = ConfigFactory
-    .load()
-    .getConfig("embedded-keycloak")
-    .as[KeycloakData]
+  lazy val empty: KeycloakData = KeycloakData()
+
+  import upickle.default.{ReadWriter => RW, macroRW}
+
+  implicit lazy val realmRW: RW[Realm]                     = macroRW[Realm]
+  implicit lazy val clientRoleRW: RW[ClientRole]           = macroRW[ClientRole]
+  implicit lazy val clientRW: RW[Client]                   = macroRW[Client]
+  implicit lazy val adminUserRW: RW[AdminUser]             = macroRW[AdminUser]
+  implicit lazy val applicationUserRW: RW[ApplicationUser] = macroRW[ApplicationUser]
+  implicit lazy val keycloakDataRW: RW[KeycloakData]       = macroRW[KeycloakData]
+
+  lazy val fromConfig: KeycloakData =
+    val config = ConfigFactory.load().getConfig("embedded-keycloak")
+    import upickle.default._
+    read[KeycloakData](config.root().render(ConfigRenderOptions.concise()))
 
   def fromServer(settings: Settings, adminUsername: String, adminPassword: String): KeycloakData = {
     implicit val token: BearerToken =
