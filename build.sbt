@@ -1,3 +1,5 @@
+name := "embedded-keycloak-root"
+
 inThisBuild(
   List(
     scalaVersion := "3.2.1",
@@ -16,8 +18,7 @@ inThisBuild(
       "-feature",
       "-unchecked",
       "-deprecation"
-    ),
-    resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+    )
   )
 )
 
@@ -29,7 +30,7 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
       "com.lihaoyi"       %% "upickle"     % "2.0.0",
       "com.lihaoyi"       %% "ujson"       % "2.0.0",
       // AKKA-DOWNLOADER
-      "com.typesafe.akka" %% "akka-http"   % "10.4.0+67-7fa27c0b-SNAPSHOT",
+      "com.typesafe.akka" %% "akka-http"   % "10.5.0-M1",
       "com.typesafe.akka" %% "akka-stream" % "2.7.0",
       // TEST
       "org.scalatest"     %% "scalatest"   % "3.2.14" % Test
