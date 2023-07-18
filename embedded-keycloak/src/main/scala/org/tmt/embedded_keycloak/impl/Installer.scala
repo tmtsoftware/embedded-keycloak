@@ -2,9 +2,9 @@ package org.tmt.embedded_keycloak.impl
 
 import org.tmt.embedded_keycloak.Settings
 import org.tmt.embedded_keycloak.impl.Bash._
-import org.tmt.embedded_keycloak.impl.download.AkkaDownloader
+import org.tmt.embedded_keycloak.impl.download.PekkoDownloader
 
-class Installer(settings: Settings, fileIO: FileIO, downloader: AkkaDownloader) {
+class Installer(settings: Settings, fileIO: FileIO, downloader: PekkoDownloader) {
   import settings._
 
   private def extractArchive(): Unit = {

@@ -1,7 +1,7 @@
 inThisBuild(
   List(
     scalaVersion := "2.13.8",
-    version := "0.6.0",
+    version := "0.6.0-pekko",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
     licenses := List(
@@ -30,9 +30,9 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
       "com.lihaoyi"       %% "upickle"     % "1.4.4",
       "com.lihaoyi"       %% "ujson"       % "1.4.4",
       "com.iheart"        %% "ficus"       % "1.5.1",
-      //AKKA-DOWNLOADER
-      "com.typesafe.akka" %% "akka-http"   % "10.2.7",
-      "com.typesafe.akka" %% "akka-stream" % "2.6.18",
+      //PEKKO-DOWNLOADER
+      "org.apache.pekko" %% "pekko-http"   % "0.0.0+4470-61034832-SNAPSHOT",
+      "org.apache.pekko" %% "pekko-stream" % "1.0.0",
       //TEST
       "org.scalatest"     %% "scalatest"   % "3.2.10" % Test
     ),

@@ -1,9 +1,9 @@
 package org.tmt.embedded_keycloak.impl
 
-import akka.NotUsed
-import akka.actor.ActorSystem
-import akka.stream.RestartSettings
-import akka.stream.scaladsl.{RestartSource, Sink, Source}
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.RestartSettings
+import org.apache.pekko.stream.scaladsl.{RestartSource, Sink, Source}
 import org.tmt.embedded_keycloak.Settings
 import requests.Response
 

@@ -2,7 +2,7 @@ package org.tmt.embedded_keycloak.impl.download
 
 import java.text.DecimalFormat
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 
 import scala.concurrent.{ExecutionContext, Future}
 

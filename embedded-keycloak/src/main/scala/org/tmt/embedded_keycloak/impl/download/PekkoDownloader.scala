@@ -1,9 +1,9 @@
 package org.tmt.embedded_keycloak.impl.download
 
-import akka.Done
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
-import akka.stream.scaladsl.Source
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
+import org.apache.pekko.stream.scaladsl.Source
 import org.tmt.embedded_keycloak.Settings
 import org.tmt.embedded_keycloak.impl.FileIO
 import org.tmt.embedded_keycloak.impl.download.DownloaderExtensions._
@@ -11,7 +11,7 @@ import org.tmt.embedded_keycloak.impl.download.DownloaderExtensions._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: FileIO)(implicit system: ActorSystem) {
+private[embedded_keycloak] class PekkoDownloader(settings: Settings, fileIO: FileIO)(implicit system: ActorSystem) {
   import settings._
 
   private def isKeycloakDownloaded = os.exists(fileIO.tarFilePath)
@@ -31,7 +31,7 @@ private[embedded_keycloak] class AkkaDownloader(settings: Settings, fileIO: File
       println(s"[Embedded-Keycloak] Downloading keycloak at location: [${fileIO.downloadDirectory}]")
       fileIO.deleteVersion()
 
-      val responseFuture = AkkaHttpUtils.singleRequestWithRedirect(HttpRequest(uri = keycloakDownloadUrl))
+      val responseFuture = PekkoHttpUtils.singleRequestWithRedirect(HttpRequest(uri = keycloakDownloadUrl))
       val contentLength  = responseFuture.map(getContentLength)
 
       val source: Source[DownloadProgress, Future[Done]] =
