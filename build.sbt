@@ -5,6 +5,7 @@ inThisBuild(
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
     resolvers += "jitpack" at "https://jitpack.io",
+    resolvers += "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging"),
     licenses := List(
       "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
     ),
@@ -32,8 +33,8 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
       "com.lihaoyi" %% "ujson" % "1.4.4",
       "com.iheart" %% "ficus" % "1.5.1",
       //PEKKO-DOWNLOADER
-      //      "org.apache.pekko" %% "pekko-http"   % "1.0.0RC1",
-      "com.github.apache.incubator-pekko-http" %% "pekko-http" % "1.0.0-RC2",
+      "org.apache.pekko" %% "pekko-http"   % "1.0.0-RC2",
+//      "com.github.apache.incubator-pekko-http" %% "pekko-http" % "1.0.0-RC2",
       "org.apache.pekko" %% "pekko-stream" % "1.0.1",
       //TEST
       "org.scalatest" %% "scalatest" % "3.2.10" % Test
