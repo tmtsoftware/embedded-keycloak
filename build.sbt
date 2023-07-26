@@ -33,8 +33,8 @@ lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
       "com.iheart" %% "ficus" % "1.5.1",
       //PEKKO-DOWNLOADER
       //      "org.apache.pekko" %% "pekko-http"   % "1.0.0RC1",
-      "com.github.apache.incubator-pekko-http" %% "pekko-http" % "1.0.0-RC1",
-      "org.apache.pekko" %% "pekko-stream" % "1.0.0",
+      "com.github.apache.incubator-pekko-http" %% "pekko-http" % "1.0.0-RC2",
+      "org.apache.pekko" %% "pekko-stream" % "1.0.1",
       //TEST
       "org.scalatest" %% "scalatest" % "3.2.10" % Test
     ),
