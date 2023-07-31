@@ -6,7 +6,8 @@ import requests._
 import ujson.{Bool, Obj, Value}
 import upickle.default.{macroRW, ReadWriter => RW}
 
-import scala.collection.mutable.{LinkedHashMap => MutableMap}
+//import scala.collection.mutable.{LinkedHashMap => MutableMap}
+import upickle.core.{LinkedHashMap => MutableMap}
 import scala.language.implicitConversions
 
 private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
@@ -38,18 +39,24 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
 
   protected def realmUrl(realmName: String): String = s"http://localhost:$port/auth/admin/realms/$realmName"
 
-  protected implicit def toMutableMap(map: Map[String, Value]): MutableMap[String, Value] = {
+  protected given Conversion[Map[String, Value], MutableMap[String, Value]] = map => {
     val mutableMap = MutableMap[String, Value]()
     map.foreach(mutableMap += _)
     mutableMap
   }
+
+//  protected implicit def toMutableMap(map: Map[String, Value]): MutableMap[String, Value] = {
+//    val mutableMap = MutableMap[String, Value]()
+//    map.foreach(mutableMap += _)
+//    mutableMap
+//  }
 
   protected def getId(response: Response): String = {
     val url = response.headers("location").head
     url.split("/").last
   }
 
-  protected implicit def toString(map: Map[String, Value]): String = ujson.write(Obj(map))
+  protected given Conversion[Map[String, Value], String] = map => ujson.write(Obj(map))
 
   protected implicit def requester(method: String): Requester = method match {
     case "POST" => post

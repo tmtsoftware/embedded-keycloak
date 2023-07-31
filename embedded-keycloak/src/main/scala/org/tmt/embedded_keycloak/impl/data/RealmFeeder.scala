@@ -4,6 +4,7 @@ import org.tmt.embedded_keycloak.KeycloakData.Realm
 import org.tmt.embedded_keycloak.Settings
 import org.tmt.embedded_keycloak.utils.BearerToken
 import ujson.Str
+import scala.language.implicitConversions
 
 private[embedded_keycloak] class RealmFeeder(settings: Settings) extends FeederBase(settings) {
 

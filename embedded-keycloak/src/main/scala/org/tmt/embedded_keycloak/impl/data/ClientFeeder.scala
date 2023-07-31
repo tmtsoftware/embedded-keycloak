@@ -6,6 +6,7 @@ import org.tmt.embedded_keycloak.utils.BearerToken
 import ujson.Str
 
 import scala.io.Source
+import scala.language.implicitConversions
 
 private[embedded_keycloak] class ClientFeeder(realm: Realm, settings: Settings) extends FeederBase(settings) {
 

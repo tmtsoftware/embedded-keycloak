@@ -1,6 +1,6 @@
 inThisBuild(
-  List(
-    scalaVersion := "2.13.8",
+  Seq(
+    scalaVersion := "3.3.0",
     version := "0.6.0-pekko",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
@@ -18,26 +18,33 @@ inThisBuild(
       "-feature",
       "-unchecked",
       "-deprecation",
-      "-Xlint",
-      "-Ywarn-dead-code"
+//      "-source:3.0-migration",
+//      "-rewrite",
+//      "-explain",
+//      "-explain-types"
     )
   )
 )
 
-lazy val `embedded-keycloak` = (project in file("embedded-keycloak"))
+lazy val `embedded-keycloak-root` = project
+  .in(file("."))
+  .aggregate(
+    `embedded-keycloak`
+  )
+
+
+lazy val `embedded-keycloak` = project.in(file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "requests" % "0.7.0",
-      "com.lihaoyi" %% "os-lib" % "0.8.0",
-      "com.lihaoyi" %% "upickle" % "1.4.4",
-      "com.lihaoyi" %% "ujson" % "1.4.4",
-      "com.iheart" %% "ficus" % "1.5.1",
-      //PEKKO-DOWNLOADER
+      "com.lihaoyi" %% "requests" % "0.8.0",
+      "com.lihaoyi" %% "os-lib" % "0.9.1",
+      "com.lihaoyi" %% "upickle" % "3.1.2",
+      "com.lihaoyi" %% "ujson" % "3.1.2",
+      "com.github.pureconfig" %% "pureconfig-core" % "0.17.4",
       "org.apache.pekko" %% "pekko-http"   % "1.0.0-RC2",
-//      "com.github.apache.incubator-pekko-http" %% "pekko-http" % "1.0.0-RC2",
       "org.apache.pekko" %% "pekko-stream" % "1.0.1",
       //TEST
-      "org.scalatest" %% "scalatest" % "3.2.10" % Test
+      "org.scalatest" %% "scalatest" % "3.2.16" % Test
     ),
     ThisBuild / Test / parallelExecution := false
   )

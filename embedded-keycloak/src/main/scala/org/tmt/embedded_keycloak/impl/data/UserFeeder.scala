@@ -4,6 +4,7 @@ import org.tmt.embedded_keycloak.KeycloakData.{ApplicationUser, Realm}
 import org.tmt.embedded_keycloak.Settings
 import org.tmt.embedded_keycloak.utils.BearerToken
 import ujson.Str
+import scala.language.implicitConversions
 
 private[embedded_keycloak] class UserFeeder(clientIds: Map[String, String], realm: Realm, settings: Settings)
     extends FeederBase(settings) {
