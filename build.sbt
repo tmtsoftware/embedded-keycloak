@@ -40,7 +40,6 @@ lazy val `embedded-keycloak` = project.in(file("embedded-keycloak"))
       "com.lihaoyi" %% "os-lib" % "0.9.1",
       "com.lihaoyi" %% "upickle" % "3.1.2",
       "com.lihaoyi" %% "ujson" % "3.1.2",
-      "com.github.pureconfig" %% "pureconfig-core" % "0.17.4",
       "org.apache.pekko" %% "pekko-http"   % "1.0.0-RC2",
       "org.apache.pekko" %% "pekko-stream" % "1.0.1",
       //TEST
