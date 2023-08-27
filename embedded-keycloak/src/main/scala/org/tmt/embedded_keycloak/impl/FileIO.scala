@@ -16,8 +16,8 @@ class FileIO(settings: Settings) {
   def binariesDirectory: Path      = versionDirectory / "binaries"
   def incompleteTarFilePath: Path  = downloadDirectory / s"keycloak-$version.tar.gz.incomplete"
   def tarFilePath: Path            = downloadDirectory / s"keycloak-$version.tar.gz"
-  def addUserExecutablePath: Path  = binariesDirectory / s"keycloak-$version" / "bin" / "add-user-keycloak.sh"
-  def keycloakExecutablePath: Path = binariesDirectory / s"keycloak-$version" / "bin" / "standalone.sh"
+//  def addUserExecutablePath: Path  = binariesDirectory / s"keycloak-$version" / "bin" / "add-user-keycloak.sh"
+  def keycloakExecutablePath: Path = binariesDirectory / s"keycloak-$version" / "bin" / "kc.sh"
 
   // CHECKS
   def isKeycloakInstalled: Boolean  = os.exists(keycloakExecutablePath)

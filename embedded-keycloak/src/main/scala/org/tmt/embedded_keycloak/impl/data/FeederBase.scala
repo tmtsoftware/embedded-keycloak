@@ -35,9 +35,9 @@ private[embedded_keycloak] abstract class FeederBase(settings: Settings) {
     sendRequest("GET", url)
   }
 
-  protected def realmUrl = s"http://localhost:$port/auth/admin/realms"
+  protected def realmUrl = s"http://localhost:$port/admin/realms"
 
-  protected def realmUrl(realmName: String): String = s"http://localhost:$port/auth/admin/realms/$realmName"
+  protected def realmUrl(realmName: String): String = s"http://localhost:$port/admin/realms/$realmName"
 
   protected given Conversion[Map[String, Value], MutableMap[String, Value]] = map => {
     val mutableMap = MutableMap[String, Value]()

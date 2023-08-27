@@ -16,7 +16,7 @@ object BearerToken {
       host: String = "localhost"
   ): BearerToken = {
     val response = post(
-      url = s"http://$host:$port/auth/realms/$realm/protocol/openid-connect/token",
+      url = s"http://$host:$port/realms/$realm/protocol/openid-connect/token",
       headers = Map("Content-Type" -> "application/x-www-form-urlencoded"),
       data = Map(
         "client_id"  -> client,

@@ -10,26 +10,26 @@ sealed trait AdminFeeder {
   def feedAdminUser(admin: AdminUser): Unit
 }
 
-private[embedded_keycloak] class JavaAdminFeeder(settings: Settings, fileIO: FileIO)
-    extends FeederBase(settings)
-    with AdminFeeder {
-
-  override def feedAdminUser(admin: AdminUser): Unit =
-    exec(
-      settings.stdOutLogger,
-      "sh",
-      fileIO.addUserExecutablePath.toString,
-      s"--user ${admin.username}",
-      s"-p ${admin.password}"
-    )
-}
+//private[embedded_keycloak] class JavaAdminFeeder(settings: Settings, fileIO: FileIO)
+//    extends FeederBase(settings)
+//    with AdminFeeder {
+//
+//  override def feedAdminUser(admin: AdminUser): Unit =
+//    exec(
+//      settings.stdOutLogger,
+//      "sh",
+//      fileIO.addUserExecutablePath.toString,
+//      s"--user ${admin.username}",
+//      s"-p ${admin.password}"
+//    )
+//}
 
 private[embedded_keycloak] class RestAdminFeeder(settings: Settings) extends FeederBase(settings) with AdminFeeder {
 
   override def feedAdminUser(admin: AdminUser): Unit = {
     val origin     = s"http://localhost:${settings.port}"
     val referer    = origin + "/"
-    val url        = referer + "auth/"
+    val url        = referer + "admin/"
     val cookieName = "WELCOME_STATE_CHECKER"
 
     val getResponse = get(url = url)

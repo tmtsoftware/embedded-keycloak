@@ -7,7 +7,8 @@ class StopHandle private[embedded_keycloak] (subProcess: SubProcess) {
   def stop(): Unit = {
     val process: Process = subProcess.wrapped
 
-    (getChildPids andThen killAll)(process.pid())
+//    (getChildPids andThen killAll)(process.pid())
+    killAll(List(process.pid()))
 
     subProcess.destroyForcibly()
   }

@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.DurationDouble
 
 class BearerTokenTest extends AnyFunSuite with Matchers with BeforeAndAfterEach {
-  test("can login admin") {
+  test("can   login admin") {
     val settings     = Settings.default.copy(port = 9005)
     val keycloakData = KeycloakData.fromConfig
     val keycloak     = new EmbeddedKeycloak(keycloakData, settings)

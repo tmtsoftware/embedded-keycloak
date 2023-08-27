@@ -19,13 +19,16 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
 
   def startServer()(implicit ec: ExecutionContext): Future[StopHandle] = {
     preRun()
-
+    val env = Map("KEYCLOAK_ADMIN" -> "admin", "KEYCLOAK_ADMIN_PASSWORD" -> "admin")
     val process = spawn(
       stdOutLogger,
-      "sh",
+      env,
+      "bash",
       fileIO.keycloakExecutablePath.toString,
-      s"-Djboss.bind.address=$host",
-      s"-Djboss.http.port=$port"
+      "start-dev",
+      s"--http-host=$host",
+      s"--http-port=$port",
+      s"--http-enabled=true",
     )
 
     val stopHandle = new StopHandle(process)
