@@ -19,7 +19,12 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
 
   def startServer()(implicit ec: ExecutionContext): Future[StopHandle] = {
     preRun()
-    val env = Map("KEYCLOAK_ADMIN" -> "admin", "KEYCLOAK_ADMIN_PASSWORD" -> "admin")
+    val env = Map(
+      "KEYCLOAK_ADMIN" -> "admin",
+      "KEYCLOAK_ADMIN_PASSWORD" -> "admin",
+      // XXX Temp required when using jdk 21 until keycloak uses newer version of bytebuddy
+      "JAVA_OPTS" -> "-Dnet.bytebuddy.experimental=true"
+    )
     val process = spawn(
       stdOutLogger,
       env,
