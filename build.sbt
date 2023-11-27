@@ -33,7 +33,7 @@ lazy val `embedded-keycloak` = project.in(file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "requests" % "0.8.0",
-      "com.lihaoyi" %% "os-lib" % "0.9.1",
+      "com.lihaoyi" %% "os-lib" % "0.9.2",
       "com.lihaoyi" %% "upickle" % "3.1.3",
       "com.lihaoyi" %% "ujson" % "3.1.3",
       "org.apache.pekko" %% "pekko-http"   % "1.0.0",

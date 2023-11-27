@@ -23,7 +23,7 @@ class EmbeddedKeycloak(keycloakData: KeycloakData, settings: Settings = Settings
       "KEYCLOAK_ADMIN" -> "admin",
       "KEYCLOAK_ADMIN_PASSWORD" -> "admin",
       // XXX Temp required when using jdk 21 until keycloak uses newer version of bytebuddy
-      "JAVA_OPTS" -> "-Dnet.bytebuddy.experimental=true"
+//      "JAVA_OPTS" -> "-Dnet.bytebuddy.experimental=true"
     )
     val process = spawn(
       stdOutLogger,
