@@ -5,6 +5,7 @@ import org.apache.pekko.http.scaladsl.model.{HttpResponse, StatusCodes}
 import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.ByteString
 
+import scala.annotation.nowarn
 import scala.concurrent.{ExecutionContext, Future}
 
 private[embedded_keycloak] object DownloaderExtensions {
@@ -20,6 +21,8 @@ private[embedded_keycloak] object DownloaderExtensions {
     def untilDownloadCompletes: Source[DownloadProgress, Future[Done]] =
       source.takeWhile(p => p.downloadedBytes <= p.totalBytes)
 
+    //noinspection ScalaDeprecation
+    @nowarn("msg=deprecated")
     def compressForPrinting: Source[DownloadProgress, Future[Done]] =
       source
         .statefulMapConcat { () =>
