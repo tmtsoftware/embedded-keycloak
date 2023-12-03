@@ -1,7 +1,7 @@
 inThisBuild(
   Seq(
     scalaVersion := "3.3.1",
-    version := "0.7.1",
+    version := "0.7.2",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
     resolvers += "jitpack" at "https://jitpack.io",
