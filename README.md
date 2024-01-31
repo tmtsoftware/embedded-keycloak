@@ -1,6 +1,6 @@
 # Embedded Keycloak
 
-Embedded keycloak server for jvm integration testing. (developed in scala)
+Embedded keycloak server for jvm integration testing. (developed in scala).
 
 [![Build Status](https://github.com/tmtsoftware/embedded-keycloak/workflows/CI/badge.svg)
 
