@@ -40,11 +40,13 @@ class DataFeederTest extends AnyFunSuite with Matchers with BeforeAndAfterAll {
           username = "user1",
           password = "[HIDDEN]",
           firstName = "john",
+          email = "user1@mail.com",
           realmRoles = Set("super-admin", "default-roles-example-realm")
         ),
         ApplicationUser(
           "user2",
           "[HIDDEN]",
+          email = "user2@mail.com",
           realmRoles = Set("default-roles-example-realm"),
           clientRoles = Set(ClientRole(clientName = "some-server", roleName = "server-user"))
         )

@@ -27,10 +27,14 @@ class BearerTokenTest extends AnyFunSuite with Matchers with BeforeAndAfterEach 
     val keycloak     = new EmbeddedKeycloak(keycloakData, settings)
     val stopHandle   = Await.result(keycloak.startServer(), 2.minutes)
 
-    val token =
-      BearerToken.fromServer(9005, "user1", "abcd", "example-realm", "some-client")
-    token.header shouldBe defined
-    stopHandle.stop()
+    try {
+      val token =
+        BearerToken.fromServer(9005, "user1", "abcd", "example-realm", "some-client")
+      token.header shouldBe defined
+    }
+    finally {
+      stopHandle.stop()
+    }
   }
 
   override def beforeEach(): Unit = {

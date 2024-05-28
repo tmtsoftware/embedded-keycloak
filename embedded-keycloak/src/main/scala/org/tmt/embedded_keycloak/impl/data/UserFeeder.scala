@@ -15,12 +15,13 @@ private[embedded_keycloak] class UserFeeder(clientIds: Map[String, String], real
     val creationResponse = kPost(
       url = realmUrl(realm.name) + "/users",
       Map(
-        "enabled"       -> jTrue,
-        "attributes"    -> ujson.Arr(),
-        "username"      -> Str(user.username),
-        "emailVerified" -> Str(""),
-        "firstName"     -> Str(user.firstName),
-        "lastName"      -> Str(user.lastName)
+        "enabled"    -> jTrue,
+        "attributes" -> ujson.Arr(),
+        "username"   -> Str(user.username),
+        // email required starting with keycloak-24?
+        "email"      -> Str(user.email),
+        "firstName"  -> Str(user.firstName),
+        "lastName"   -> Str(user.lastName)
       )
     )
 

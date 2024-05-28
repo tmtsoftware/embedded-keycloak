@@ -110,6 +110,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
           "[HIDDEN]",
           firstName = obj.getStr("firstName"),
           lastName = obj.getStr("lastName"),
+          email = s"${obj.getStr("username")}@mail.com",
           realmRoles = getRealmRoleMappings(obj.getStr("id")),
           clientRoles = getClientsRoleMappings(obj.getStr("id"))
         )

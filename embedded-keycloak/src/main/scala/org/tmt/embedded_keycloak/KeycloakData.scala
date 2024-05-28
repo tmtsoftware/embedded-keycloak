@@ -49,6 +49,7 @@ object KeycloakData {
       password: String,
       firstName: String = "",
       lastName: String = "",
+      email: String = "",
       realmRoles: Set[String] = Set.empty,
       clientRoles: Set[ClientRole] = Set.empty
   ) derives ReadWriter

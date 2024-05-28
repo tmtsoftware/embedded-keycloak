@@ -21,6 +21,12 @@ object BearerToken {
       data = Map(
         "client_id"  -> client,
         "grant_type" -> "password",
+
+        //. Required  since keycloak-24.x
+        "email"   -> s"$username@mail.com",
+        "firstName"   -> username,
+        "lastName"   -> username,
+
         "username"   -> username,
         "password"   -> password
       )
