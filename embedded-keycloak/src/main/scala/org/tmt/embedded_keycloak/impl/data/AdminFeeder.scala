@@ -48,6 +48,12 @@ private[embedded_keycloak] class RestAdminFeeder(settings: Settings) extends Fee
           Map(
             "username"             -> admin.username,
             "password"             -> admin.password,
+
+            // XXX for kc-24.x
+            "firstName"             -> admin.username,
+            "lastName"             -> admin.username,
+            "email"             -> s"${admin.username}@mail.com",
+
             "passwordConfirmation" -> admin.password,
             "stateChecker"         -> state
           )
