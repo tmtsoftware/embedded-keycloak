@@ -25,14 +25,17 @@ class DataParserTest extends AnyFunSuite with Matchers {
           users = Set(
             ApplicationUser(
               username = "user1",
-              firstName = "john",
               password = "abcd",
+              firstName = "john",
+              lastName = "doe",
               email = "user1@mail.com",
               realmRoles = Set("super-admin")
             ),
             ApplicationUser(
               username = "user2",
               password = "abcd",
+              firstName = "user2",
+              lastName = "user2",
               email = "user2@mail.com",
               clientRoles = Set(ClientRole("some-server", "server-user"))
             )

@@ -47,9 +47,9 @@ object KeycloakData {
   case class ApplicationUser(
       username: String,
       password: String,
-      firstName: String = "",
-      lastName: String = "",
-      email: String = "",
+      firstName: String,
+      lastName: String,
+      email: String,
       realmRoles: Set[String] = Set.empty,
       clientRoles: Set[ClientRole] = Set.empty
   ) derives ReadWriter
