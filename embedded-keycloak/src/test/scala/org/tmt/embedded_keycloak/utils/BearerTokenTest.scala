@@ -38,7 +38,7 @@ class BearerTokenTest extends AnyFunSuite with Matchers with BeforeAndAfterEach 
   }
 
   override def beforeEach(): Unit = {
-    super.afterEach()
+    super.beforeEach()
   }
 
   override def afterEach(): Unit = {
