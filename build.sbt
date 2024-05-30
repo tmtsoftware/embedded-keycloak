@@ -1,6 +1,6 @@
 inThisBuild(
   Seq(
-    scalaVersion := "3.3.3",
+    scalaVersion := "3.4.2",
     version := "0.7.3",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
