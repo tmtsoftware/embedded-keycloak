@@ -11,7 +11,7 @@ import scala.language.implicitConversions
 
 private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederBase(settings) {
 
-  private[this] given Conversion[upickle.core.LinkedHashMap[String, Value], RichLinkedHashMap] = RichLinkedHashMap(_)
+  private given Conversion[upickle.core.LinkedHashMap[String, Value], RichLinkedHashMap] = RichLinkedHashMap(_)
 
   def getRealms(implicit bearerToken: BearerToken): Set[Realm] = {
     val response = kGet(realmUrl)
@@ -118,7 +118,7 @@ private[embedded_keycloak] class DataFetcher(settings: Settings) extends FeederB
       .toSet
   }
 
-  private[this] class RichLinkedHashMap(map: upickle.core.LinkedHashMap[String, Value]) {
+  private class RichLinkedHashMap(map: upickle.core.LinkedHashMap[String, Value]) {
     def getStr(key: String): String = map.get(key).map(_.str).getOrElse("")
 
     def getBool(key: String): Boolean = map.get(key).exists(_.bool)

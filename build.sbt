@@ -18,6 +18,9 @@ inThisBuild(
       "-feature",
       "-unchecked",
       "-deprecation",
+//      "-rewrite",
+//      "-source",
+//      "3.4-migration"
     )
   )
 )

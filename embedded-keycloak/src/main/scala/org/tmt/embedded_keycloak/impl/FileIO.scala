@@ -7,7 +7,7 @@ import scala.language.implicitConversions
 
 class FileIO(settings: Settings) {
   import settings._
-  private[this] implicit def toPath(path: String): Path = Path(path)
+  private implicit def toPath(path: String): Path = Path(path)
 
   // PATHS
   private val versionDirectory: Path = keycloakDirectory / version
