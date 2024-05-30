@@ -44,6 +44,7 @@ object KeycloakData {
     val default: AdminUser = AdminUser()
   }
 
+  // Note: As of Keycloak-24.x, firstName, lastName and email are required by default (and need to be unique!)
   case class ApplicationUser(
       username: String,
       password: String,
