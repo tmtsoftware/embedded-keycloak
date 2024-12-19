@@ -10,7 +10,7 @@ case class Settings(
     keycloakDirectory: String = System.getProperty("user.home") + "/embedded-keycloak/",
     cleanPreviousData: Boolean = true,
     alwaysDownload: Boolean = false,
-    version: String = "24.0.4",
+    version: String = "26.0.7",
     printProcessLogs: Boolean = true
 ) {
   val stdOutLogger: ProcessOutput = if (printProcessLogs) Inherit else Pipe

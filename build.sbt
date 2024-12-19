@@ -1,7 +1,6 @@
 inThisBuild(
   Seq(
-//    scalaVersion := "3.4.2",
-    scalaVersion := "3.3.3",
+    scalaVersion := "3.6.2",
     version := "0.7.3",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
@@ -36,14 +35,14 @@ lazy val `embedded-keycloak-root` = project
 lazy val `embedded-keycloak` = project.in(file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "requests" % "0.8.2",
-      "com.lihaoyi" %% "os-lib" % "0.10.1",
-      "com.lihaoyi" %% "upickle" % "3.3.1",
-      "com.lihaoyi" %% "ujson" % "3.3.1",
-      "org.apache.pekko" %% "pekko-http"   % "1.0.1",
-      "org.apache.pekko" %% "pekko-stream" % "1.0.2",
+      "com.lihaoyi" %% "requests" % "0.9.0",
+      "com.lihaoyi" %% "os-lib" % "0.11.3",
+      "com.lihaoyi" %% "upickle" % "4.0.2",
+      "com.lihaoyi" %% "ujson" % "4.0.2",
+      "org.apache.pekko" %% "pekko-http"   % "1.1.0",
+      "org.apache.pekko" %% "pekko-stream" % "1.1.2",
       //TEST
-      "org.scalatest" %% "scalatest" % "3.2.18" % Test
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test
     ),
     ThisBuild / Test / parallelExecution := false
   )

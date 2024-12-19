@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
       - uses: coursier/setup-action@v1
         with:
-          jvm: temurin:1.17
+          jvm: temurin:1.21
           apps: sbt
       - name: Test
         run: sbt clean test

@@ -10,7 +10,7 @@ class StopHandle private[embedded_keycloak] (subProcess: SubProcess) {
 //    (getChildPids andThen killAll)(process.pid())
     killAll(List(process.pid()))
 
-    subProcess.destroyForcibly()
+    subProcess.destroy()
   }
 
   private val killAll: List[Long] => Unit = _.foreach(proc("kill", "-9", _).call())
