@@ -11,7 +11,7 @@ case class Settings(
     cleanPreviousData: Boolean = true,
     alwaysDownload: Boolean = false,
     // XXX TODO FIXME: Recent versions of Keycloak have removed the adapter libs.
-    // The code using the adapters would need to be completely rewritten.
+    // XXX TODO FIXME: The code using the adapters would need to be completely rewritten.
     version: String = "24.0.4",
     printProcessLogs: Boolean = true
 ) {
