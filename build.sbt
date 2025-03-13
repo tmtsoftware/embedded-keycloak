@@ -1,6 +1,6 @@
 inThisBuild(
   Seq(
-    scalaVersion := "3.6.2",
+    scalaVersion := "3.6.4",
     version := "0.7.3",
     organization := "com.github.tmtsoftware.embedded-keycloak",
     homepage := Some(url("https://github.com/tmtsoftware/embedded-keycloak")),
@@ -18,9 +18,6 @@ inThisBuild(
       "-feature",
       "-unchecked",
       "-deprecation",
-//      "-rewrite",
-//      "-source",
-//      "3.4-migration"
     )
   )
 )
@@ -36,11 +33,11 @@ lazy val `embedded-keycloak` = project.in(file("embedded-keycloak"))
   .settings(
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "requests" % "0.9.0",
-      "com.lihaoyi" %% "os-lib" % "0.11.3",
-      "com.lihaoyi" %% "upickle" % "4.0.2",
-      "com.lihaoyi" %% "ujson" % "4.0.2",
+      "com.lihaoyi" %% "os-lib" % "0.11.4",
+      "com.lihaoyi" %% "upickle" % "4.1.0",
+      "com.lihaoyi" %% "ujson" % "4.1.0",
       "org.apache.pekko" %% "pekko-http"   % "1.1.0",
-      "org.apache.pekko" %% "pekko-stream" % "1.1.2",
+      "org.apache.pekko" %% "pekko-stream" % "1.1.3",
       //TEST
       "org.scalatest" %% "scalatest" % "3.2.19" % Test
     ),
