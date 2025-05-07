@@ -10,9 +10,9 @@ case class Settings(
     keycloakDirectory: String = System.getProperty("user.home") + "/embedded-keycloak/",
     cleanPreviousData: Boolean = true,
     alwaysDownload: Boolean = false,
-    // XXX TODO FIXME: Recent versions of Keycloak have removed the adapter libs.
-    // XXX TODO FIXME: The code using the adapters would need to be completely rewritten.
-    version: String = "25.0.6",
+    // Note: Recent versions of Keycloak have removed the java adapter libs.
+    // The code using the adapters would need to be completely rewritten.
+    version: String = "26.2.3",
     printProcessLogs: Boolean = true
 ) {
   val stdOutLogger: ProcessOutput = if (printProcessLogs) Inherit else Pipe
