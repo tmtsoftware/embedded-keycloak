@@ -12,7 +12,7 @@ case class Settings(
     alwaysDownload: Boolean = false,
     // Note: Recent versions of Keycloak have removed the java adapter libs.
     // The code using the adapters would need to be completely rewritten.
-    version: String = "26.2.3",
+    version: String = "26.2.4",
     printProcessLogs: Boolean = true
 ) {
   val stdOutLogger: ProcessOutput = if (printProcessLogs) Inherit else Pipe
